@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% for competition in competitions %}
+        <div class="container py-5">
+            <div class="card">
+            <h3>{{ competition.name }}</h3>
+            </div>
+        </div>
+    {% endfor %}
+
+    <div class="p-3">
+    <div class="card card-body bg-black">
+
+        <div class="row">
+            <div class="col-3">
+                <img src="{{ post.image.url }}" alt="{{ post.title }}" class="img-fluid">
+            </div>
+            <div class="col-9">
+                <h2>{{ post.title }}</h2>
+                <h3>{{ post.date | date:"M d, Y" }}</h3>
+                <p>{{ post.description | striptags | truncatechars:200 }}</p>
+                <a href="#" class="btn btn-primary">sdasd</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+```
