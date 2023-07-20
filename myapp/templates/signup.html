@@ -1,34 +1,57 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-    <main class="container py-5">
-        <div class="row">
-            <div class="col-md-4 offset-md-4 mt-5">
-                <form method="POST" class="card card-body">
-                    {% csrf_token %}
-                    <h1 class="text-center mb-4">Signup</h1>
-                    {{ error }}<br>
-
-                    <div class="mb-3">
-                        <label for="username">Username:</label>
-                        <input type="text" name="username" id="username" class="form-control" placeholder="Write your username">
+    <body class="bg-secondary">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-xl-10 col-lg-12 col-md-9">
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <div class="row">
+                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+                                    </div>
+                                    <form method="POST" class="form-group mx-auto mt-2 ">
+                                        {% csrf_token %}
+                                        {{ error }}<br>
+                                        <div class="mb-4">
+                                            <input type="text" style="height: 45px;"
+                                                   class="form-control border-$gray-900 rounded-pill" name="username"
+                                                   id="username" placeholder="Username">
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="password" style="height: 45px;"
+                                                   class="form-control border-$gray-600 rounded-pill" name="password1"
+                                                   id="password1" placeholder="Password">
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="password" style="height: 45px;"
+                                                   class="form-control border-$gray-600 rounded-pill" name="password2"
+                                                   id="password2" placeholder="Confirm your password">
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary rounded-pill btn-lg w-100"
+                                                    style="height: 45px; background: #205D9E; font-size: math;">Register
+                                                Account
+                                            </button>
+                                        </div>
+                                    </form>
+                                    <hr>
+                                    <div class="text-center">
+                                        <a class="small" style="text-decoration: none" href="{% url 'signin' %}">Already
+                                            have an account? Login!</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="password1">Password:</label>
-                        <input type="password" name="password1" id="password1" class="form-control" placeholder="Write your password">
-                    </div>
-                    <div class="mb-3">
-                        <label for="password2">Confirm your password:</label>
-                        <input type="password" name="password2" id="password2" class="form-control" placeholder="Confirm your password">
-                    </div>
-
-                    <button class="btn btn-primary">SignUp</button>
-
-                </form>
+                </div>
             </div>
         </div>
-    </main>
-
+    </div>
+    </body>
 {% endblock %}
 ```
