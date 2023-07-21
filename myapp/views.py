@@ -5,13 +5,21 @@ from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 
+from .forms import PlayerForm
 from .models import Competition, Season
 
 
 # Create your views here.
+
+
 def seasons(request):
     seasons = Season.objects.all()
     return render(request, 'season.html', {'seasons': seasons})
+
+
+def new_player(request):
+    form = PlayerForm()
+    return render(request, 'new_player.html', {'form': form})
 
 
 def competition_detail(request, id):
