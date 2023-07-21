@@ -23,7 +23,7 @@ class Player(models.Model):
         return self.name
 
 
-class Team(models.Model):
+class  (models.Model):
     name = models.CharField(max_length=50)
     inscription = models.ForeignKey(Inscription, on_delete=models.CASCADE, related_name='teams', null=True)
     player_list = models.ManyToManyField(Player, related_name='teams')

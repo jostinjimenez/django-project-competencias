@@ -11,6 +11,10 @@ urlpatterns = [
     path('signin/', views.signin, name='signin'),
     path('competitions/', views.competitions, name='competitions'),
     path('competitions/competitions_detail/<int:id>/', views.competition_detail, name='competition_detail'),
+
+
+
+
     path('seasons/', views.seasons, name='seasons'),
     path('new_player/', views.new_player, name='new_player'),
 ]

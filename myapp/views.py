@@ -85,3 +85,4 @@ def signin(request):
 def competitions(request):
     competitions = Competition.objects.all()
     return render(request, 'competitions.html', {'competitions': competitions})
+
