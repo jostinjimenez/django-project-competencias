@@ -3,15 +3,14 @@
 {% block content %}
 
     {% for competition in competitions %}
-        <div class="container py-5">
-            <div class="card card-body bg-dark">
+        <div class="container py-5 ">
+            <div class="card card-body bg-success">
                 <div class="row">
-                  <div class="col text-left text-light">
-                    <h2>{{ competition.name }}</h2>
-                    {% for season in competition.season_set.all %}
-                        <li>{{ season.name }}</li>
-                    {% endfor %}
-                  </div>
+                    <div class="col-md-4 text-light">
+                        <h2><a href="{% url 'competition_detail' competition.id %}">{{ competition.name }}</a></h2>
+                        <p class="text-right">{{ competition.is_active }}</p>
+ 
+                    </div>
                 </div>
             </div>
         </div>

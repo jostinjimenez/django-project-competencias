@@ -5,10 +5,15 @@ from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 
-from .models import Competition
+from .models import Competition, Season
 
 
 # Create your views here.
+
+def competition_detail(request, id):
+    competition = get_object_or_404(Competition, pk=id)
+    return render(request, 'competition_detail.html', {'competition': competition})
+
 
 def home(request):
     return render(request, 'home.html')

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <h1>{{ competition.name }}</h1>
+    <p>Sport: {{ competition.sport_list }}</p>
+    <ul>
+        {% for season in competition.season_set.all %}
+            <li>{{ season.name }}</li>
+        {% endfor %}
+        <p>Teams:</p>
+
+
+    </ul>
+
+
+{% endblock %}
+```
