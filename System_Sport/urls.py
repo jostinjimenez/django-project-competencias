@@ -14,7 +14,7 @@ urlpatterns = [
 
 
 
-
     path('seasons/', views.seasons, name='seasons'),
     path('new_player/', views.new_player, name='new_player'),
+
 ]
