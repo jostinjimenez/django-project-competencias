@@ -9,6 +9,10 @@ from .models import Competition, Season
 
 
 # Create your views here.
+def seasons(request):
+    seasons = Season.objects.all()
+    return render(request, 'season.html', {'seasons': seasons})
+
 
 def competition_detail(request, id):
     competition = get_object_or_404(Competition, pk=id)

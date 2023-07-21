@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {%  for seasons in seasons %}
+    <div class="seasons">
+        <h2>{{ seasons.name }}</h2>
+        <p>{{ seasons.description }}</p>
+        <p>{{ seasons.start_date }}</p>
+        <p>{{ seasons.end_date }}</p>
+    </div>
+    {% endfor %}
+{% endblock %}
+```
