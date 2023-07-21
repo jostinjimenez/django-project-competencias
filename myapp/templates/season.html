@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>{{ Seasons.name }}</h1>
+    <p>modality: {{seasons.modality  }}</p>
+        <ul>
+            {% for team in seasons.teams.all %}
+                <li>{{ team.name }}</li>
+            {% endfor %}
+        </ul>
+
+
+{% endblock %}
+```
