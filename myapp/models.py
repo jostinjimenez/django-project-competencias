@@ -29,7 +29,6 @@ class Team(models.Model):
     player_list = models.ManyToManyField(Player, related_name='teams')
 
     # Cambiar la relacion de muchos a muchos por una de uno a muchos para poder hacer que un jugador pertenezca a un solo equipo
-
     def __str__(self):
         players_list = ', '.join([str(player) for player in self.player_list.all()])
         return f"{self.name} ({players_list})"
