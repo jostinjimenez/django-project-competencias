@@ -23,10 +23,11 @@ class Player(models.Model):
         return self.name
 
 
-class  (models.Model):
+class Team(models.Model):
     name = models.CharField(max_length=50)
     inscription = models.ForeignKey(Inscription, on_delete=models.CASCADE, related_name='teams', null=True)
     player_list = models.ManyToManyField(Player, related_name='teams')
+
     # Cambiar la relacion de muchos a muchos por una de uno a muchos para poder hacer que un jugador pertenezca a un solo equipo
 
     def __str__(self):
