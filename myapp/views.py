@@ -1,3 +1,5 @@
+from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
@@ -9,7 +11,6 @@ from .forms import PlayerForm, SportForm
 from .models import Competition, Season, Sport, Group, Team, Inscription, Player, Game, State
 
 
-# Create your views here.
 def inscription_details(request, id):
     # Obtener la inscripción específica según el ID
     inscription = get_object_or_404(Inscription, pk=id)

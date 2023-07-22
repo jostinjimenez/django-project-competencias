@@ -1,7 +1,10 @@
 from django.contrib import admin
+from django.db.models import Q
+from django.http import JsonResponse
 from django.urls import path
 from django.urls import include
 from myapp import views
+from myapp.models import Player
 
 urlpatterns = [
     path('admin/', admin.site.urls),

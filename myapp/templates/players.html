@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
+
 {% block content %}
+
+    {% load static %}
 
     <head>
         <title>Listado de Jugadores</title>
@@ -8,31 +11,39 @@
     <main>
         <h1>Listado de Jugadores</h1>
 
-        <form method="get" action="{% url 'players' %}">
-            <input type="text" name="search" placeholder="Buscar por equipo, nombre o apellido">
-            <input type="submit" value="Buscar">
-        </form>
+        <div class="d-flex justify-content-end">
+            <form class="d-none d-sm-inline-block form-inline mr-2 mr-md-3 my-2 my-md-0 mw-100">
+                <div class="input-group">
+                    <label class="sr-only" for="search">Search:</label>
+                    <input type="text" class="form-control bg-light border-0 rounded-pill py-2 px-3" name="search"
+                           id="search-table" aria-label="Search" aria-describedby="basic-addon2"
+                           onkeyup="searchTable()">
+                </div>
+            </form>
+        </div>
 
-        <table>
+        <table class="table table-hover" id="player_table">
             <thead>
             <tr>
-                <th>Name</th>
-                <th>Position</th>
-                <th>Season</th>
-                <th>Team</th>
+                <th scope="col">Number</th>
+                <th scope="col">Name</th>
+                <th scope="col">Position</th>
+                <th scope="col">Season</th>
+                <th scope="col" colspan="2">Team</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody class="table-group-divider">
             {% for player in players %}
-                <tr>
-                    <td><a href="{% url 'player_detail' player.id %}">{{ player.name }}</a></td>
+                <tr style="cursor: pointer" onclick="window.location='{% url 'player_detail' player.id %}'">
+                    <th scope="row">{{ player.number_player }}</th>
+                    <td>{{ player.name }}</td>
                     <td>{{ player.position }}</td>
                     <td>
                         {% for team in player.teams.all %}
                             {{ team.season.name }}{% if not forloop.last %}, {% endif %}
                         {% endfor %}
                     </td>
-                    <td>
+                    <td colspan="2">
                         {% for team in player.teams.all %}
                             {{ team.name }}{% if not forloop.last %}, {% endif %}
                         {% endfor %}
@@ -41,7 +52,15 @@
             {% endfor %}
             </tbody>
         </table>
+
+        <div id="no-results-message" style="display: none; margin-top: 10px;">
+            No se encontraron registros coincidentes.
+        </div>
+
     </main>
+
+
+
 
 {% endblock %}
 ```
