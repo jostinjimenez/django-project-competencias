@@ -10,17 +10,17 @@
         <p>Position: {{ player.position }}</p>
         <h2>Seasons:</h2>
         <ul>
-            {% for team in player.teams.all %}
-                <li>{{ team.season.name }}</li>
+            {% for player_team_season in player.playerteamseason_set.all %}
+                <li>{{ player_team_season.season.name }}</li>
             {% endfor %}
         </ul>
         <h2>Equipos:</h2>
         <ul>
-            {% for team in player.teams.all %}
-                <li>{{ team.name }}</li>
+            {% for player_team_season in player.playerteamseason_set.all %}
+                <li>{{ player_team_season.team.name }}</li>
             {% endfor %}
         </ul>
+        <a href="{% url 'edit_player' player.id %}" class="btn btn-primary">Editar Jugador</a>
     </main>
 
 {% endblock %}
-```

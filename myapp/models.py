@@ -14,25 +14,14 @@ class Inscription(models.Model):
         return self.name
 
 
-class Player(models.Model):
-    name = models.CharField(max_length=50)
-    number_player = models.IntegerField()
-    position = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.name
-
-
 class Team(models.Model):
     name = models.CharField(max_length=50)
     inscription = models.ForeignKey(Inscription, on_delete=models.CASCADE, related_name='teams', null=True)
-    player_list = models.ManyToManyField(Player, related_name='teams')
     goals_scored = models.IntegerField(default=0)
     goals_received = models.IntegerField(default=0)
 
-    # Cambiar la relacion de muchos a muchos por una de uno a muchos para poder hacer que un jugador pertenezca a un solo equipo
     def __str__(self):
-        players_list = ', '.join([str(player) for player in self.player_list.all()])
+        players_list = ', '.join([str(player) for player in self.players.all()])
         return f"{self.name} ({players_list})"
 
 
@@ -124,6 +113,15 @@ class Season(models.Model):
         return self.name
 
 
+class Player(models.Model):
+    name = models.CharField(max_length=50)
+    number_player = models.IntegerField()
+    position = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
 class Group(models.Model):
     letter = models.CharField(max_length=1)
     season = models.ForeignKey(Season, on_delete=models.CASCADE, null=True)
@@ -131,3 +129,12 @@ class Group(models.Model):
 
     def __str__(self):
         return self.letter
+
+
+class PlayerTeamSeason(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    season = models.ForeignKey(Season, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.player.name} - {self.team.name} ({self.season.name})"

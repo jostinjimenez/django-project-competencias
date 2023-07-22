@@ -1,5 +1,3 @@
-from django.db.models import Q
-from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
@@ -8,7 +6,24 @@ from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 
 from .forms import PlayerForm, SportForm
-from .models import Competition, Season, Sport, Group, Team, Inscription, Player, Game, State
+from .models import Competition, Season, Sport, Group, Team, Inscription, Player, Game, State, PlayerTeamSeason
+
+
+def edit_player(request, id):
+    player = get_object_or_404(Player, pk=id)
+
+    if request.method == 'POST':
+        form = PlayerForm(request.POST, instance=player)
+        if form.is_valid():
+            form.save()
+            return redirect('player_detail', id=id)
+    else:
+        form = PlayerForm(instance=player)
+
+    return render(request, 'edit_player.html', {
+        'form': form,
+        'player': player,
+    })
 
 
 def inscription_details(request, id):
@@ -96,7 +111,16 @@ def player_list(request):
 
 def player_detail(request, id):
     player = get_object_or_404(Player, pk=id)
-    teams = Team.objects.filter(player_list=player)
+
+    # Obtener todas las relaciones PlayerTeamSeason del jugador
+    player_teams_seasons = PlayerTeamSeason.objects.filter(player=player)
+
+    # Obtener todos los equipos del jugador en temporadas distintas
+    teams = []
+    for player_team_season in player_teams_seasons:
+        if player_team_season.team not in teams:
+            teams.append(player_team_season.team)
+
     return render(request, 'player_detail.html', {
         'player': player,
         'teams': teams,
@@ -105,7 +129,10 @@ def player_detail(request, id):
 
 def teams_detail(request, id):
     team = get_object_or_404(Team, pk=id)
-    players = Player.objects.filter(teams=team)
+
+    # Obtener jugadores del equipo en la temporada actual
+    players = Player.objects.filter(team=team, season=team.season)
+
     games_as_local = Game.objects.filter(team_local=team)
     games_as_visitor = Game.objects.filter(team_visitor=team)
 
@@ -136,7 +163,8 @@ def seasons_and_groups(request, id):
             teams_by_inscription = {}
 
             for inscription in inscriptions:
-                teams = Team.objects.filter(inscription=inscription)
+                # Filtrar equipos por la temporada del jugador
+                teams = Team.objects.filter(inscription=inscription, season=season)
                 teams_by_inscription[inscription] = teams
 
             inscriptions_by_group[group] = teams_by_inscription

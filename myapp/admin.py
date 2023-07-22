@@ -4,7 +4,8 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.html import format_html
 
-from .models import Inscription, Sport, Group, Season, Modality, Competition, Game, Score, Team, Player
+from .models import Inscription, Sport, Group, Season, Modality, Competition, Game, Score, Team, Player, \
+    PlayerTeamSeason
 
 
 class SeasonInline(admin.StackedInline):
@@ -62,7 +63,7 @@ class TeamInline(admin.TabularInline):
 
 class TeamAdmin(admin.ModelAdmin):
     list_display = ('name', 'display_players', 'inscription')
-    list_editable = ('inscription', )
+    list_editable = ('inscription',)
 
     def display_players(self, obj):
         players = obj.player_list.all()
