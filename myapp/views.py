@@ -6,10 +6,29 @@ from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 
 from .forms import PlayerForm, SportForm
-from .models import Competition, Season, Sport, Group, Team
+from .models import Competition, Season, Sport, Group, Team, Inscription, Player, Game
 
 
 # Create your views here.
+def teams_detail(request, id):
+    team = get_object_or_404(Team, pk=id)
+    players = Player.objects.filter(teams=team)
+    games_as_local = Game.objects.filter(team_local=team)
+    games_as_visitor = Game.objects.filter(team_visitor=team)
+
+    return render(request, 'team_detail.html', {
+        'team': team,
+        'players': players,
+        'games_as_local': games_as_local,
+        'games_as_visitor': games_as_visitor,
+    })
+
+
+def team_list(request):
+    teams = Team.objects.all()
+    return render(request, 'teams.html', {'teams': teams})
+
+
 def seasons_and_groups(request, id):
     competition = get_object_or_404(Competition, pk=id)
     seasons = Season.objects.filter(competition=competition)
@@ -17,13 +36,19 @@ def seasons_and_groups(request, id):
 
     for season in seasons:
         groups = Group.objects.filter(season=season)
-        teams_by_group = {}
+        inscriptions_by_group = {}
 
         for group in groups:
-            teams = group.inscriptions.all()
-            teams_by_group[group] = teams
+            inscriptions = Inscription.objects.filter(group=group)
+            teams_by_inscription = {}
 
-        seasons_and_groups[season] = teams_by_group
+            for inscription in inscriptions:
+                teams = Team.objects.filter(inscription=inscription)
+                teams_by_inscription[inscription] = teams
+
+            inscriptions_by_group[group] = teams_by_inscription
+
+        seasons_and_groups[season] = inscriptions_by_group
 
     # Pasar los datos a la plantilla y renderizarla
     return render(request, 'seasons_and_groups.html', {

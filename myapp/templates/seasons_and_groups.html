@@ -8,15 +8,18 @@
     <main>
         <h1>{{ competition.name }}</h1>
 
-        {% for season, groups_and_teams in seasons_and_groups.items %}
+        {% for season, inscriptions_by_group in seasons_and_groups.items %}
             <h2>{{ season.name }}</h2>
-            {% for group, teams in groups_and_teams.items %}
+            {% for group, inscriptions in inscriptions_by_group.items %}
                 <h3>Grupo {{ group.letter }}</h3>
-                <ul>
-                    {% for team in teams %}
-                        <li>{{ team.name }}</li>
-                    {% endfor %}
-                </ul>
+                {% for inscription, teams in inscriptions.items %}
+                    <h4>Inscripción {{ inscription.name }}</h4>
+                    <ul>
+                        {% for team in teams %}
+                            <li>{{ team.name }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
             {% endfor %}
         {% endfor %}
     </main>
