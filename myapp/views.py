@@ -5,14 +5,31 @@ from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 
-from .forms import PlayerForm
-from .models import Competition, Season
+from .forms import PlayerForm, SportForm
+from .models import Competition, Season, Sport, Group, Team
 
 
 # Create your views here.
-def seasons(request):
-    seasons = Season.objects.all()
-    return render(request, 'season.html', {'seasons': seasons})
+def seasons_and_groups(request, id):
+    competition = get_object_or_404(Competition, pk=id)
+    seasons = Season.objects.filter(competition=competition)
+    seasons_and_groups = {}
+
+    for season in seasons:
+        groups = Group.objects.filter(season=season)
+        teams_by_group = {}
+
+        for group in groups:
+            teams = group.inscriptions.all()
+            teams_by_group[group] = teams
+
+        seasons_and_groups[season] = teams_by_group
+
+    # Pasar los datos a la plantilla y renderizarla
+    return render(request, 'seasons_and_groups.html', {
+        'competition': competition,
+        'seasons_and_groups': seasons_and_groups,
+    })
 
 
 def new_player(request):
@@ -22,11 +39,25 @@ def new_player(request):
 
 def competition_detail(request, id):
     competition = get_object_or_404(Competition, pk=id)
-    return render(request, 'competition_detail.html', {'competition': competition})
+    seasons = Season.objects.filter(competition=competition)
+    groups = Group.objects.filter(season__in=seasons)
+    return render(request, 'competition_detail.html', {
+        'competition': competition,
+        'seasons': seasons,
+        'groups': groups,
+    })
 
 
 def home(request):
-    return render(request, 'home.html')
+    active_competitions = Competition.objects.filter(is_active=True)
+    upcoming_competitions = Competition.objects.filter(is_active=False)
+
+    sports_offered = Sport.objects.all()
+    return render(request, 'home.html', {
+        'active_competitions': active_competitions,
+        'upcoming_competitions': upcoming_competitions,
+        'sports_offered': sports_offered,
+    })
 
 
 # Función para registrar un usuario
@@ -46,7 +77,7 @@ def signup(request):
                     'form': UserCreationForm,
                     'error': 'User already exists'
                 })
-        return render(request, 'signin.html', {
+        return render(request, 'signup.html', {
             'form': UserCreationForm,
             'error': 'Passwords did not match'
         })
@@ -81,3 +112,18 @@ def competitions(request):
     return render(request, 'competitions.html', {'competitions': competitions})
 
 
+def new_sport(request):
+    if request.method == 'GET':
+        form = SportForm()
+        return render(request, 'new_sport.html', {'form': form})
+    else:
+        try:
+            form = SportForm(request.POST)
+            new_sport = form.save(commit=False)
+            new_sport.save()
+            return redirect('home')
+        except ValueError:
+            return render(request, 'new_sport.html', {
+                'form': SportForm,
+                'error': 'Bad data passed in. Try again.'
+            })

@@ -1,16 +1,29 @@
 {% extends 'base.html' %}
 {% block content %}
 
+    <head>
+        <title>{{ competition.name }} - Competition details</title>
+    </head>
+
+    <body>
     <h1>{{ competition.name }}</h1>
-    <p>Sport: {{ competition.sport_list }}</p>
+    <p>Deporte asociado: {{ competition.sport_list.name }}</p>
+    <p>Modalidad: {{ competition.sport_list.get_type_sport_display }}</p>
+
+    <a href="{% url 'seasons_and_groups' competition.id %}"><h2>Temporadas:</h2></a>
     <ul>
-        {% for season in competition.season_set.all %}
+        {% for season in seasons %}
             <li>{{ season.name }}</li>
         {% endfor %}
-        <p>Teams:</p>
-
-
     </ul>
+
+    <h2>Grupos:</h2>
+    <ul>
+        {% for group in groups %}
+            <li>{{ group.letter }}</li>
+        {% endfor %}
+    </ul>
+    </body>
 
 
 {% endblock %}

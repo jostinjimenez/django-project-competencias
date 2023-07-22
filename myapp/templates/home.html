@@ -3,8 +3,31 @@
 {% block content %}
 
     <div class="container py-5">
-        <h1>Home</h1>
-        <p> Welcome to the home page!</p>
+        <h1>Welcome!</h1>
+
+        <!-- Mostrar información general sobre los deportes ofrecidos -->
+        <h2>Sports offered:</h2>
+        <ul>
+            {% for sport in sports_offered %}
+                <li>{{ sport.name }}</li>
+            {% endfor %}
+        </ul>
+
+        <!-- Mostrar la lista de competiciones activas -->
+        <h2>Active competitions:</h2>
+        <ul>
+            {% for competition in active_competitions %}
+                <li>{{ competition.name }}</li>
+            {% endfor %}
+        </ul>
+
+        <!-- Mostrar la lista de competiciones próximas -->
+        <h2>Upcoming competitions:</h2>
+        <ul>
+            {% for competition in upcoming_competitions %}
+                <li>{{ competition.name }}</li>
+            {% endfor %}
+        </ul>
     </div>
 
 {% endblock %}

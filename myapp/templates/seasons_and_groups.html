@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <head>
+        <title>{{ competition.name }} - Temporadas y grupos</title>
+    </head>
+
+    <main>
+        <h1>{{ competition.name }}</h1>
+
+        {% for season, groups_and_teams in seasons_and_groups.items %}
+            <h2>{{ season.name }}</h2>
+            {% for group, teams in groups_and_teams.items %}
+                <h3>Grupo {{ group.letter }}</h3>
+                <ul>
+                    {% for team in teams %}
+                        <li>{{ team.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        {% endfor %}
+    </main>
+
+{% endblock %}
+```

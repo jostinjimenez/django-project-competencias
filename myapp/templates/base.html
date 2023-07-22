@@ -33,8 +33,9 @@
             <ul class="navbar-nav ms-auto">
                 {% if user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'competitions' %}">Competitions</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'seasons' %}">Seasons</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'new' %}">Agregar Jugador</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Seasons</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'new_player' %}">New Player</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'new_sport' %}">New Sport</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="dropdown-profile" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">{{ user.username }}
