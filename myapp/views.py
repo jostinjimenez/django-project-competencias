@@ -10,6 +10,26 @@ from .models import Competition, Season, Sport, Group, Team, Inscription, Player
 
 
 # Create your views here.
+def inscription_details(request, id):
+    # Obtener la inscripción específica según el ID
+    inscription = get_object_or_404(Inscription, pk=id)
+
+    # Pasar los datos a la plantilla y renderizarla
+    return render(request, 'inscription_details.html', {
+        'inscription': inscription,
+    })
+
+
+def inscription_list(request):
+    # Obtener todas las inscripciones
+    inscriptions = Inscription.objects.all()
+
+    # Pasar los datos a la plantilla y renderizarla
+    return render(request, 'inscription_list.html', {
+        'inscriptions': inscriptions,
+    })
+
+
 def standings_table(request):
     teams = Team.objects.all()
     played_games = Game.objects.filter(state=State.PLAYED)

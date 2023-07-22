@@ -38,6 +38,8 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'players' %}">Players</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'game_list' %}">Matches</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'standings_table' %}">Standings Table</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'inscription_list' %}">Inscriptions List</a>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'new_player' %}">New Player</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'new_sport' %}">New Sport</a></li>
                     <li class="nav-item dropdown">
@@ -80,9 +82,11 @@
 
 </nav>
 
-{% block content %}
+<main class="container py-5">
+    {% block content %}
+    {% endblock %}
+</main>
 
-{% endblock %}
 
 </body>
 </html>
