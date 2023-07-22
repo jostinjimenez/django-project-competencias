@@ -7,8 +7,8 @@
 
     <body>
     <h1>{{ competition.name }}</h1>
-    <p>Deporte asociado: {{ competition.sport_list.name }}</p>
-    <p>Modalidad: {{ competition.sport_list.get_type_sport_display }}</p>
+    <p>Associated Sport {{ competition.sport_list.name }}</p>
+    <p>Modality: {{ competition.sport_list.get_type_sport_display }}</p>
 
     <a href="{% url 'seasons_and_groups' competition.id %}"><h2>Temporadas:</h2></a>
     <ul>
@@ -17,7 +17,7 @@
         {% endfor %}
     </ul>
 
-    <h2>Grupos:</h2>
+    <h2>Groups</h2>
     <ul>
         {% for group in groups %}
             <li>{{ group.letter }}</li>

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <head>
+        <title>Listado de Jugadores</title>
+    </head>
+
+    <main>
+        <h1>Listado de Jugadores</h1>
+
+        <form method="get" action="{% url 'players' %}">
+            <input type="text" name="search" placeholder="Buscar por equipo, nombre o apellido">
+            <input type="submit" value="Buscar">
+        </form>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Season</th>
+                <th>Team</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for player in players %}
+                <tr>
+                    <td><a href="{% url 'player_detail' player.id %}">{{ player.name }}</a></td>
+                    <td>{{ player.position }}</td>
+                    <td>
+                        {% for team in player.teams.all %}
+                            {{ team.season.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for team in player.teams.all %}
+                            {{ team.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </main>
+
+{% endblock %}
+```

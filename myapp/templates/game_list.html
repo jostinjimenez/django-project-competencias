@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <head>
+        <title>Game List</title>
+    </head>
+    <main>
+        <h1>List of matches</h1>
+
+        <form method="get" action="{% url 'game_list' %}">
+            <label for="state">Filter by state:</label>
+            <select id="state" name="state">
+                <option value="">All states</option>
+                {% for state_key, state_value in states %}
+                    <option value="{{ state_key }}"
+                            {% if state_key == selected_state %}selected{% endif %}>{{ state_value }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="sport">Filter by sport</label>
+            <select id="sport" name="sport">
+                <option value="">All sports</option>
+                {% for sport in sports %}
+                    <option value="{{ sport.id }}"
+                            {% if sport.id|stringformat:"s" == selected_sport %}selected{% endif %}>{{ sport.name }}</option>
+                {% endfor %}
+            </select>
+
+            <input type="submit" value="Filtrar">
+        </form>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Local Team</th>
+                <th>Visiting Team</th>
+                <th>State</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for game in games %}
+                <tr>
+                    <td>{{ game.date }}</td>
+                    <td>{{ game.hour }}</td>
+                    <td>{{ game.team_local.name }}</td>
+                    <td>{{ game.team_visitor.name }}</td>
+                    <td>{{ game.get_state_display }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </main>
+{% endblock %}
+```

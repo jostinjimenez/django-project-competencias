@@ -2,26 +2,26 @@
 {% block content %}
 
     <head>
-        <title>{{ team.name }} - Detalles del equipo</title>
+        <title>{{ team.name }} - Team Details</title>
     </head>
 
     <main>
         <h1>{{ team.name }}</h1>
-        <h2>Jugadores:</h2>
+        <h2>Players:</h2>
         <ul>
             {% for player in players %}
                 <li>{{ player.name }} ({{ player.position }})</li>
             {% endfor %}
         </ul>
 
-        <h2>Partidos como equipo local:</h2>
+        <h2>Home Team Matches:</h2>
         <ul>
             {% for game in games_as_local %}
                 <li>{{ game.team_visitor.name }} - {{ game.date }} - {{ game.hour }}</li>
             {% endfor %}
         </ul>
 
-        <h2>Partidos como equipo visitante:</h2>
+        <h2>Matches as away team:</h2>
         <ul>
             {% for game in games_as_visitor %}
                 <li>{{ game.team_local.name }} - {{ game.date }} - {{ game.hour }}</li>

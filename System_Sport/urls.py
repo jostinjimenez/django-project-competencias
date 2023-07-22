@@ -9,11 +9,15 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('logout/', views.signout, name='logout'),
     path('signin/', views.signin, name='signin'),
-    path('competitions/', views.competitions, name='competitions'),
+    path('competitions/', views.competition_list, name='competitions'),
     path('competitions/competitions_detail/<int:id>/', views.competition_detail, name='competition_detail'),
     path('new_player/', views.new_player, name='new_player'),
     path('new_sport/', views.new_sport, name='new_sport'),
     path('competition/<int:id>/seasons_and_groups/', views.seasons_and_groups, name='seasons_and_groups'),
     path('teams', views.team_list, name='teams'),
     path('teams/<int:id>/', views.teams_detail, name='teams_detail'),
+    path('players', views.player_list, name='players'),
+    path('player/<int:id>/', views.player_detail, name='player_detail'),
+    path('games/', views.game_list, name='game_list'),
+
 ]

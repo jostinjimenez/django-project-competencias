@@ -6,10 +6,48 @@ from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 
 from .forms import PlayerForm, SportForm
-from .models import Competition, Season, Sport, Group, Team, Inscription, Player, Game
+from .models import Competition, Season, Sport, Group, Team, Inscription, Player, Game, State
 
 
 # Create your views here.
+def game_list(request):
+    games = Game.objects.all()
+    states = State.choices
+    sports = Sport.objects.all()
+
+    selected_state = request.GET.get('state')
+    if selected_state and selected_state in dict(State.choices):
+        games = games.filter(state=selected_state)
+
+    # Filtrar los partidos según el deporte (si se selecciona)
+    selected_sport = request.GET.get('sport')
+    if selected_sport:
+        games = games.filter(team_local__sport_list_id=selected_sport)
+
+    # Pasar los datos a la plantilla y renderizarla
+    return render(request, 'game_list.html', {
+        'games': games,
+        'states': states,
+        'sports': sports,
+        'selected_state': selected_state,
+        'selected_sport': selected_sport,
+    })
+
+
+def player_list(request):
+    players = Player.objects.all()
+    return render(request, 'players.html', {'players': players})
+
+
+def player_detail(request, id):
+    player = get_object_or_404(Player, pk=id)
+    teams = Team.objects.filter(player_list=player)
+    return render(request, 'player_detail.html', {
+        'player': player,
+        'teams': teams,
+    })
+
+
 def teams_detail(request, id):
     team = get_object_or_404(Team, pk=id)
     players = Player.objects.filter(teams=team)
@@ -132,7 +170,7 @@ def signin(request):
             return redirect('home')
 
 
-def competitions(request):
+def competition_list(request):
     competitions = Competition.objects.all()
     return render(request, 'competitions.html', {'competitions': competitions})
 
