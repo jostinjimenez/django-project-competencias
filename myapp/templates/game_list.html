@@ -42,7 +42,7 @@
             </thead>
             <tbody>
             {% for game in games %}
-                <tr>
+                <tr class="clickable-row" data-href="{% url 'game_detail' game.id %}">
                     <td>{{ game.date }}</td>
                     <td>{{ game.hour }}</td>
                     <td>{{ game.team_local.name }}</td>
@@ -51,8 +51,21 @@
                 </tr>
             {% endfor %}
             </tbody>
+
         </table>
 
     </main>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var rows = document.querySelectorAll(".clickable-row");
+            rows.forEach(function (row) {
+                row.addEventListener("click", function () {
+                    var href = row.dataset.href;
+                    window.location = href;
+                });
+            });
+        });
+    </script>
+
 {% endblock %}
 ```

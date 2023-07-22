@@ -1,0 +1,18 @@
+{{% extends 'base.html' %}
+{% block content %}
+
+    <main>
+        <h1>Detalles del Partido</h1>
+        <p>Fecha: {{ game.date }}</p>
+        <p>Hora: {{ game.hour }}</p>
+        <p>Equipo Local: {{ game.team_local.name }}</p>
+        <p>Equipo Visitante: {{ game.team_visitor.name }}</p>
+        <p>Estado del Partido: {{ game.get_state_display }}</p>
+
+        {% if game.state == 'Played' %}
+            <p>Resultado: {{ game.score.result }}</p>
+        {% endif %}
+    </main>
+
+{% endblock %}
+```

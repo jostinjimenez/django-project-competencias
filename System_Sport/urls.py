@@ -19,5 +19,7 @@ urlpatterns = [
     path('players', views.player_list, name='players'),
     path('player/<int:id>/', views.player_detail, name='player_detail'),
     path('games/', views.game_list, name='game_list'),
+    path('game/<int:id>/', views.game_detail, name='game_detail'),
+    path('standings/', views.standings_table, name='standings_table'),
 
 ]

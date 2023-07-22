@@ -23,10 +23,13 @@ class Player(models.Model):
         return self.name
 
 
-class Team (models.Model):
+class Team(models.Model):
     name = models.CharField(max_length=50)
     inscription = models.ForeignKey(Inscription, on_delete=models.CASCADE, related_name='teams', null=True)
     player_list = models.ManyToManyField(Player, related_name='teams')
+    goals_scored = models.IntegerField(default=0)
+    goals_received = models.IntegerField(default=0)
+
     # Cambiar la relacion de muchos a muchos por una de uno a muchos para poder hacer que un jugador pertenezca a un solo equipo
     def __str__(self):
         players_list = ', '.join([str(player) for player in self.player_list.all()])
@@ -60,9 +63,26 @@ class Game(models.Model):
     team_visitor = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, related_name='teamVisitor')
     state = models.CharField(max_length=50, choices=[(tag.name, tag.value) for tag in State],
                              default=State.NOT_PLAYED.value)
+    winner = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True, related_name='winning_games')
+    loser = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True, related_name='losing_games')
 
     def __str__(self):
         return self.team_local.name + ' vs ' + self.team_visitor.name
+
+    def get_result(self):
+        if self.score:
+            return self.score.result
+        return "Not played"
+
+    def update_goals(self):
+        if self.state == State.PLAYED:
+            local_goals, visitor_goals = map(int, self.score.result.split('-'))
+            self.team_local.goals_scored += local_goals
+            self.team_local.goals_received += visitor_goals
+            self.team_visitor.goals_scored += visitor_goals
+            self.team_visitor.goals_received += local_goals
+            self.team_local.save()
+            self.team_visitor.save()
 
 
 class Score(models.Model):

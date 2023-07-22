@@ -10,21 +10,55 @@ from .models import Competition, Season, Sport, Group, Team, Inscription, Player
 
 
 # Create your views here.
+def standings_table(request):
+    teams = Team.objects.all()
+    played_games = Game.objects.filter(state=State.PLAYED)
+
+    for game in played_games:
+        game.update_goals()
+
+    standings = {}
+
+    for team in teams:
+        wins = played_games.filter(winner=team).count()
+        losses = played_games.filter(loser=team).count()
+        points = (wins * 3)
+        goals_difference = team.goals_scored - team.goals_received
+
+        standings[team] = {
+            'wins': wins,
+            'losses': losses,
+            'points': points,
+            'goals_difference': goals_difference,
+        }
+
+    sorted_standings = sorted(standings.items(), key=lambda x: (x[1]['points'], x[1]['goals_difference']), reverse=True)
+
+    return render(request, 'standings_table.html', {
+        'standings': sorted_standings,
+    })
+
+
+def game_detail(request, id):
+    game = get_object_or_404(Game, pk=id)
+    return render(request, 'game_detail.html', {'game': game})
+
+
 def game_list(request):
     games = Game.objects.all()
     states = State.choices
     sports = Sport.objects.all()
-
     selected_state = request.GET.get('state')
+
     if selected_state and selected_state in dict(State.choices):
         games = games.filter(state=selected_state)
 
-    # Filtrar los partidos según el deporte (si se selecciona)
     selected_sport = request.GET.get('sport')
-    if selected_sport:
-        games = games.filter(team_local__sport_list_id=selected_sport)
 
-    # Pasar los datos a la plantilla y renderizarla
+    if selected_sport:
+        games = games.filter(team_local__inscription__sport_list_id=selected_sport) | \
+                games.filter(team_visitor__inscription__sport_list_id=selected_sport)
+
     return render(request, 'game_list.html', {
         'games': games,
         'states': states,

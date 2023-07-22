@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <head>
+        <title>Tabla de Posiciones</title>
+    </head>
+
+    <main>
+        <h1>Tabla de Posiciones</h1>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Equipo</th>
+                <th>Partidos Ganados</th>
+                <th>Partidos Empatados</th>
+                <th>Partidos Perdidos</th>
+                <th>Puntos</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for team, stats in standings %}
+                <tr>
+                    <td>{{ team.name }}</td>
+                    <td>{{ stats.wins }}</td>
+                    <td>{{ stats.draws }}</td>
+                    <td>{{ stats.losses }}</td>
+                    <td>{{ stats.points }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </main>
+
+{% endblock %}
+```
