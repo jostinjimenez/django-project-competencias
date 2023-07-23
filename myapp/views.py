@@ -5,8 +5,25 @@ from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 
-from .forms import PlayerForm, SportForm
+from .forms import PlayerForm, SportForm, CompetitionForm
 from .models import Competition, Season, Sport, Group, Team, Inscription, Player, Game, State, PlayerTeamSeason
+
+
+def new_competition(request):
+    if request.method == 'GET':
+        form = CompetitionForm()
+        return render(request, 'new_competition.html', {'form': form})
+    else:
+        try:
+            form = CompetitionForm(request.POST)
+            new_competition = form.save(commit=False)
+            new_competition.save()
+            return redirect('home')
+        except ValueError:
+            return render(request, 'new_competition.html', {
+                'form': CompetitionForm,
+                'error': 'Bad data passed in. Try again.'
+            })
 
 
 def edit_player(request, id):

@@ -58,17 +58,5 @@
             {% endfor %}
         </div>
     </main>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var rows = document.querySelectorAll(".clickable-row");
-            rows.forEach(function (row) {
-                row.addEventListener("click", function () {
-                    var href = row.dataset.href;
-                    window.location = href;
-                });
-            });
-        });
-    </script>
-
 {% endblock %}
 ```

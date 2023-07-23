@@ -27,5 +27,6 @@ urlpatterns = [
     path('inscriptions/', views.inscription_list, name='inscription_list'),
     path('inscription/<int:id>/', views.inscription_details, name='inscription_detail'),
     path('edit_player/<int:id>/', views.edit_player, name='edit_player'),
+    path('new_competition/', views.new_competition, name='new_competition'),
 
 ]
