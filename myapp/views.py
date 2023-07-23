@@ -130,8 +130,11 @@ def player_detail(request, id):
 def teams_detail(request, id):
     team = get_object_or_404(Team, pk=id)
 
-    # Obtener jugadores del equipo en la temporada actual
-    players = Player.objects.filter(team=team, season=team.season)
+    # Obtener todas las relaciones PlayerTeamSeason del equipo en todas las temporadas
+    player_team_seasons = PlayerTeamSeason.objects.filter(team=team)
+
+    # Obtener todos los jugadores del equipo en todas las temporadas
+    players = [player_team_season.player for player_team_season in player_team_seasons]
 
     games_as_local = Game.objects.filter(team_local=team)
     games_as_visitor = Game.objects.filter(team_visitor=team)
@@ -163,15 +166,13 @@ def seasons_and_groups(request, id):
             teams_by_inscription = {}
 
             for inscription in inscriptions:
-                # Filtrar equipos por la temporada del jugador
-                teams = Team.objects.filter(inscription=inscription, season=season)
+                teams = Team.objects.filter(inscription=inscription)
                 teams_by_inscription[inscription] = teams
 
             inscriptions_by_group[group] = teams_by_inscription
 
         seasons_and_groups[season] = inscriptions_by_group
 
-    # Pasar los datos a la plantilla y renderizarla
     return render(request, 'seasons_and_groups.html', {
         'competition': competition,
         'seasons_and_groups': seasons_and_groups,

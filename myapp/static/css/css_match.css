@@ -1,0 +1,29 @@
+/* Estilos para el div de los nombres */
+.name {
+    font-size: 15px; /* Tamaño de fuente más grande para los nombres */
+    margin-bottom: 5px; /* Ajusta el espacio inferior */
+}
+
+/* Estilos para el div de la fecha */
+.datetime {
+    font-size: 12px; /* Tamaño de fuente más pequeño para la fecha */
+    margin-bottom: 0; /* Elimina el espacio inferior para que esté más pegado al margen */
+}
+
+/* Estilos para la tarjeta */
+.card-game {
+    transition: box-shadow 0.3s ease, background-color 0.3s ease; /* Aplica la transición a sombreado y fondo */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Sombreado inicial */
+}
+
+/* Estilos para la animación al pasar el cursor */
+.card-game:hover {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Nuevo sombreado al pasar el cursor */
+    cursor: pointer; /* Cambia el cursor al pasar el cursor */
+    border: 1px solid #205D9E; /* Borde blanco al pasar el cursor */
+}
+
+/* Estilo personalizado para quitar el subrayado del enlace */
+.custom-link {
+    text-decoration: none !important;
+}

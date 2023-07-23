@@ -21,8 +21,7 @@ class Team(models.Model):
     goals_received = models.IntegerField(default=0)
 
     def __str__(self):
-        players_list = ', '.join([str(player) for player in self.players.all()])
-        return f"{self.name} ({players_list})"
+        return self.name
 
 
 class Sport(models.Model):
