@@ -3,10 +3,14 @@
 
     <h1>Teams List</h1>
 
-    <ul>
+    <div>
         {% for team in teams %}
-            <li><a href="{% url 'teams_detail' team.id %}">{{ team.name }}</a></li>
+            <div class="card card-body bg-dark">
+                <div class=" text-light">
+                   <h2><a href="{% url 'teams_detail' team.id %}">{{ team.name }}</a></h2>
+                </div>
+            </div>
         {% endfor %}
-    </ul>
+    </div>
 
 {% endblock %}
