@@ -7,11 +7,31 @@
 
         <!-- Mostrar información general sobre los deportes ofrecidos -->
         <h2>Sports offered:</h2>
-        <ul>
+        <div class="container">
             {% for sport in sports_offered %}
-                <li>{{ sport.name }}</li>
+                {% if forloop.counter0|divisibleby:3 %}
+                    <div class="row">
+                {% endif %}
+
+                <div class="col-4">
+                    <div class="card text-bg-dark">
+                        <img src="static/img/futbol.jpg" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <h5 class="card-title">{{ sport.name }}</h5>
+                            <p class="card-text">......</p>
+                            <p class="card-text"><small>......</small></p>
+                        </div>
+                    </div>
+                </div>
+
+                {% if forloop.counter|divisibleby:3 or forloop.last %}
+                    </div>
+                {% endif %}
             {% endfor %}
-        </ul>
+        </div>
+
+
+
 
         <!-- Mostrar la lista de competiciones activas -->
         <h2>Active competitions:</h2>
