@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 # Create your models here.
@@ -22,6 +23,20 @@ class Team(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_standings(self):
+        played_games = Game.objects.filter(state=State.PLAYED)
+        wins = played_games.filter(winner=self).count()
+        losses = played_games.filter(loser=self).count()
+        points = wins * 3
+        goals_difference = self.goals_scored - self.goals_received
+
+        return {
+            'wins': wins,
+            'losses': losses,
+            'points': points,
+            'goals_difference': goals_difference,
+        }
 
 
 class Sport(models.Model):
@@ -62,7 +77,7 @@ class Game(models.Model):
             return self.score.result
         return "Not played"
 
-    def update_goals(self):
+    def save(self, *args, **kwargs):
         if self.state == State.PLAYED:
             local_goals, visitor_goals = map(int, self.score.result.split('-'))
             self.team_local.goals_scored += local_goals
@@ -71,6 +86,7 @@ class Game(models.Model):
             self.team_visitor.goals_received += local_goals
             self.team_local.save()
             self.team_visitor.save()
+        super().save(*args, **kwargs)
 
 
 class Score(models.Model):
@@ -119,6 +135,21 @@ class Player(models.Model):
 
     def __str__(self):
         return self.name
+
+    def clean(self):
+        # Obtener la temporada del equipo al que se intenta agregar al jugador
+        team_season = self.team.season if self.team else None
+
+        # Obtener todos los equipos del jugador en temporadas distintas
+        teams_in_other_seasons = self.teams.exclude(season=team_season)
+
+        # Verificar si el jugador ya pertenece a otro equipo de la misma temporada
+        if self.team and self.teams.filter(season=team_season).count() > 1:
+            raise ValidationError("El jugador ya pertenece a otro equipo de la misma temporada.")
+
+        # Verificar si el jugador pertenece a otros equipos en temporadas distintas
+        if teams_in_other_seasons.exists():
+            raise ValidationError("El jugador ya pertenece a otros equipos en temporadas distintas.")
 
 
 class Group(models.Model):

@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 
-    {{ form.as_p }}
+    <h1>Agregar Jugador</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar</button>
+    </form>
 
 {% endblock %}
-```

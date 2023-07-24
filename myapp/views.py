@@ -1,14 +1,17 @@
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from django.contrib.auth.decorators import login_required
 
-from .forms import PlayerForm, SportForm, CompetitionForm
+from .forms import PlayerForm, SportForm, CompetitionForm, CustomPlayerForm
 from .models import Competition, Season, Sport, Group, Team, Inscription, Player, Game, State, PlayerTeamSeason
 
 
+@login_required
+@transaction.atomic  # Aplicamos el decorador para asegurar el uso de transacciones
 def new_competition(request):
     if request.method == 'GET':
         form = CompetitionForm()
@@ -26,6 +29,8 @@ def new_competition(request):
             })
 
 
+@login_required
+@transaction.atomic
 def edit_player(request, id):
     player = get_object_or_404(Player, pk=id)
 
@@ -65,25 +70,7 @@ def inscription_list(request):
 
 def standings_table(request):
     teams = Team.objects.all()
-    played_games = Game.objects.filter(state=State.PLAYED)
-
-    for game in played_games:
-        game.update_goals()
-
-    standings = {}
-
-    for team in teams:
-        wins = played_games.filter(winner=team).count()
-        losses = played_games.filter(loser=team).count()
-        points = (wins * 3)
-        goals_difference = team.goals_scored - team.goals_received
-
-        standings[team] = {
-            'wins': wins,
-            'losses': losses,
-            'points': points,
-            'goals_difference': goals_difference,
-        }
+    standings = {team: team.get_standings() for team in teams}
 
     sorted_standings = sorted(standings.items(), key=lambda x: (x[1]['points'], x[1]['goals_difference']), reverse=True)
 
@@ -109,8 +96,10 @@ def game_list(request):
     selected_sport = request.GET.get('sport')
 
     if selected_sport:
-        games = games.filter(team_local__inscription__sport_list_id=selected_sport) | \
-                games.filter(team_visitor__inscription__sport_list_id=selected_sport)
+        games = games.filter(
+            Q(team_local__inscription__sport_list_id=selected_sport) |
+            Q(team_visitor__inscription__sport_list_id=selected_sport)
+        )
 
     return render(request, 'game_list.html', {
         'games': games,
@@ -196,8 +185,16 @@ def seasons_and_groups(request, id):
     })
 
 
+@login_required
 def new_player(request):
-    form = PlayerForm()
+    if request.method == 'POST':
+        form = CustomPlayerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('player_list')
+    else:
+        form = CustomPlayerForm()
+
     return render(request, 'new_player.html', {'form': form})
 
 

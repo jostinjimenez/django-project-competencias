@@ -10,8 +10,8 @@
 
     <div class="container py-5">
         {% for competition in competitions %}
-            <div class="card card-body bg-secondary">
-                <div class="row text-light">
+            <div class="card card-body bg-dark">
+                <div class=" text-light">
                     <h2><a href="{% url 'competition_detail' competition.id %}">{{ competition.name }}</a></h2>
                     <p class="text-right">{{ competition.is_active }}</p>
                 </div>

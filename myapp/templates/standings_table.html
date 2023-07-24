@@ -8,24 +8,24 @@
     <main>
         <h1>Tabla de Posiciones</h1>
 
-        <table>
+        <table class="table table-hover">
             <thead>
             <tr>
-                <th>Equipo</th>
-                <th>Partidos Ganados</th>
-                <th>Partidos Empatados</th>
-                <th>Partidos Perdidos</th>
-                <th>Puntos</th>
+                <th scope="col">Equipo</th>
+                <th scope="col">Partidos Ganados</th>
+                <th scope="col">Partidos Empatados</th>
+                <th scope="col">Partidos Perdidos</th>
+                <th scope="col" colspan="2">Puntos</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody class="table-group-divider">
             {% for team, stats in standings %}
-                <tr>
+                <tr style="cursor: pointer" onclick="window.location='{% url 'teams_detail' team.id %}'">
                     <td>{{ team.name }}</td>
                     <td>{{ stats.wins }}</td>
                     <td>{{ stats.draws }}</td>
                     <td>{{ stats.losses }}</td>
-                    <td>{{ stats.points }}</td>
+                    <td colspan="2">{{ stats.points }}</td>
                 </tr>
             {% endfor %}
             </tbody>
