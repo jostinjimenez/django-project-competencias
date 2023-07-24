@@ -41,6 +41,7 @@ class Team(models.Model):
 
 class Sport(models.Model):
     name = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='sports', null=True, blank=True)
     TYPE_SPORT = (
         ('I', 'Individual'),
         ('T', 'Team'),
