@@ -2,24 +2,26 @@
 
 {% block content %}
 
-    <h1>Competitions List</h1>
+    <div class="container mt-5">
+        <h1 class="mb-4">Competitions List</h1>
 
-    <form action="">
-        <a class="btn btn-primary" href="{% url 'new_competition' %}">Crear Competencia</a>
-    </form>
+        <div class="d-flex justify-content-end mb-3">
+            <a class="btn btn-primary" href="{% url 'new_competition' %}">Crear Competencia</a>
+        </div>
 
-    <div class="container py-5 ">
-        {% for competition in competitions %}
-            <div class="card card-body bg-dark mb-3">
-                <div class=" text-light ">
-                    <h2><a href="{% url 'competition_detail' competition.id %}">{{ competition.name }}</a></h2>
-                    <p class="text-right">{{ competition.is_active }}</p>
+        <div class="row">
+            {% for competition in competitions %}
+                <div class="col-md-6 mb-4">
+                    <div class="card bg-dark text-light">
+                        <div class="card-body">
+                            <h2 class="card-title"><a
+                                    href="{% url 'competition_detail' competition.id %}">{{ competition.name }}</a></h2>
+                            <p class="card-text text-right">{{ competition.is_active }}</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
 
 {% endblock %}
-```
