@@ -2,23 +2,31 @@
 {% block content %}
 
     {% load static %}
-    <head>
-        <title>Teams</title>
-        <link rel="stylesheet" href="{% static 'css/css_team.css' %}">
-    </head>
 
-    <h1 class="text-center">Teams</h1>
-    <div class="row">
-        {% for team in teams %}
-        <div class="col-md-4"> <!-- Se puede ajustar el tamaño de las columnas según las necesidades -->
-            <div class="card card-teams" style="margin-bottom: 10px;">
-                <div class="card-body">
-                    <h5 class="card-title">{{ team.name }}</h5>
-                    <p class="card-text">Description</p>
-                    <a href="{% url 'teams_detail' team.id %}" class="card-link">Details</a>
+    <div class="container mt-5 ">
+        <h1 class="text-center mb-4">Teams</h1>
+        <div class="row">
+            {% for team in teams %}
+                <div class="col-md-3 ">
+                    <div class="card shadow-sm mb-4 ">
+                        <!-- Imagen del equipo, si está disponible -->
+                        <div class="text-center mt-3"> <!-- Agregar clase text-center para centrar la imagen -->
+                            {% if team.image %}
+                                <img src="{{ team.image.url }}" class="card-img-top img-small" alt="{{ team.name }}">
+                            {% else %}
+                                <img src="{% static 'img/team_default.png' %}" class="card-img-top img-fluid"
+                                     alt="{{ team.name }}" style="width: 150px; height: 160px;">
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ team.name }}</h5>
+                            <p class="card-text">Description</p>
+                            <a href="{% url 'teams_detail' team.id %}" class="btn btn-primary btn-sm">Details</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
+
 {% endblock %}
