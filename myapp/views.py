@@ -11,25 +11,6 @@ from .models import Competition, Season, Sport, Group, Team, Inscription, Player
 
 
 @login_required
-@transaction.atomic  # Aplicamos el decorador para asegurar el uso de transacciones
-def new_competition(request):
-    if request.method == 'GET':
-        form = CompetitionForm()
-        return render(request, 'new_competition.html', {'form': form})
-    else:
-        try:
-            form = CompetitionForm(request.POST)
-            new_competition = form.save(commit=False)
-            new_competition.save()
-            return redirect('home')
-        except ValueError:
-            return render(request, 'new_competition.html', {
-                'form': CompetitionForm,
-                'error': 'Bad data passed in. Try again.'
-            })
-
-
-@login_required
 @transaction.atomic
 def edit_player(request, id):
     player = get_object_or_404(Player, pk=id)
@@ -279,12 +260,31 @@ def new_sport(request):
         return render(request, 'new_sport.html', {'form': form})
     else:
         try:
-            form = SportForm(request.POST)
-            new_sport = form.save(commit=False)
-            new_sport.save()
-            return redirect('home')
+            form = SportForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+            return redirect('new_competition')
         except ValueError:
             return render(request, 'new_sport.html', {
                 'form': SportForm,
+                'error': 'Bad data passed in. Try again.'
+            })
+
+
+@login_required
+@transaction.atomic  # Aplicamos el decorador para asegurar el uso de transacciones
+def new_competition(request):
+    if request.method == 'GET':
+        form = CompetitionForm()
+        return render(request, 'new_competition.html', {'form': form})
+    else:
+        try:
+            form = CompetitionForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+            return redirect('competitions')
+        except ValueError:
+            return render(request, 'new_competition.html', {
+                'form': CompetitionForm,
                 'error': 'Bad data passed in. Try again.'
             })

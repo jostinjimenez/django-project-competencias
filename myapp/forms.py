@@ -43,8 +43,24 @@ class SportForm(forms.ModelForm):
         model = Sport
         fields = ['name', 'type_sport', 'image']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({'class': 'form-control mb-3'})
+        self.fields['type_sport'].widget.attrs.update({'class': 'form-select mb-3'})
+        self.fields['image'].widget.attrs.update({'class': 'form-control mb-3'})
+
 
 class CompetitionForm(forms.ModelForm):
     class Meta:
         model = Competition
-        fields = ['name', 'sport_list', 'is_active']
+        fields = ['name', 'sport', 'is_active', 'awards', 'rules_and_regulations']
+
+    def __init__(self, *args, **kwargs):
+        super(CompetitionForm, self).__init__(*args, **kwargs)
+
+        # Agregar clases de Bootstrap a los campos del formulario
+        self.fields['name'].widget.attrs['class'] = 'form-control border-2 rounded-pill'
+        self.fields['sport'].widget.attrs['class'] = 'form-select border-2 rounded-pill'
+        self.fields['is_active'].widget.attrs['class'] = 'form-check-input'
+        self.fields['awards'].widget.attrs['class'] = 'form-control border-2 rounded-pill'
+        self.fields['rules_and_regulations'].widget.attrs['class'] = 'form-control border-2'

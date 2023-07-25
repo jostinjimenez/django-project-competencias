@@ -46,7 +46,7 @@ class Sport(models.Model):
         ('I', 'Individual'),
         ('T', 'Team'),
     )
-    type_sport = models.CharField(max_length=1, choices=TYPE_SPORT, blank=True, default='I', help_text='Type of sport')
+    type_sport = models.CharField(max_length=1, choices=TYPE_SPORT, blank=True, default='T')
 
     def __str__(self):
         return self.name
@@ -96,9 +96,11 @@ class Score(models.Model):
 
 
 class Competition(models.Model):
-    name = models.CharField(max_length=50)
-    sport_list = models.ForeignKey(Sport, on_delete=models.SET_NULL, null=True)
+    name = models.CharField(max_length=50, blank=True)
+    sport = models.ForeignKey(Sport, on_delete=models.SET_NULL, null=True)  # cambiar la relacion a OneToOneField
     is_active = models.BooleanField(default=True)
+    awards = models.CharField(max_length=50, null=True, blank=True)
+    rules_and_regulations = models.TextField(max_length=500, null=True, blank=True)
 
     def __str__(self):
         return self.name
