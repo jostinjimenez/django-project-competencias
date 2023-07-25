@@ -11,7 +11,7 @@
 
     <body>
     <div class="container mt-5">
-        <h1 class="text-center">Welcome!</h1>
+        <h1 class="text-center mb-5">Welcome!</h1>
 
         <!-- Mostrar información general sobre los deportes ofrecidos -->
         <h2 class="mt-5 mb-3">Sports offered:</h2>
@@ -23,22 +23,20 @@
                         {% if sport.image %}
                             <img src="{{ sport.image.url }}" class="card-img-top" alt="{{ sport.name }}">
                         {% else %}
-                            <img src="{% static 'img/sports.png' %}" class="card-img-top"
-                                 alt="{{ sport.name }}">
+                            <img src="{% static 'img/sports.png' %}" class="card-img-top" alt="{{ sport.name }}">
                         {% endif %}
                         <!-- Resto del contenido del card -->
                         <div class="card-body">
                             <h5 class="card-title">{{ sport.name }}</h5>
-                            <p class="card-text">...</p>
-                            <p class="card-text"><small>...</small></p>
-                            <a href="#" class="btn btn-primary">Learn More</a>
+                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            <a href="#" class="btn btn-primary btn-sm">Learn More</a>
                         </div>
                     </div>
                 </div>
             {% endfor %}
-        </div
+        </div>
 
-                <!-- Mostrar la lista de competiciones activas -->
+        <!-- Mostrar la lista de competiciones activas -->
         <h2 class="mt-5 mb-3">Active competitions:</h2>
         <ul class="list-group">
             {% for competition in active_competitions %}
@@ -54,8 +52,7 @@
             {% endfor %}
         </ul>
     </div>
-
-
-
+    </body>
+    
 {% endblock %}
 ```

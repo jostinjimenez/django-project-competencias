@@ -1,14 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
 
-    <form action="">
-        {{ form.as_p }}
-
-        <form action="">
-            <a class="btn btn-primary" href="{% url 'new_sport' %}">New Sport</a>
-        </form>
-
+    <form method="post" class="card o-hidden border-0 shadow-lg my-5">
+        <div class="card-body p-0">
+            <div class="row">
+                <div class="col-lg-6 d-none d-lg-block "></div>
+                <div class="col-lg-6">
+                    <div class="p-5">
+                        <div class="text-center">
+                            <h1 class="h4 text-gray-900 mb-4">Competition Form</h1>
+                        </div>
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary rounded-pill btn-lg w-100"
+                                    style="height: 45px; background: #205D9E; font-size: math;">Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
+
 
 {% endblock %}
 ```
