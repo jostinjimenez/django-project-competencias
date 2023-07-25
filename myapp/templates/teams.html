@@ -1,16 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
 
-    <h1>Teams List</h1>
+    {% load static %}
+    <head>
+        <title>Teams</title>
+        <link rel="stylesheet" href="{% static 'css/css_team.css' %}">
+    </head>
 
-    <div>
+    <h1 class="text-center">Teams</h1>
+    <div class="row">
         {% for team in teams %}
-            <div class="card card-body bg-dark">
-                <div class=" text-light">
-                   <h2><a href="{% url 'teams_detail' team.id %}">{{ team.name }}</a></h2>
+        <div class="col-md-4"> <!-- Se puede ajustar el tamaño de las columnas según las necesidades -->
+            <div class="card card-teams" style="margin-bottom: 10px;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ team.name }}</h5>
+                    <p class="card-text">Description</p>
+                    <a href="{% url 'teams_detail' team.id %}" class="card-link">Details</a>
                 </div>
             </div>
+        </div>
         {% endfor %}
     </div>
-
 {% endblock %}
