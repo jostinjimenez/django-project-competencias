@@ -2,53 +2,60 @@
 
 {% block content %}
 
-    <div>
-        <h1>Welcome!</h1>
+    {% load static %}
+
+    <head>
+        <title>{{ competition.name }} - Competition details</title>
+        <link rel="stylesheet" href="{% static 'css/css_home.css' %}">
+    </head>
+
+    <body>
+    <div class="container mt-5">
+        <h1 class="text-center">Welcome!</h1>
 
         <!-- Mostrar información general sobre los deportes ofrecidos -->
-        <h2>Sports offered:</h2>
-        <div class="container">
+        <h2 class="mt-5 mb-3">Sports offered:</h2>
+        <div class="row">
             {% for sport in sports_offered %}
-                {% if forloop.counter0|divisibleby:3 %}
-                    <div class="row">
-                {% endif %}
-
-                <div class="col-4">
-                    <div class="card text-bg-dark">
-                        <img src="static/img/futbol.jpg" class="card-img" alt="...">
-                        <div class="card-img-overlay">
+                <div class="col-md-4 mb-4">
+                    <div class="card text-dark">
+                        <!-- Mostrar la imagen del usuario si está disponible, de lo contrario, mostrar una imagen por defecto -->
+                        {% if sport.image %}
+                            <img src="{{ sport.image.url }}" class="card-img-top" alt="{{ sport.name }}">
+                        {% else %}
+                            <img src="{% static 'img/sports.png' %}" class="card-img-top"
+                                 alt="{{ sport.name }}">
+                        {% endif %}
+                        <!-- Resto del contenido del card -->
+                        <div class="card-body">
                             <h5 class="card-title">{{ sport.name }}</h5>
-                            <p class="card-text">......</p>
-                            <p class="card-text"><small>......</small></p>
+                            <p class="card-text">...</p>
+                            <p class="card-text"><small>...</small></p>
+                            <a href="#" class="btn btn-primary">Learn More</a>
                         </div>
                     </div>
                 </div>
-
-                {% if forloop.counter|divisibleby:3 or forloop.last %}
-                    </div>
-                {% endif %}
             {% endfor %}
-        </div>
+        </div
 
-
-        <!-- Mostrar la lista de competiciones activas -->
-
-        <h2>Active competitions:</h2>
-        <ul>
+                <!-- Mostrar la lista de competiciones activas -->
+        <h2 class="mt-5 mb-3">Active competitions:</h2>
+        <ul class="list-group">
             {% for competition in active_competitions %}
-                <li>{{ competition.name }}</li>
+                <li class="list-group-item">{{ competition.name }}</li>
             {% endfor %}
         </ul>
 
-
         <!-- Mostrar la lista de competiciones próximas -->
-        <h2>Upcoming competitions:</h2>
-        <ul>
+        <h2 class="mt-5 mb-3">Upcoming competitions:</h2>
+        <ul class="list-group">
             {% for competition in upcoming_competitions %}
-                <li>{{ competition.name }}</li>
+                <li class="list-group-item">{{ competition.name }}</li>
             {% endfor %}
         </ul>
     </div>
+
+
 
 {% endblock %}
 ```

@@ -41,7 +41,7 @@ class PlayerForm(forms.ModelForm):
 class SportForm(forms.ModelForm):
     class Meta:
         model = Sport
-        fields = ['name', 'type_sport']
+        fields = ['name', 'type_sport', 'image']
 
 
 class CompetitionForm(forms.ModelForm):
