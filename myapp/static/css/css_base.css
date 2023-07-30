@@ -1,3 +1,14 @@
+.card {
+    /* Estilos normales de la tarjeta aquí */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Estilos para el efecto de brillo al pasar el mouse */
+.card:hover {
+    box-shadow: 0 0 10px rgba(13, 232, 49, 0.97);
+    transition: box-shadow 0.3s ease;
+}
 
 
 
