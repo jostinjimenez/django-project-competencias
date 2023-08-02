@@ -1,14 +1,9 @@
-.card {
-    /* Estilos normales de la tarjeta aquí */
-    border: 1px solid #ccc;
-    border-radius: 5px;
+/* css_base.css */
+
+.menu-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Ajustamos la altura del menú al 100% de la pantalla */
 }
-
-/* Estilos para el efecto de brillo al pasar el mouse */
-.card:hover {
-    box-shadow: 0 0 10px rgba(13, 232, 49, 0.97);
-    transition: box-shadow 0.3s ease;
-}
-
-
-

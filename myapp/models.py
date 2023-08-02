@@ -140,17 +140,12 @@ class Player(models.Model):
         return self.name
 
     def clean(self):
-        # Obtener la temporada del equipo al que se intenta agregar al jugador
         team_season = self.team.season if self.team else None
-
-        # Obtener todos los equipos del jugador en temporadas distintas
         teams_in_other_seasons = self.teams.exclude(season=team_season)
 
-        # Verificar si el jugador ya pertenece a otro equipo de la misma temporada
         if self.team and self.teams.filter(season=team_season).count() > 1:
             raise ValidationError("El jugador ya pertenece a otro equipo de la misma temporada.")
 
-        # Verificar si el jugador pertenece a otros equipos en temporadas distintas
         if teams_in_other_seasons.exists():
             raise ValidationError("El jugador ya pertenece a otros equipos en temporadas distintas.")
 
