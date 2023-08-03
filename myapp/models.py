@@ -95,20 +95,29 @@ class Score(models.Model):
     game = models.OneToOneField(Game, on_delete=models.CASCADE, null=True)
 
 
-class Competition(models.Model):
-    name = models.CharField(max_length=50, blank=True)
-    sport = models.ForeignKey(Sport, on_delete=models.SET_NULL, null=True)  # cambiar la relacion a OneToOneField
-    is_active = models.BooleanField(default=True)
-    awards = models.CharField(max_length=50, null=True, blank=True)
-    rules_and_regulations = models.TextField(max_length=500, null=True, blank=True)
+class Season(models.Model):
+    name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.name
 
 
-class Modality(models.Model):
-    name = models.CharField(max_length=50)
-    MODALITY_TYPES = (
+class Competition(models.Model):
+    name = models.CharField(max_length=50, blank=True)
+    date_start = models.DateField(null=True)
+    date_end = models.DateField(blank=True, null=True)
+    SPORT_lIST = (
+        ('F', 'Football'),
+        ('B', 'Basketball'),
+        ('V', 'Volleyball'),
+        ('H', 'Handball'),
+        ('T', 'Tennis'),
+        ('O', 'Other')
+    )
+    season = models.ForeignKey(Season, on_delete=models.CASCADE, null=True)
+    sport = models.CharField(max_length=1, choices=SPORT_lIST, default='O')
+    genre = models.CharField(choices=[('M', 'Male'), ('F', 'Female'), ('MF', 'Mixed')], max_length=2, null=True)
+    COMPETITION_TYPES = (
         ('L', 'League'),
         ('T', 'Tournament'),
         ('P', 'Playoff'),
@@ -116,16 +125,9 @@ class Modality(models.Model):
         ('GS', 'Group Stage'),
         ('O', 'Other')
     )
-    type_modality = models.CharField(max_length=2, choices=MODALITY_TYPES, default='O', help_text='Type of modality')
-
-    def __str__(self):
-        return self.name
-
-
-class Season(models.Model):
-    name = models.CharField(max_length=50)
-    modality = models.OneToOneField(Modality, on_delete=models.SET_NULL, null=True)
-    competition = models.ForeignKey(Competition, on_delete=models.CASCADE, null=True)
+    number_grups = models.IntegerField(blank=True, null=True)
+    type_competition = models.CharField(max_length=2, choices=COMPETITION_TYPES, default='O')
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name

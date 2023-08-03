@@ -1,3 +1,4 @@
+from bootstrap_datepicker_plus.widgets import DatePickerInput
 from django import forms
 from .models import Player, Sport, Competition, PlayerTeamSeason
 
@@ -53,14 +54,27 @@ class SportForm(forms.ModelForm):
 class CompetitionForm(forms.ModelForm):
     class Meta:
         model = Competition
-        fields = ['name', 'sport', 'is_active', 'awards', 'rules_and_regulations']
+        fields = ['name', 'date_start', 'date_end', 'sport', 'season', 'genre', 'type_competition',
+                  'number_grups', 'is_active']
 
-    def __init__(self, *args, **kwargs):
-        super(CompetitionForm, self).__init__(*args, **kwargs)
-
-        # Agregar clases de Bootstrap a los campos del formulario
-        self.fields['name'].widget.attrs['class'] = 'form-control border-2 rounded-pill'
-        self.fields['sport'].widget.attrs['class'] = 'form-select border-2 rounded-pill'
-        self.fields['is_active'].widget.attrs['class'] = 'form-check-input'
-        self.fields['awards'].widget.attrs['class'] = 'form-control border-2 rounded-pill'
-        self.fields['rules_and_regulations'].widget.attrs['class'] = 'form-control border-2'
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
+            'date_start': DatePickerInput(format='%Y-%m-%d', options={
+                'locale': 'es',  # Cambia el idioma a español (opcional)
+                'showClose': True,
+                'showClear': True,
+                'showTodayButton': True,
+            }),
+            'date_end': DatePickerInput(format='%Y-%m-%d', options={
+                'locale': 'es',
+                'showClose': True,
+                'showClear': True,
+                'showTodayButton': True,
+            }),
+            'genre': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
+            'sport': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
+            'type_competition': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
+            'number_grups': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'season': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
+        }
