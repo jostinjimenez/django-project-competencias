@@ -60,17 +60,17 @@ class CompetitionForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
             'date_start': DatePickerInput(format='%Y-%m-%d', options={
-                'locale': 'es',  # Cambia el idioma a español (opcional)
+                'locale': 'es',
                 'showClose': True,
                 'showClear': True,
                 'showTodayButton': True,
-            }),
+            }, attrs={'class': 'form-control border-2 rounded-pill'}),  # Agregamos la clase 'rounded-pill' aquí
             'date_end': DatePickerInput(format='%Y-%m-%d', options={
                 'locale': 'es',
                 'showClose': True,
                 'showClear': True,
                 'showTodayButton': True,
-            }),
+            }, attrs={'class': 'form-control border-2 rounded-pill'}),  # Agregamos la clase 'rounded-pill' aquí
             'genre': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
             'sport': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
             'type_competition': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
