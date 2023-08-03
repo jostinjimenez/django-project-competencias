@@ -1,9 +1,8 @@
 from django.contrib import admin
 
-from .models import Inscription, Sport, Group, Season, Competition, Game, Score, Team, Player
+from .models import Sport, Group, Season, Competition, Game, Score, Team, Player
 
 # Register your models here.
-admin.site.register(Inscription)
 admin.site.register(Sport)
 admin.site.register(Group)
 admin.site.register(Season)

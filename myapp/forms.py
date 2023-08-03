@@ -78,3 +78,15 @@ class CompetitionForm(forms.ModelForm):
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'season': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
         }
+
+
+class TeamForm(forms.ModelForm):
+    class Meta:
+        model = PlayerTeamSeason
+        fields = ['name', 'city', 'country']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({'class': 'form-select mb-3'})
+        self.fields['city'].widget.attrs.update({'class': 'form-select mb-3'})
+        self.fields['country'].widget.attrs.update({'class': 'form-select mb-3'})

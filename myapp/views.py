@@ -6,8 +6,27 @@ from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError, transaction
 from django.contrib.auth.decorators import login_required
 
-from .forms import PlayerForm, SportForm, CompetitionForm, CustomPlayerForm
-from .models import Competition, Season, Sport, Group, Team, Inscription, Player, Game, State, PlayerTeamSeason
+from .forms import PlayerForm, SportForm, CompetitionForm, CustomPlayerForm, TeamForm
+from .models import Competition, Season, Sport, Group, Team, Player, Game, State, PlayerTeamSeason
+
+
+def new_team(request, id):
+    competition = get_object_or_404(Competition, pk=id)
+
+    if request.method == 'POST':
+        form = TeamForm(request.POST)
+        if form.is_valid():
+            team = form.save(commit=False)
+            team.competition = competition
+            team.save()
+            return redirect('competition_detail', id=id)
+    else:
+        form = TeamForm()
+
+    return render(request, 'new_team.html', {
+        'form': form,
+        'competition': competition,
+    })
 
 
 @login_required
@@ -26,26 +45,6 @@ def edit_player(request, id):
     return render(request, 'edit_player.html', {
         'form': form,
         'player': player,
-    })
-
-
-def inscription_details(request, id):
-    # Obtener la inscripción específica según el ID
-    inscription = get_object_or_404(Inscription, pk=id)
-
-    # Pasar los datos a la plantilla y renderizarla
-    return render(request, 'inscription_details.html', {
-        'inscription': inscription,
-    })
-
-
-def inscription_list(request):
-    # Obtener todas las inscripciones
-    inscriptions = Inscription.objects.all()
-
-    # Pasar los datos a la plantilla y renderizarla
-    return render(request, 'inscription_list.html', {
-        'inscriptions': inscriptions,
     })
 
 
@@ -137,33 +136,6 @@ def teams_detail(request, id):
 def team_list(request):
     teams = Team.objects.all()
     return render(request, 'teams.html', {'teams': teams})
-
-
-def seasons_and_groups(request, id):
-    competition = get_object_or_404(Competition, pk=id)
-    seasons = Season.objects.filter(competition=competition)
-    seasons_and_groups = {}
-
-    for season in seasons:
-        groups = Group.objects.filter(season=season)
-        inscriptions_by_group = {}
-
-        for group in groups:
-            inscriptions = Inscription.objects.filter(group=group)
-            teams_by_inscription = {}
-
-            for inscription in inscriptions:
-                teams = Team.objects.filter(inscription=inscription)
-                teams_by_inscription[inscription] = teams
-
-            inscriptions_by_group[group] = teams_by_inscription
-
-        seasons_and_groups[season] = inscriptions_by_group
-
-    return render(request, 'seasons_and_groups.html', {
-        'competition': competition,
-        'seasons_and_groups': seasons_and_groups,
-    })
 
 
 @login_required

@@ -8,35 +8,14 @@ from django.db import models
 
 
 # Create your models here.
-class Inscription(models.Model):
-    name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.name
-
 
 class Team(models.Model):
     name = models.CharField(max_length=50)
-    inscription = models.ForeignKey(Inscription, on_delete=models.CASCADE, related_name='teams', null=True)
-    goals_scored = models.IntegerField(default=0)
-    goals_received = models.IntegerField(default=0)
+    city = models.CharField(max_length=50, blank=True)
+    country = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
         return self.name
-
-    def get_standings(self):
-        played_games = Game.objects.filter(state=State.PLAYED)
-        wins = played_games.filter(winner=self).count()
-        losses = played_games.filter(loser=self).count()
-        points = wins * 3
-        goals_difference = self.goals_scored - self.goals_received
-
-        return {
-            'wins': wins,
-            'losses': losses,
-            'points': points,
-            'goals_difference': goals_difference,
-        }
 
 
 class Sport(models.Model):
@@ -77,17 +56,6 @@ class Game(models.Model):
         if self.score:
             return self.score.result
         return "Not played"
-
-    def save(self, *args, **kwargs):
-        if self.state == State.PLAYED:
-            local_goals, visitor_goals = map(int, self.score.result.split('-'))
-            self.team_local.goals_scored += local_goals
-            self.team_local.goals_received += visitor_goals
-            self.team_visitor.goals_scored += visitor_goals
-            self.team_visitor.goals_received += local_goals
-            self.team_local.save()
-            self.team_visitor.save()
-        super().save(*args, **kwargs)
 
 
 class Score(models.Model):
@@ -141,21 +109,10 @@ class Player(models.Model):
     def __str__(self):
         return self.name
 
-    def clean(self):
-        team_season = self.team.season if self.team else None
-        teams_in_other_seasons = self.teams.exclude(season=team_season)
-
-        if self.team and self.teams.filter(season=team_season).count() > 1:
-            raise ValidationError("El jugador ya pertenece a otro equipo de la misma temporada.")
-
-        if teams_in_other_seasons.exists():
-            raise ValidationError("El jugador ya pertenece a otros equipos en temporadas distintas.")
-
 
 class Group(models.Model):
     letter = models.CharField(max_length=1)
     season = models.ForeignKey(Season, on_delete=models.CASCADE, null=True)
-    inscriptions = models.ManyToManyField(Inscription)
 
     def __str__(self):
         return self.letter
