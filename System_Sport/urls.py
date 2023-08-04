@@ -30,6 +30,7 @@ urlpatterns = [
     path('standings/', views.standings_table, name='standings_table'),
     path('edit_player/<int:id>/', views.edit_player, name='edit_player'),
     path('new_competition/', views.new_competition, name='new_competition'),
+
     path('accounts/', include('allauth.urls')),
 ]
 

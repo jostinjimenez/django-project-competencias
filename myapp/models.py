@@ -43,7 +43,7 @@ class Competition(models.Model):
         ('T', 'Tennis'),
         ('O', 'Other')
     )
-    sport = models.CharField(max_length=1, choices=SPORT_lIST, default='O')
+    sport = models.CharField(max_length=1, choices=SPORT_lIST, default='F')
     genre = models.CharField(choices=[('M', 'Male'), ('F', 'Female'), ('MF', 'Mixed')], max_length=2, null=True)
     COMPETITION_TYPES = (
         ('L', 'League'),
