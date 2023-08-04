@@ -7,7 +7,7 @@ from django.db import IntegrityError, transaction
 from django.contrib.auth.decorators import login_required
 
 from .forms import PlayerForm, SportForm, CompetitionForm, CustomPlayerForm, TeamForm
-from .models import Competition, Season, Sport, Group, Team, Player, Game, State, PlayerTeamSeason
+from .models import Competition, Season, Sport, Group, Team, Player, Game, State, PlayerTeamSeason, Inscription
 
 
 def new_team(request, id):
@@ -116,10 +116,8 @@ def player_detail(request, id):
 def teams_detail(request, id):
     team = get_object_or_404(Team, pk=id)
 
-    # Obtener todas las relaciones PlayerTeamSeason del equipo en todas las temporadas
     player_team_seasons = PlayerTeamSeason.objects.filter(team=team)
 
-    # Obtener todos los jugadores del equipo en todas las temporadas
     players = [player_team_season.player for player_team_season in player_team_seasons]
 
     games_as_local = Game.objects.filter(team_local=team)
@@ -131,11 +129,6 @@ def teams_detail(request, id):
         'games_as_local': games_as_local,
         'games_as_visitor': games_as_visitor,
     })
-
-
-def team_list(request):
-    teams = Team.objects.all()
-    return render(request, 'teams.html', {'teams': teams})
 
 
 @login_required
@@ -151,14 +144,23 @@ def new_player(request):
     return render(request, 'new_player.html', {'form': form})
 
 
+def team_list(request):
+    teams = Team.objects.all()
+    return render(request, 'teams.html', {'teams': teams})
+
+
 def competition_detail(request, id):
     competition = get_object_or_404(Competition, pk=id)
     seasons = Season.objects.filter(competition=competition)
     groups = Group.objects.filter(season__in=seasons)
+
+    teams = Team.objects.all()
+
     return render(request, 'competition_detail.html', {
         'competition': competition,
         'seasons': seasons,
         'groups': groups,
+        'teams': teams,
     })
 
 

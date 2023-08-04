@@ -22,6 +22,7 @@ urlpatterns = [
     path('new_sport/', views.new_sport, name='new_sport'),
     path('teams/', views.team_list, name='teams'),
     path('teams/<int:id>/', views.teams_detail, name='teams_detail'),
+
     path('players', views.player_list, name='players'),
     path('player/<int:id>/', views.player_detail, name='player_detail'),
     path('games/', views.game_list, name='game_list'),
@@ -29,6 +30,7 @@ urlpatterns = [
     path('standings/', views.standings_table, name='standings_table'),
     path('edit_player/<int:id>/', views.edit_player, name='edit_player'),
     path('new_competition/', views.new_competition, name='new_competition'),
+    path('accounts/', include('allauth.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

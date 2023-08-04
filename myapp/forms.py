@@ -1,6 +1,6 @@
 from bootstrap_datepicker_plus.widgets import DatePickerInput
 from django import forms
-from .models import Player, Sport, Competition, PlayerTeamSeason
+from .models import Player, Sport, Competition, PlayerTeamSeason, Team
 
 
 class CustomPlayerForm(forms.ModelForm):
@@ -54,7 +54,7 @@ class SportForm(forms.ModelForm):
 class CompetitionForm(forms.ModelForm):
     class Meta:
         model = Competition
-        fields = ['name', 'date_start', 'date_end', 'sport', 'season', 'genre', 'type_competition',
+        fields = ['name', 'date_start', 'date_end', 'sport', 'genre', 'type_competition',
                   'number_grups', 'is_active']
 
         widgets = {
@@ -76,17 +76,16 @@ class CompetitionForm(forms.ModelForm):
             'type_competition': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
             'number_grups': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'season': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
         }
 
 
 class TeamForm(forms.ModelForm):
     class Meta:
-        model = PlayerTeamSeason
+        model = Team
         fields = ['name', 'city', 'country']
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs.update({'class': 'form-select mb-3'})
-        self.fields['city'].widget.attrs.update({'class': 'form-select mb-3'})
-        self.fields['country'].widget.attrs.update({'class': 'form-select mb-3'})
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
+            'city': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
+            'country': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
+        }

@@ -9,7 +9,7 @@
                 <div class="card o-hidden border-0 shadow-lg">
                     <div class="card-body p-5">
                         <div class="text-center">
-                            <h1 class="h4 text-gray-900 mb-4">New Competition</h1>
+                            <h1 class="h4 text-gray-900 mb-4">New Equipo</h1>
                         </div>
                         <form method="post" class="form-group mx-auto mt-2">
                             {% csrf_token %}
@@ -19,12 +19,8 @@
                             {{ form.as_p }}
                             <div class="text-center">
                                 <a class="btn btn-secondary rounded-pill btn-md w-25"
-                                   href="{% url 'competition_detail' competition.id %}">Cancel</a>
-                                <button type="submit" class="btn btn-primary rounded-pill btn-md w-25">Submit</button>
-                                <button type="submit" class="btn btn-success rounded-pill btn-md w-25"><a
-                                        class="text-decoration-none text-light"
-                                        href="{% url 'new_team' competition.id %}">New
-                                    Sport</a></button>
+                                   href="{% url 'competition_detail' competition.id %}">Cancelar</a>
+                                <button type="submit" class="btn btn-primary rounded-pill btn-md w-25">Guardar</button>
                             </div>
                         </form>
                     </div>

@@ -1,4 +1,4 @@
-function searchTable() {
+function searchTablePlayer() {
     var input, filter, found, table, tr, td, i, j;
     input = document.getElementById("search-table");
     filter = input.value.toUpperCase();

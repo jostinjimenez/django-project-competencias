@@ -18,94 +18,110 @@
 
 <body class="d-flex flex-column min-vh-100">
 
-<div class="container-fluid">
-    <div class="row flex-nowrap">
-        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark position-fixed" style="top: 0; bottom: 0;">
-            <div class="d-flex flex-column align-items-center justify-content-center px-3 pt-2 text-white min-vh-100">
-                <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                    <span class="fs-5 d-none d-sm-inline">Competencia App</span>
-                </a>
-                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                    <li class="nav-item mt-5">
-                        <a href="#" class="nav-link align-middle px-0">
-                            <i class="fs-4 bi-house"></i> <img src="{% static 'img/default_male.png' %}"
-                                                               class="card-img-top img-fluid"
-                                                               style="width: 100px; height: 100px;">
-                        </a>
-                    </li>
-                    <li class="nav-item mt-5">
-                        <a href="/" class="nav-link align-middle px-0">
-                            <img src="{% static 'img/calendar.png' %}" alt="hugenerd" width="30" height="30">
-                            <i class="fs-4 bi-house"></i> <span
-                                class="ms-1 d-none d-sm-inline text-light">Home</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'competitions' %}" class="nav-link align-middle px-0">
-                            <img src="{% static 'img/calendar.png' %}" alt="hugenerd" width="30" height="30">
-                            <i class="fs-4 bi-house"></i> <span
-                                class="ms-1 d-none d-sm-inline text-light">Competiciones</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'teams' %}" class="nav-link align-middle px-0">
-                            <img src="{% static 'img/calendar.png' %}" alt="hugenerd" width="30" height="30">
-                            <i class="fs-4 bi-house"></i> <span
-                                class=" text-light ms-1 d-none d-sm-inline">Equipos</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'players' %}" class="nav-link align-middle px-0">
-                            <img src="{% static 'img/calendar.png' %}" alt="hugenerd" width="30" height="30">
-                            <i class="fs-4 bi-house"></i> <span
-                                class="text-light ms-1 d-none d-sm-inline">Jugadores</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'standings_table' %}" class="nav-link align-middle px-0">
-                            <img src="{% static 'img/calendar.png' %}" alt="hugenerd" width="30" height="30">
-                            <i class="fs-4 bi-house"></i> <span
-                                class=" text-light ms-1 d-none d-sm-inline">Tabla de Posiciones</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="" class="nav-link align-middle px-0">
-                            <img src="{% static 'img/calendar.png' %}" alt="hugenerd" width="30" height="30">
-                            <i class="fs-4 bi-house"></i> <span
-                                class="text-light ms-1 d-none d-sm-inline">Inscripciones</span>
-                        </a>
-                    </li>
-                </ul>
-                <hr>
-                <div class="dropdown pb-4">
-                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-                       id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{% static 'img/default_male.png' %}" alt="hugenerd" width="30" height="30"
-                             class="rounded-circle">
-                        <span class="d-none d-sm-inline mx-1">loser</span>
+{% if user.is_authenticated %}
+
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark position-fixed" style="top: 0; bottom: 0;">
+                <div class="d-flex flex-column align-items-center justify-content-center px-3 pt-2 text-white min-vh-100">
+                    <a href="/"
+                       class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                        <span class="fs-5 d-none d-sm-inline">Competencia App</span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                        <li><a class="dropdown-item" href="#">New project...</a></li>
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
+                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+                        id="menu">
+                        <li class="nav-item mt-5">
+                            <a href="#" class="nav-link align-middle px-0">
+                                <i class="fs-4 bi-house"></i> <img src="{% static 'img/default_male.png' %}"
+                                                                   class="card-img-top img-fluid"
+                                                                   style="width: 100px; height: 100px;">
+                            </a>
                         </li>
-                        <li><a class="dropdown-item" href="#">Sign out</a></li>
+                        <li class="nav-item mt-5">
+                            <a href="/" class="nav-link align-middle px-0">
+                                <img src="{% static 'img/calendar.png' %}" alt="hugenerd" width="30" height="30">
+                                <i class="fs-4 bi-house"></i> <span
+                                    class="ms-1 d-none d-sm-inline text-light">Home</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'competitions' %}" class="nav-link align-middle px-0">
+                                <img src="{% static 'img/calendar.png' %}" alt="hugenerd" width="30" height="30">
+                                <i class="fs-4 bi-house"></i> <span
+                                    class="ms-1 d-none d-sm-inline text-light">Competiciones</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'teams' %}" class="nav-link align-middle px-0">
+                                <img src="{% static 'img/calendar.png' %}" alt="hugenerd" width="30" height="30">
+                                <i class="fs-4 bi-house"></i> <span
+                                    class=" text-light ms-1 d-none d-sm-inline">Equipos</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'players' %}" class="nav-link align-middle px-0">
+                                <img src="{% static 'img/calendar.png' %}" alt="hugenerd" width="30" height="30">
+                                <i class="fs-4 bi-house"></i> <span
+                                    class="text-light ms-1 d-none d-sm-inline">Jugadores</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'standings_table' %}" class="nav-link align-middle px-0">
+                                <img src="{% static 'img/calendar.png' %}" alt="hugenerd" width="30" height="30">
+                                <i class="fs-4 bi-house"></i> <span
+                                    class=" text-light ms-1 d-none d-sm-inline">Tabla de Posiciones</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link align-middle px-0">
+                                <img src="{% static 'img/calendar.png' %}" alt="hugenerd" width="30" height="30">
+                                <i class="fs-4 bi-house"></i> <span
+                                    class="text-light ms-1 d-none d-sm-inline">Inscripciones</span>
+                            </a>
+                        </li>
                     </ul>
+                    <hr>
+                    <div class="dropdown pb-4">
+                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                           id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{% static 'img/default_male.png' %}" alt="hugenerd" width="30" height="30"
+                                 class="rounded-circle">
+                            <span class="d-none d-sm-inline mx-1">loser</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                            <li><a class="dropdown-item" href="#">New project...</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %} ">Sign out</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col offset-md-3 offset-xl-2 py-3">
+            <div class="col offset-md-3 offset-xl-2 py-3">
 
-            <div class="mx-3">
-                {% block content %}
-                    <!-- Aquí va el contenido que deseas mostrar en la parte derecha del menú -->
-                {% endblock %}
+                <div class="mx-3">
+                    {% block content %}
+                        <!-- Aquí va el contenido que deseas mostrar en la parte derecha del menú -->
+                    {% endblock %}
+                </div>
+
             </div>
-
         </div>
     </div>
-</div>
+
+{% else %}
+
+    <li class="nav-item mx-3"><a class="nav-link active " aria-current="page"
+                                 href="{% url 'signin' %}">Login</a>
+    </li>
+    <li class="nav-item mx-3"><a class="nav-link active" aria-current="page"
+                                 href="{% url 'signup' %}">Signup</a>
+    </li>
+
+{% endif %}
+
 </body>
 </html>

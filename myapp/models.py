@@ -9,14 +9,6 @@ from django.db import models
 
 # Create your models here.
 
-class Team(models.Model):
-    name = models.CharField(max_length=50)
-    city = models.CharField(max_length=50, blank=True)
-    country = models.CharField(max_length=50, blank=True)
-
-    def __str__(self):
-        return self.name
-
 
 class Sport(models.Model):
     name = models.CharField(max_length=50)
@@ -37,6 +29,71 @@ class State(models.TextChoices):
     SUSPENDED = 'Suspended'
     CANCELLED = 'Cancelled'
     POSTPONED = 'Postponed'
+
+
+class Competition(models.Model):
+    name = models.CharField(max_length=50, blank=True)
+    date_start = models.DateField(null=True)
+    date_end = models.DateField(blank=True, null=True)
+    SPORT_lIST = (
+        ('F', 'Football'),
+        ('B', 'Basketball'),
+        ('V', 'Volleyball'),
+        ('H', 'Handball'),
+        ('T', 'Tennis'),
+        ('O', 'Other')
+    )
+    sport = models.CharField(max_length=1, choices=SPORT_lIST, default='O')
+    genre = models.CharField(choices=[('M', 'Male'), ('F', 'Female'), ('MF', 'Mixed')], max_length=2, null=True)
+    COMPETITION_TYPES = (
+        ('L', 'League'),
+        ('T', 'Tournament'),
+        ('P', 'Playoff'),
+        ('F', 'Friendly'),
+        ('GS', 'Group Stage'),
+        ('O', 'Other')
+    )
+    number_grups = models.IntegerField(blank=True, null=True)
+    type_competition = models.CharField(max_length=2, choices=COMPETITION_TYPES, default='O')
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Season(models.Model):
+    name = models.CharField(max_length=50)
+    competition = models.ForeignKey(Competition, on_delete=models.CASCADE, related_name='seasons', null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Group(models.Model):
+    letter = models.CharField(max_length=1)
+    season = models.ForeignKey(Season, on_delete=models.CASCADE, related_name='groups', null=True)
+
+    def __str__(self):
+        return self.letter
+
+
+class Team(models.Model):
+    name = models.CharField(max_length=50)
+    city = models.CharField(max_length=50, blank=True)
+    country = models.CharField(max_length=50, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Inscription(models.Model):
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+
+    # Puedes agregar campos adicionales, como la fecha de inscripción, estado, etc.
+
+    def __str__(self):
+        return f'Inscription: {self.team} - {self.group}'
 
 
 class Game(models.Model):
@@ -63,44 +120,6 @@ class Score(models.Model):
     game = models.OneToOneField(Game, on_delete=models.CASCADE, null=True)
 
 
-class Season(models.Model):
-    name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.name
-
-
-class Competition(models.Model):
-    name = models.CharField(max_length=50, blank=True)
-    date_start = models.DateField(null=True)
-    date_end = models.DateField(blank=True, null=True)
-    SPORT_lIST = (
-        ('F', 'Football'),
-        ('B', 'Basketball'),
-        ('V', 'Volleyball'),
-        ('H', 'Handball'),
-        ('T', 'Tennis'),
-        ('O', 'Other')
-    )
-    season = models.ForeignKey(Season, on_delete=models.CASCADE, null=True)
-    sport = models.CharField(max_length=1, choices=SPORT_lIST, default='O')
-    genre = models.CharField(choices=[('M', 'Male'), ('F', 'Female'), ('MF', 'Mixed')], max_length=2, null=True)
-    COMPETITION_TYPES = (
-        ('L', 'League'),
-        ('T', 'Tournament'),
-        ('P', 'Playoff'),
-        ('F', 'Friendly'),
-        ('GS', 'Group Stage'),
-        ('O', 'Other')
-    )
-    number_grups = models.IntegerField(blank=True, null=True)
-    type_competition = models.CharField(max_length=2, choices=COMPETITION_TYPES, default='O')
-    is_active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.name
-
-
 class Player(models.Model):
     name = models.CharField(max_length=50)
     number_player = models.IntegerField()
@@ -108,14 +127,6 @@ class Player(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class Group(models.Model):
-    letter = models.CharField(max_length=1)
-    season = models.ForeignKey(Season, on_delete=models.CASCADE, null=True)
-
-    def __str__(self):
-        return self.letter
 
 
 class PlayerTeamSeason(models.Model):
