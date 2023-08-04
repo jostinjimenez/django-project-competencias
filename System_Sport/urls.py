@@ -11,7 +11,8 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),
+    path('', views.default_page, name='default_page'),
+    path('home/', views.home, name='home'),
     path('signup/', views.signup, name='signup'),
     path('logout/', views.signout, name='logout'),
     path('signin/', views.signin, name='signin'),
@@ -31,6 +32,7 @@ urlpatterns = [
     path('edit_player/<int:id>/', views.edit_player, name='edit_player'),
     path('new_competition/', views.new_competition, name='new_competition'),
 
+    path('accounts/', include('allauth.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

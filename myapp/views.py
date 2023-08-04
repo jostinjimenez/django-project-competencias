@@ -10,6 +10,7 @@ from .forms import PlayerForm, SportForm, CompetitionForm, CustomPlayerForm, Tea
 from .models import Competition, Season, Sport, Group, Team, Player, Game, State, PlayerTeamSeason, Inscription
 
 
+@login_required
 def new_team(request, id):
     competition = get_object_or_404(Competition, pk=id)
 
@@ -48,6 +49,7 @@ def edit_player(request, id):
     })
 
 
+@login_required
 def standings_table(request):
     teams = Team.objects.all()
     standings = {team: team.get_standings() for team in teams}
@@ -59,11 +61,13 @@ def standings_table(request):
     })
 
 
+@login_required
 def game_detail(request, id):
     game = get_object_or_404(Game, pk=id)
     return render(request, 'game_detail.html', {'game': game})
 
 
+@login_required
 def game_list(request):
     games = Game.objects.all()
     states = State.choices
@@ -90,11 +94,13 @@ def game_list(request):
     })
 
 
+@login_required
 def player_list(request):
     players = Player.objects.all()
     return render(request, 'players.html', {'players': players})
 
 
+@login_required
 def player_detail(request, id):
     player = get_object_or_404(Player, pk=id)
 
@@ -113,6 +119,7 @@ def player_detail(request, id):
     })
 
 
+@login_required
 def teams_detail(request, id):
     team = get_object_or_404(Team, pk=id)
 
@@ -144,11 +151,13 @@ def new_player(request):
     return render(request, 'new_player.html', {'form': form})
 
 
+@login_required
 def team_list(request):
     teams = Team.objects.all()
     return render(request, 'teams.html', {'teams': teams})
 
 
+@login_required
 def competition_detail(request, id):
     competition = get_object_or_404(Competition, pk=id)
     seasons = Season.objects.filter(competition=competition)
@@ -165,15 +174,18 @@ def competition_detail(request, id):
 
 
 def home(request):
-    active_competitions = Competition.objects.filter(is_active=True)
-    upcoming_competitions = Competition.objects.filter(is_active=False)
+    if request.user.is_authenticated:
+        active_competitions = Competition.objects.filter(is_active=True, user=request.user)
+        upcoming_competitions = Competition.objects.filter(is_active=False, user=request.user)
 
-    sports_offered = Sport.objects.all()
-    return render(request, 'home.html', {
-        'active_competitions': active_competitions,
-        'upcoming_competitions': upcoming_competitions,
-        'sports_offered': sports_offered,
-    })
+        sports_offered = Sport.objects.all()
+        return render(request, 'home.html', {
+            'active_competitions': active_competitions,
+            'upcoming_competitions': upcoming_competitions,
+            'sports_offered': sports_offered,
+        })
+    else:
+        return render(request, 'home.html')
 
 
 # Función para registrar un usuario
@@ -223,11 +235,13 @@ def signin(request):
             return redirect('home')
 
 
+@login_required
 def competition_list(request):
-    competitions = Competition.objects.all()
+    competitions = Competition.objects.filter(user=request.user)
     return render(request, 'competitions.html', {'competitions': competitions})
 
 
+@login_required
 def new_sport(request):
     if request.method == 'GET':
         form = SportForm()
@@ -262,3 +276,12 @@ def new_competition(request):
                 'form': CompetitionForm,
                 'error': 'Bad data passed in. Try again.'
             })
+
+
+def default_page(request):
+    if request.user.is_authenticated:
+        # Si el usuario está autenticado, redirigir a la página de inicio para usuarios autenticados
+        return redirect('home')
+    else:
+        # Si el usuario no está autenticado, redirigir a la página de inicio para usuarios no autenticados
+        return redirect('home')

@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 
@@ -56,6 +57,7 @@ class Competition(models.Model):
     number_grups = models.IntegerField(blank=True, null=True)
     type_competition = models.CharField(max_length=2, choices=COMPETITION_TYPES, default='O')
     is_active = models.BooleanField(default=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='competitions')
 
     def __str__(self):
         return self.name

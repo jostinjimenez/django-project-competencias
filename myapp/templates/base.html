@@ -24,7 +24,7 @@
         <div class="row flex-nowrap">
             <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark position-fixed" style="top: 0; bottom: 0;">
                 <div class="d-flex flex-column align-items-center justify-content-center px-3 pt-2 text-white min-vh-100">
-                    <a href="/"
+                    <a href="{% url 'home' %}"
                        class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                         <span class="fs-5 d-none d-sm-inline">Competencia App</span>
                     </a>
@@ -38,7 +38,7 @@
                             </a>
                         </li>
                         <li class="nav-item mt-5">
-                            <a href="/" class="nav-link align-middle px-0">
+                            <a href="{% url 'home' %}" class="nav-link align-middle px-0">
                                 <img src="{% static 'img/calendar.png' %}" alt="hugenerd" width="30" height="30">
                                 <i class="fs-4 bi-house"></i> <span
                                     class="ms-1 d-none d-sm-inline text-light">Home</span>
@@ -86,7 +86,7 @@
                            id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="{% static 'img/default_male.png' %}" alt="hugenerd" width="30" height="30"
                                  class="rounded-circle">
-                            <span class="d-none d-sm-inline mx-1">loser</span>
+                            <span class="d-none d-sm-inline mx-1">{{ user.username }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
                             <li><a class="dropdown-item" href="#">New project...</a></li>
@@ -114,12 +114,12 @@
 
 {% else %}
 
-    <li class="nav-item mx-3"><a class="nav-link active " aria-current="page"
-                                 href="{% url 'signin' %}">Login</a>
-    </li>
-    <li class="nav-item mx-3"><a class="nav-link active" aria-current="page"
-                                 href="{% url 'signup' %}">Signup</a>
-    </li>
+    <div class="container-fluid">
+        <ul>
+            <li><a href="{% url 'signin' %}">Login</a></li>
+            <li><a href="{% url 'signup' %}">Sign Up</a></li>
+        </ul>
+    </div>
 
 {% endif %}
 
