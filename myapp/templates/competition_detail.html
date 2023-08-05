@@ -30,12 +30,14 @@
 
     <nav class="nav">
         <a class="nav-link active" aria-current="page" href="{% url 'game_list' %}">Partidos</a>
-        <a class="nav-link" href="#">Resultados</a>
+        <a class="nav-link" href="{% url 'competition_seasons' competition.id %}">Clasificaciones</a>
+        <a class="nav-link" href="">Resultados</a>
         <a class="nav-link" href="#">Temporadas</a>
         <a class="nav-link disabled" aria-disabled="true">Disabled</a>
     </nav>
 
     <hr>
+
 
     <div class="btn-group">
         <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -54,6 +56,7 @@
             </li>
         </ul>
     </div>
+
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -73,6 +76,8 @@
         </div>
     </div>
     <hr>
+
+
 
     <main class="mt-5">
         <h3>Equipos</h3>
@@ -100,17 +105,17 @@
             </thead>
             <tbody class="table-group-divider">
             {% for team in teams %}
-                <tr style="cursor: pointer" onclick="window.location='{% url 'teams_detail' team.id %}'">
+                <tr>
                     <td>
                         {% if team.image %}
-                            <img src="{{ team.image.url }}" width="50px" alt="{{ team.name }}">
+                            <img src="{{ team.image.url }}" width="25px" alt="{{ team.name }}">
                         {% else %}
-                            <img src="{% static 'img/team_default.png' %} " width="50px"
+                            <img src="{% static 'img/team_default.png' %} " width="25px"
                                  alt="{{ team.name }}">
                         {% endif %}
                     </td>
-                    <td>{{ team.name }}</td>
-                    <td>{{ team.players.count }}</td>
+                    <td><a href="{% url 'teams_detail' team.id %}">{{ team.name }}</a></td>
+                    <td><a href="{% url 'inscription_team' competition.id team.id %}">Añadir Jugadores</a></td>
                     <td>{{ team.status }}</td>
                     <td>{{ team.city }}</td>
                 </tr>

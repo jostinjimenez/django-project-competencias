@@ -17,12 +17,16 @@ urlpatterns = [
     path('logout/', views.signout, name='logout'),
     path('signin/', views.signin, name='signin'),
     path('competitions/', views.competition_list, name='competitions'),
-    path('competitions/competitions_detail/<int:id>/', views.competition_detail, name='competition_detail'),
+    path('competitions/<int:id>/', views.competition_detail, name='competition_detail'),
     path('competitions/competitions_detail<int:id>/new_team/', views.new_team, name='new_team'),
     path('new_player/', views.new_player, name='new_player'),
     path('new_sport/', views.new_sport, name='new_sport'),
     path('teams/', views.team_list, name='teams'),
     path('teams/<int:id>/', views.teams_detail, name='teams_detail'),
+    path('competitions/<int:id_competition>/inscription_player/<int:id_team>', views.inscription_team,
+         name='inscription_team'),
+
+    path('competitions/<int:id>/seasons/', views.competition_seasons, name='competition_seasons'),
 
     path('players', views.player_list, name='players'),
     path('player/<int:id>/', views.player_detail, name='player_detail'),

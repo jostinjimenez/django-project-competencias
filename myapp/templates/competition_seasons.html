@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <h1>Temporadas de {{ competition.name }}</h1>
+
+    <div class="btn-group">
+        <button type="button" class="btn btn-light dropdown-toggle" id="seasonsDropdown" data-bs-toggle="dropdown"
+                aria-expanded="false">
+            Temporadas
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            {% for season in seasons %}
+                <li>
+                    <a class="dropdown-item" href="#" data-season-id="{{ season.id }}" data-bs-toggle="modal"
+                       data-bs-target="#exampleModal">{{ season.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+
+    <div class="container">
+        <ul>
+            {% for foo in competition %}
+
+            {% endfor %}
+
+        </ul>
+    </div>
+
+
+    <script>
+        // Obtener el botón del menú y los enlaces de temporada
+        const seasonsDropdown = document.getElementById('seasonsDropdown');
+        const seasonLinks = document.querySelectorAll('.dropdown-item');
+
+        // Agregar un evento de clic a cada enlace de temporada
+        seasonLinks.forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault(); // Evitar que el enlace redirija
+                const seasonName = event.target.innerText; // Obtener el nombre de la temporada
+                seasonsDropdown.innerText = seasonName; // Actualizar el texto del botón del menú
+            });
+        });
+    </script>
+
+
+{% endblock %}

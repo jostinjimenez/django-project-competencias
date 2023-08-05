@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <div class="card mb-3">
+        <img src="{% static 'img/bannerPlaceholder.png' %}" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">{{ team.name }}</h5>
+            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
+                content. This content is a little bit longer.</p>
+            <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+        </div>
+    </div>
+
+    <a href="{% url 'new_player' %}">Agregar Jugador</a>
+
+    <div class="mt-5 container-">
+
+        <div class="row">
+            <div class="col-md-10 mx-auto">
+                <div class="d-flex justify-content-end ">
+                    <form class="d-none d-sm-inline-block form-inline mr-2 mr-md-3 my-2 my-md-0 mw-100">
+                        <div class="input-group">
+                            <label class="sr-only" for="search">Search:</label>
+                            <input type="text" class="form-control bg-light border-0 rounded-pill py-2 px-3"
+                                   name="search"
+                                   id="search-table" aria-label="Search" aria-describedby="basic-addon2"
+                                   onkeyup="searchTablePlayer()">
+                        </div>
+                    </form>
+                </div>
+
+                <table class="table table-hover " id="player_table">
+                    <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Number</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Position</th>
+                        <th scope="col">Season</th>
+                        <th scope="col" colspan="2">Team</th>
+                    </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                    {% for player in players %}
+                        <tr style="cursor: pointer" onclick="window.location='{% url 'player_detail' player.id %}'">
+                            <th scope="row">{{ player.number_player }}</th>
+                            <td>{{ player.name }}</td>
+                            <td>{{ player.position }}</td>
+                            <td>
+                                {% for team in player.teams.all %}
+                                    {{ team.season.name }}{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td colspan="2">
+                                {% for team in player.teams.all %}
+                                    {{ team.name }}{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <div id="no-results-message" style="display: none; margin-top: 10px;">
+                    No se encontraron registros coincidentes.
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+{% endblock %}
+```

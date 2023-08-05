@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
@@ -8,9 +9,31 @@ from django.contrib.auth.decorators import login_required
 
 from .forms import PlayerForm, SportForm, CompetitionForm, CustomPlayerForm, TeamForm
 from .models import Competition, Season, Sport, Group, Team, Player, Game, State, PlayerTeamSeason, Inscription
+from .utils import generate_groups_for_season
 
 
-@login_required
+def inscription_team(request, id_competition, id_team):
+    team = get_object_or_404(Team, pk=id_team)
+    competition = get_object_or_404(Competition, pk=id_competition)
+
+    if request.method == 'POST':
+        form = CustomPlayerForm(request.POST)
+        if form.is_valid():
+            player = form.save(commit=False)
+            player.user = request.user
+            player.save()
+            return redirect('competition_detail', id_competition=id_competition)
+
+    else:
+        form = CustomPlayerForm()
+
+    return render(request, 'inscription_team.html', {
+        'form': form,
+        'team': team,
+    })
+
+
+@login_required  # Asegúrate de que el usuario esté autenticado para crear un equipo
 def new_team(request, id):
     competition = get_object_or_404(Competition, pk=id)
 
@@ -18,7 +41,8 @@ def new_team(request, id):
         form = TeamForm(request.POST)
         if form.is_valid():
             team = form.save(commit=False)
-            team.competition = competition
+            team.user = request.user  # Asignar el usuario al equipo
+            team.competition = competition  # Asignar la competencia al equipo
             team.save()
             return redirect('competition_detail', id=id)
     else:
@@ -152,8 +176,14 @@ def new_player(request):
 
 
 @login_required
+def competition_list(request):
+    competitions = Competition.objects.filter(user=request.user)
+    return render(request, 'competitions.html', {'competitions': competitions})
+
+
+@login_required
 def team_list(request):
-    teams = Team.objects.all()
+    teams = Team.objects.filter(user=request.user)
     return render(request, 'teams.html', {'teams': teams})
 
 
@@ -161,15 +191,11 @@ def team_list(request):
 def competition_detail(request, id):
     competition = get_object_or_404(Competition, pk=id)
     seasons = Season.objects.filter(competition=competition)
-    groups = Group.objects.filter(season__in=seasons)
-
     teams = Team.objects.all()
-
     return render(request, 'competition_detail.html', {
         'competition': competition,
-        'seasons': seasons,
-        'groups': groups,
         'teams': teams,
+        'seasons': seasons,
     })
 
 
@@ -236,12 +262,6 @@ def signin(request):
 
 
 @login_required
-def competition_list(request):
-    competitions = Competition.objects.filter(user=request.user)
-    return render(request, 'competitions.html', {'competitions': competitions})
-
-
-@login_required
 def new_sport(request):
     if request.method == 'GET':
         form = SportForm()
@@ -269,11 +289,14 @@ def new_competition(request):
         try:
             form = CompetitionForm(request.POST, request.FILES)
             if form.is_valid():
-                form.save()
-            return redirect('competitions')
+                # Asignar el usuario autenticado al campo "user" antes de guardar la competencia
+                competition = form.save(commit=False)
+                competition.user = request.user
+                competition.save()
+                return redirect('competitions')
         except ValueError:
             return render(request, 'new_competition.html', {
-                'form': CompetitionForm,
+                'form': form,
                 'error': 'Bad data passed in. Try again.'
             })
 
@@ -285,3 +308,10 @@ def default_page(request):
     else:
         # Si el usuario no está autenticado, redirigir a la página de inicio para usuarios no autenticados
         return redirect('home')
+
+
+def competition_seasons(request, id):
+    competition = get_object_or_404(Competition, pk=id)
+    seasons = Season.objects.filter(competition=competition)
+    
+    return render(request, 'competition_seasons.html', {'competition': competition, 'seasons': seasons})
