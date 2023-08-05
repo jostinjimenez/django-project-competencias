@@ -84,6 +84,7 @@ class Team(models.Model):
     city = models.CharField(max_length=50, blank=True)
     country = models.CharField(max_length=50, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='teams')
+    competition = models.ManyToManyField(Competition, through='Inscription', related_name='teams')
 
     def __str__(self):
         return self.name
@@ -91,12 +92,10 @@ class Team(models.Model):
 
 class Inscription(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
-
-    # Puedes agregar campos adicionales, como la fecha de inscripción, estado, etc.
+    competition = models.ForeignKey(Competition, on_delete=models.CASCADE, related_name='inscriptions', null=True)
 
     def __str__(self):
-        return f'Inscription: {self.team} - {self.group}'
+        return self.team.name + ' - ' + self.competition.name
 
 
 class Game(models.Model):

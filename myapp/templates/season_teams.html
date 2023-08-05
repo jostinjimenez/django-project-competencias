@@ -1,0 +1,24 @@
+{% block content %}
+
+    Equipos:
+    <ul>
+        {% for team in teams %}
+            <li>{{ team.name }}</li>
+        {% endfor %}
+    </ul>
+
+
+    <h1>{{ competition.name }}</h1>
+    <h2>Temporada: {{ season.name }}</h2>
+
+    <!-- Aquí puedes mostrar los grupos solo si la temporada coincide con la temporada de los grupos -->
+    {% if competition == season.competition %}
+        {% for group in groups %}
+            <h3>{{ group.letter }}</h3>
+            <!-- Aquí puedes mostrar los equipos que pertenecen a este grupo -->
+        {% endfor %}
+    {% else %}
+        <p>No se encontraron grupos para la temporada seleccionada.</p>
+    {% endif %}
+
+{% endblock %}

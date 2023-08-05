@@ -1,48 +1,41 @@
 {% extends 'base.html' %}
 {% block content %}
 
-    <h1>Temporadas de {{ competition.name }}</h1>
+    <h1>{{ competition.name }}</h1>
 
-    <div class="btn-group">
-        <button type="button" class="btn btn-light dropdown-toggle" id="seasonsDropdown" data-bs-toggle="dropdown"
-                aria-expanded="false">
-            Temporadas
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end">
+    <div class="form-group mt-5 mb-5">
+        <select class="form-control" style="width: 140px" id="seasonsMenu" aria-label="Default select example"
+                onchange="showSeasonContent()">
             {% for season in seasons %}
-                <li>
-                    <a class="dropdown-item" href="#" data-season-id="{{ season.id }}" data-bs-toggle="modal"
-                       data-bs-target="#exampleModal">{{ season.name }}</a>
-                </li>
+                <option value="{{ season.id }}">{{ season.name }}</option>
             {% endfor %}
-        </ul>
+        </select>
     </div>
 
-
-    <div class="container">
-        <ul>
-            {% for foo in competition %}
-
-            {% endfor %}
-
-        </ul>
-    </div>
-
+    <div id="seasonContent"></div>
 
     <script>
-        // Obtener el botón del menú y los enlaces de temporada
-        const seasonsDropdown = document.getElementById('seasonsDropdown');
-        const seasonLinks = document.querySelectorAll('.dropdown-item');
+        function showSeasonContent() {
+            var selectedSeasonId = document.getElementById("seasonsMenu").value;
+            var seasonContent = document.getElementById("seasonContent");
 
-        // Agregar un evento de clic a cada enlace de temporada
-        seasonLinks.forEach(link => {
-            link.addEventListener('click', (event) => {
-                event.preventDefault(); // Evitar que el enlace redirija
-                const seasonName = event.target.innerText; // Obtener el nombre de la temporada
-                seasonsDropdown.innerText = seasonName; // Actualizar el texto del botón del menú
-            });
-        });
+            // Perform an AJAX request to get the teams for the selected season
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    seasonContent.innerHTML = this.responseText;
+                }
+            };
+            var competitionId = {{ competition.id }};
+            var url = "/competitions/" + competitionId + "/seasons/" + selectedSeasonId + "/";
+            xhttp.open("GET", url, true);
+            xhttp.send();
+        }
+
+        // Show the content of the first option when the page loads
+        window.onload = function () {
+            showSeasonContent();
+        };
     </script>
-
 
 {% endblock %}

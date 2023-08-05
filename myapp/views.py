@@ -187,18 +187,6 @@ def team_list(request):
     return render(request, 'teams.html', {'teams': teams})
 
 
-@login_required
-def competition_detail(request, id):
-    competition = get_object_or_404(Competition, pk=id)
-    seasons = Season.objects.filter(competition=competition)
-    teams = Team.objects.all()
-    return render(request, 'competition_detail.html', {
-        'competition': competition,
-        'teams': teams,
-        'seasons': seasons,
-    })
-
-
 def home(request):
     if request.user.is_authenticated:
         active_competitions = Competition.objects.filter(is_active=True, user=request.user)
@@ -310,8 +298,31 @@ def default_page(request):
         return redirect('home')
 
 
-def competition_seasons(request, id):
+@login_required
+def competition_detail(request, id):
     competition = get_object_or_404(Competition, pk=id)
     seasons = Season.objects.filter(competition=competition)
-    
-    return render(request, 'competition_seasons.html', {'competition': competition, 'seasons': seasons})
+    teams = Team.objects.all()
+    return render(request, 'competition_detail.html', {
+        'competition': competition,
+        'teams': teams,
+        'seasons': seasons,
+    })
+
+
+def competition_seasons(request, id_competition):
+    competition = get_object_or_404(Competition, pk=id_competition)
+    seasons = Season.objects.filter(competition=competition)
+    teams = Team.objects.all()
+    return render(request, 'competition_seasons.html', {'competition': competition, 'seasons': seasons, 'teams': teams})
+
+
+def season_teams(request, id_competition, id_season):
+    competition = get_object_or_404(Competition, pk=id_competition)
+    season = get_object_or_404(Season, pk=id_season)
+
+    # Obtener todos los equipos de la competencia
+    teams = Team.objects.all()
+    groups = Group.objects.filter(season=season)
+    return render(request, 'season_teams.html',
+                  {'competition': competition, 'season': season, 'teams': teams, 'groups': groups})
