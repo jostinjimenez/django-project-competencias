@@ -1,24 +1,48 @@
 {% block content %}
+    {% load static %}
 
-    Equipos:
-    <ul>
-        {% for team in teams %}
-            <li>{{ team.name }}</li>
-        {% endfor %}
-    </ul>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Carga de jQuery UI -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
+    <h2>Equipos</h2>
+    <div class="container mt-5">
+        <div class="row">
+            {% for team in teams %}
+                <div class="col-md-2 mb-4">
+                    <div class="card text-dark team-card" data-team-id="{{ team.id }}">
+                        <div class="card-body text-center">
+                            <p class="card-title">{{ team.name }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 
-    <h1>{{ competition.name }}</h1>
-    <h2>Temporada: {{ season.name }}</h2>
+    <h2>Grupos</h2>
+    {% for group in groups %}
+        <div class="group-container" data-group-id="{{ group.id }}">{{ group.letter }}</div>
+    {% endfor %}
 
-    <!-- Aquí puedes mostrar los grupos solo si la temporada coincide con la temporada de los grupos -->
-    {% if competition == season.competition %}
-        {% for group in groups %}
-            <h3>{{ group.letter }}</h3>
-            <!-- Aquí puedes mostrar los equipos que pertenecen a este grupo -->
-        {% endfor %}
-    {% else %}
-        <p>No se encontraron grupos para la temporada seleccionada.</p>
-    {% endif %}
+    <script>
+        // Verifica que jQuery esté disponible antes de ejecutar el código
+        $(document).ready(function () {
+            $(".team-card").draggable({
+                revert: "invalid" // Devuelve el elemento a su posición original si no se suelta en un área válida
+            });
 
+            $(".group-container").droppable({
+                accept: ".team-card", // Solo acepta elementos con la clase .team-card
+                drop: function (event, ui) {
+                    var teamId = ui.draggable.data("team-id");
+                    var groupId = $(this).data("group-id");
+                    // Aquí puedes realizar una petición AJAX para guardar la relación entre el equipo y el grupo en tu base de datos
+                    // Por ejemplo, enviar teamId y groupId a tu vista para procesar el guardado
+                    // Luego, actualiza la interfaz para mostrar el equipo en el grupo
+                    $(this).append(ui.draggable);
+                }
+            });
+        });
+    </script>
 {% endblock %}

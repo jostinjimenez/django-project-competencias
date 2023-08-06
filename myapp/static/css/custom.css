@@ -1,0 +1,7 @@
+.draggable {
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    padding: 8px;
+    margin-bottom: 8px;
+    cursor: move;
+}

@@ -6,6 +6,8 @@ from django.db import models
 import enum
 
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 # Create your models here.
@@ -54,7 +56,6 @@ class Competition(models.Model):
         ('GS', 'Group Stage'),
         ('O', 'Other')
     )
-    number_grups = models.IntegerField(blank=True, null=True)
     type_competition = models.CharField(max_length=2, choices=COMPETITION_TYPES, default='O')
     is_active = models.BooleanField(default=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='competitions')
@@ -66,17 +67,10 @@ class Competition(models.Model):
 class Season(models.Model):
     name = models.CharField(max_length=50)
     competition = models.ForeignKey(Competition, on_delete=models.CASCADE, related_name='seasons', null=True)
+    number_grups = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.name
-
-
-class Group(models.Model):
-    letter = models.CharField(max_length=1)
-    season = models.ForeignKey(Season, on_delete=models.CASCADE, related_name='groups', null=True)
-
-    def __str__(self):
-        return self.letter
 
 
 class Team(models.Model):
@@ -138,3 +132,19 @@ class PlayerTeamSeason(models.Model):
 
     def __str__(self):
         return f"{self.player.name} - {self.team.name} ({self.season.name})"
+
+
+class Group(models.Model):
+    letter = models.CharField(max_length=1)
+    season = models.ForeignKey(Season, on_delete=models.CASCADE, related_name='groups', null=True)
+
+    def __str__(self):
+        return self.letter
+
+
+# Función para crear automáticamente los grupos cuando se crea una temporada
+@receiver(post_save, sender=Season)
+def create_groups_for_season(sender, instance, created, **kwargs):
+    if created and instance.number_grups:
+        for i in range(instance.number_grups):
+            Group.objects.create(letter=f"Grupo {i + 1}", season=instance)

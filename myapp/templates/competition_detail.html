@@ -105,7 +105,7 @@
             </thead>
             <tbody class="table-group-divider">
             {% for team in teams %}
-                <tr>
+                <tr data-team-id="{{ team.id }}">
                     <td>
                         {% if team.image %}
                             <img src="{{ team.image.url }}" width="25px" alt="{{ team.name }}">

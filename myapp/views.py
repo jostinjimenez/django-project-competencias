@@ -7,7 +7,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError, transaction
 from django.contrib.auth.decorators import login_required
 
-from .forms import PlayerForm, SportForm, CompetitionForm, CustomPlayerForm, TeamForm
+from .forms import PlayerForm, SportForm, CompetitionForm, CustomPlayerForm, TeamForm, SeasonForm
 from .models import Competition, Season, Sport, Group, Team, Player, Game, State, PlayerTeamSeason, Inscription
 from .utils import generate_groups_for_season
 
@@ -267,28 +267,6 @@ def new_sport(request):
             })
 
 
-@login_required
-@transaction.atomic  # Aplicamos el decorador para asegurar el uso de transacciones
-def new_competition(request):
-    if request.method == 'GET':
-        form = CompetitionForm()
-        return render(request, 'new_competition.html', {'form': form})
-    else:
-        try:
-            form = CompetitionForm(request.POST, request.FILES)
-            if form.is_valid():
-                # Asignar el usuario autenticado al campo "user" antes de guardar la competencia
-                competition = form.save(commit=False)
-                competition.user = request.user
-                competition.save()
-                return redirect('competitions')
-        except ValueError:
-            return render(request, 'new_competition.html', {
-                'form': form,
-                'error': 'Bad data passed in. Try again.'
-            })
-
-
 def default_page(request):
     if request.user.is_authenticated:
         # Si el usuario está autenticado, redirigir a la página de inicio para usuarios autenticados
@@ -311,17 +289,56 @@ def competition_detail(request, id):
 
 
 def competition_seasons(request, id_competition):
-    competition = get_object_or_404(Competition, pk=id_competition)
-    seasons = Season.objects.filter(competition=competition)
-    teams = Team.objects.all()
-    return render(request, 'competition_seasons.html', {'competition': competition, 'seasons': seasons, 'teams': teams})
+    if request.method == 'GET':
+        form = SeasonForm()
+        competition = get_object_or_404(Competition, pk=id_competition)
+        seasons = Season.objects.filter(competition=competition)
+        return render(request, 'competition_seasons.html', {
+            'competition': competition,
+            'seasons': seasons,
+            'form': form,
+        })
+    else:
+        try:
+            form = SeasonForm(request.POST)
+            if form.is_valid():
+                season = form.save(commit=False)
+                season.competition = get_object_or_404(Competition, pk=id_competition)
+                season.save()
+                return redirect('competition_seasons', id_competition=id_competition)
+        except ValueError:
+            return render(request, 'competition_seasons.html', {
+                'form': form,
+                'error': 'Bad data passed in. Try again.'
+            })
+
+
+@login_required
+@transaction.atomic  # Aplicamos el decorador para asegurar el uso de transacciones
+def new_competition(request):
+    if request.method == 'GET':
+        form = CompetitionForm()
+        return render(request, 'new_competition.html', {'form': form})
+    else:
+        try:
+            form = CompetitionForm(request.POST, request.FILES)
+            if form.is_valid():
+                # Asignar el usuario autenticado al campo "user" antes de guardar la competencia
+                competition = form.save(commit=False)
+                competition.user = request.user
+                competition.save()
+                return redirect('competitions')
+        except ValueError:
+            return render(request, 'new_competition.html', {
+                'form': form,
+                'error': 'Bad data passed in. Try again.'
+            })
 
 
 def season_teams(request, id_competition, id_season):
     competition = get_object_or_404(Competition, pk=id_competition)
     season = get_object_or_404(Season, pk=id_season)
 
-    # Obtener todos los equipos de la competencia
     teams = Team.objects.all()
     groups = Group.objects.filter(season=season)
     return render(request, 'season_teams.html',

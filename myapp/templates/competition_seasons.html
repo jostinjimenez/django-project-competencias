@@ -3,39 +3,101 @@
 
     <h1>{{ competition.name }}</h1>
 
-    <div class="form-group mt-5 mb-5">
-        <select class="form-control" style="width: 140px" id="seasonsMenu" aria-label="Default select example"
-                onchange="showSeasonContent()">
-            {% for season in seasons %}
-                <option value="{{ season.id }}">{{ season.name }}</option>
-            {% endfor %}
-        </select>
-    </div>
+    {% if seasons %}
+        <div class="container mt-5 mb-4">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <select class="form-control" style="width: 180px" id="seasonsMenu"
+                                aria-label="Default select example"
+                                onchange="showSeasonContent()">
+                            {% for season in seasons %}
+                                <option value="{{ season.id }}">{{ season.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class=" col-md-2 d-flex ">
+                    <div>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal">
+                            Crear Temporada
+                        </button>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Añadir Temporada</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="post">
+                                            {% csrf_token %}
+                                            {{ error }}
+                                            {{ form.as_p }}
+                                            <button type="submit" class="btn btn-primary">Añadir</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <div id="seasonContent"></div>
+        <div id="seasonContent"></div>
 
-    <script>
-        function showSeasonContent() {
-            var selectedSeasonId = document.getElementById("seasonsMenu").value;
-            var seasonContent = document.getElementById("seasonContent");
+        <script>
+            function showSeasonContent() {
+                var selectedSeasonId = document.getElementById("seasonsMenu").value;
+                var seasonContent = document.getElementById("seasonContent");
 
-            // Perform an AJAX request to get the teams for the selected season
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState === 4 && this.status === 200) {
-                    seasonContent.innerHTML = this.responseText;
-                }
+                // Perform an AJAX request to get the teams for the selected season
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState === 4 && this.status === 200) {
+                        seasonContent.innerHTML = this.responseText;
+                    }
+                };
+                var competitionId = {{ competition.id }};
+                var url = "/competitions/" + competitionId + "/seasons/" + selectedSeasonId + "/";
+                xhttp.open("GET", url, true);
+                xhttp.send();
+            }
+
+            // Show the content of the first option when the page loads
+            window.onload = function () {
+                showSeasonContent();
             };
-            var competitionId = {{ competition.id }};
-            var url = "/competitions/" + competitionId + "/seasons/" + selectedSeasonId + "/";
-            xhttp.open("GET", url, true);
-            xhttp.send();
-        }
+        </script>
+    {% else %}
+        <div class="alert alert-warning mt-5" role="alert">
+            There are no seasons created for this competition.
+            <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">Create a New Season</a>
+        </div>
+    {% endif %}
 
-        // Show the content of the first option when the page loads
-        window.onload = function () {
-            showSeasonContent();
-        };
-    </script>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Create a New Season</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ error }}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

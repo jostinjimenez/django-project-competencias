@@ -1,6 +1,6 @@
 from bootstrap_datepicker_plus.widgets import DatePickerInput
 from django import forms
-from .models import Player, Sport, Competition, PlayerTeamSeason, Team
+from .models import Player, Sport, Competition, PlayerTeamSeason, Team, Season
 
 
 class CustomPlayerForm(forms.ModelForm):
@@ -54,8 +54,7 @@ class SportForm(forms.ModelForm):
 class CompetitionForm(forms.ModelForm):
     class Meta:
         model = Competition
-        fields = ['name', 'date_start', 'date_end', 'sport', 'genre', 'type_competition',
-                  'number_grups', 'is_active']
+        fields = ['name', 'date_start', 'date_end', 'sport', 'genre', 'type_competition', 'is_active']
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
@@ -74,7 +73,6 @@ class CompetitionForm(forms.ModelForm):
             'genre': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
             'sport': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
             'type_competition': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
-            'number_grups': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
 
@@ -88,4 +86,15 @@ class TeamForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
             'city': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
             'country': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
+        }
+
+
+class SeasonForm(forms.ModelForm):
+    class Meta:
+        model = Season
+        fields = ['name', 'number_grups']
+
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
+            'number_grups': forms.NumberInput(attrs={'class': 'form-control border-2 rounded-pill'}),
         }
