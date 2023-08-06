@@ -1,9 +1,17 @@
 {% block content %}
+
     {% load static %}
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <!-- Carga de jQuery UI -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <div class="container mt-5 mb-4">
+        <div class="row">
+            <div class="col-md-2 d-flex">
+                <div>
+                    <button class="btn btn-primary" onclick="sortTeamsInGroups()">Sortear Equipos en Grupos</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     <h2>Equipos</h2>
     <div class="container mt-5">
@@ -21,28 +29,28 @@
     </div>
 
     <h2>Grupos</h2>
-    {% for group in groups %}
-        <div class="group-container" data-group-id="{{ group.id }}">{{ group.letter }}</div>
-    {% endfor %}
+    <div class="container mt-5">
+        <div class="row">
+            {% for group in groups %}
+                <div class="col-md-2 mb-4">
+                    <div class="card text-dark team-card">
+                        <div class="card-body text-center">
+                            <p class="card-title">{{ group.letter }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 
     <script>
-        // Verifica que jQuery esté disponible antes de ejecutar el código
-        $(document).ready(function () {
-            $(".team-card").draggable({
-                revert: "invalid" // Devuelve el elemento a su posición original si no se suelta en un área válida
-            });
-
-            $(".group-container").droppable({
-                accept: ".team-card", // Solo acepta elementos con la clase .team-card
-                drop: function (event, ui) {
-                    var teamId = ui.draggable.data("team-id");
-                    var groupId = $(this).data("group-id");
-                    // Aquí puedes realizar una petición AJAX para guardar la relación entre el equipo y el grupo en tu base de datos
-                    // Por ejemplo, enviar teamId y groupId a tu vista para procesar el guardado
-                    // Luego, actualiza la interfaz para mostrar el equipo en el grupo
-                    $(this).append(ui.draggable);
-                }
-            });
-        });
+        function sortTeamsInGroups() {
+            var idCompetencia = {{ competition.id }};
+            var idSeason = {{ season.id }};
+            var url = `/competitions/${idCompetencia}/seasons/${idSeason}/draw_groups/`;
+            console.log(url); // Agregar un console.log para verificar la URL
+            //window.location.href = url;
+        }
     </script>
+
 {% endblock %}

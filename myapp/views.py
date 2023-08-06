@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 from .forms import PlayerForm, SportForm, CompetitionForm, CustomPlayerForm, TeamForm, SeasonForm
 from .models import Competition, Season, Sport, Group, Team, Player, Game, State, PlayerTeamSeason, Inscription
-from .utils import generate_groups_for_season
+from .utils import sort_teams_in_groups
 
 
 def inscription_team(request, id_competition, id_team):
@@ -343,3 +343,11 @@ def season_teams(request, id_competition, id_season):
     groups = Group.objects.filter(season=season)
     return render(request, 'season_teams.html',
                   {'competition': competition, 'season': season, 'teams': teams, 'groups': groups})
+
+
+def draw_groups(request, id_competencia, id_season):
+    season = Season.objects.get(id=id_season)  # Get the Temporada object for the specific season
+    sort_teams_in_groups(season)
+
+    # Redirect to the page that shows the teams in the current season
+    return redirect('season_teams', id_competencia=id_competencia, id_season=id_season)

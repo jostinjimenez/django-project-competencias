@@ -31,6 +31,9 @@ urlpatterns = [
     path('competitions/<int:id_competition>/seasons/<int:id_season>/', views.season_teams,
          name='season_teams'),
 
+    path('competitions/<int:id_competencia>/seasons/<int:id_season>/draw_groups/', views.draw_groups,
+         name='draw_groups'),
+
     path('players', views.player_list, name='players'),
     path('player/<int:id>/', views.player_detail, name='player_detail'),
     path('games/', views.game_list, name='game_list'),

@@ -50,29 +50,38 @@
 
         <div id="seasonContent"></div>
 
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-            function showSeasonContent() {
-                var selectedSeasonId = document.getElementById("seasonsMenu").value;
-                var seasonContent = document.getElementById("seasonContent");
+            var seasonContent = $("#seasonContent");
 
-                // Perform an AJAX request to get the teams for the selected season
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function () {
-                    if (this.readyState === 4 && this.status === 200) {
-                        seasonContent.innerHTML = this.responseText;
-                    }
-                };
+            function showSeasonContent() {
+                var selectedSeasonId = $("#seasonsMenu").val();
                 var competitionId = {{ competition.id }};
-                var url = "/competitions/" + competitionId + "/seasons/" + selectedSeasonId + "/";
-                xhttp.open("GET", url, true);
-                xhttp.send();
+
+                // Make an AJAX request to the server to get the content of the selected season
+                $.ajax({
+                    type: "GET",
+                    url: "/competitions/" + competitionId + "/seasons/" + selectedSeasonId + "/",
+                    success: function (data) {
+                        seasonContent.html(data);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Error loading the content of the season:", error);
+                    }
+                });
             }
 
-            // Show the content of the first option when the page loads
-            window.onload = function () {
+            // Show the content of the first option when the page is loaded
+            $(document).ready(function () {
                 showSeasonContent();
-            };
+
+                // Update the content of the season when the selection in the menu changes
+                $("#seasonsMenu").change(function () {
+                    showSeasonContent();
+                });
+            });
         </script>
+
     {% else %}
         <div class="alert alert-warning mt-5" role="alert">
             There are no seasons created for this competition.
