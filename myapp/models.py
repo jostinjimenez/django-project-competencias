@@ -162,8 +162,8 @@ class Stadium(models.Model):
     name = models.CharField(max_length=50)
     number_seats = models.IntegerField(default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='stadiums')
-    addres = map_fields.AddressField(max_length=200)
-    geolocation = map_fields.GeoLocationField(max_length=200)
+    addres = models.CharField(max_length=200)
+    geolocation = models.CharField(max_length=200)
 
     def __str__(self):
         return self.name

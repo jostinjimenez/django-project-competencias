@@ -7,7 +7,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError, transaction
 from django.contrib.auth.decorators import login_required
 
-from .forms import PlayerForm, SportForm, CompetitionForm, CustomPlayerForm, TeamForm, SeasonForm
+from .forms import PlayerForm, SportForm, CompetitionForm, CustomPlayerForm, TeamForm, SeasonForm, StadiumForm
 from .models import Competition, Season, Sport, Group, Team, Player, Game, State, PlayerTeamSeason
 
 
@@ -49,6 +49,23 @@ def new_team(request, id_competition):
     return render(request, 'new_team.html', {
         'form': form,
         'competition': competition,
+    })
+
+
+def new_stadium(request, id_competition):
+    competition = get_object_or_404(Competition, pk=id_competition)
+
+    if request.method == 'POST':
+        form = StadiumForm(request.POST)
+        if form.is_valid():
+            stadium = form.save(commit=False)
+            stadium.save()
+            return redirect('competition_detail', id=id_competition)
+    else:
+        form = StadiumForm()
+
+    return render(request, 'new_stadium.html', {
+        'form': form,
     })
 
 
@@ -339,11 +356,9 @@ def season_teams(request, id_competition, id_season):
 
     teams = Team.objects.all()
     groups = Group.objects.filter(season=season)
-    equipos_sin_grupo = Team.objects.filter(group__isnull=True)
 
     return render(request, 'season_teams.html',
-                  {'competition': competition, 'season': season, 'teams': teams, 'groups': groups,
-                   'teams_null': equipos_sin_grupo})
+                  {'competition': competition, 'season': season, 'teams': teams, 'groups': groups})
 
 
 def sortear_grupos(request, id_competition, id_season):

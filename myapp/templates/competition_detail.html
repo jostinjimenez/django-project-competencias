@@ -49,7 +49,8 @@
                     Equipo</a>
             </li>
             <li>
-                <a class="dropdown-item" href="">Importar Equipos</a>
+                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#new_Stadium_modal">Generar
+                    Calendario</a>
             </li>
             <li>
                 <a class="dropdown-item" href="">Exportar Equipos</a>
@@ -66,6 +67,25 @@
                 </div>
                 <div class="modal-body">
                     <p>Busca a los equipos y agrégalos de la lista, <a href="{% url 'new_team' competition.id %}">o crea
+                        un nuevo perfil para
+                        ellos.</a></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Añadir Equipo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="new_Stadium_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Añadir Lugar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Busca a los equipos y agrégalos de la lista, <a href="{% url 'new_stadium' competition.id %}">o
+                        crea
                         un nuevo perfil para
                         ellos.</a></p>
                 </div>

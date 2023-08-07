@@ -28,6 +28,10 @@ urlpatterns = [
 
     path('competitions/<int:id_competition>/seasons/', views.competition_seasons,
          name='competition_seasons'),
+
+    path('competitions/<int:id_competition>/seasons/new_stadium', views.new_stadium,
+         name='new_stadium'),
+
     path('competitions/<int:id_competition>/seasons/<int:id_season>/', views.season_teams,
          name='season_teams'),
 

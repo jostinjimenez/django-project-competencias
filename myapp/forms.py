@@ -1,6 +1,6 @@
 from bootstrap_datepicker_plus.widgets import DatePickerInput
 from django import forms
-from .models import Player, Sport, Competition, PlayerTeamSeason, Team, Season
+from .models import Player, Sport, Competition, PlayerTeamSeason, Team, Season, Stadium
 
 
 class CustomPlayerForm(forms.ModelForm):
@@ -97,4 +97,17 @@ class SeasonForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
             'number_grups': forms.NumberInput(attrs={'class': 'form-control border-2 rounded-pill'}),
+        }
+
+
+class StadiumForm(forms.ModelForm):
+    class Meta:
+        model = Stadium
+        fields = ['name', 'number_seats', 'addres', 'geolocation']
+
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
+            'number_seats': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
+            'addres': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
+            'geolocation': forms.HiddenInput(),
         }

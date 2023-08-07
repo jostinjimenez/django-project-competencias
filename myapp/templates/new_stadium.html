@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    {{ form.media }}
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-8 col-lg-10 col-md-9">
+                <div class="card o-hidden border-0 shadow-lg">
+                    <div class="card-body p-5">
+                        <div class="text-center">
+                            <h1 class="h4 text-gray-900 mb-4">New Competition</h1>
+                        </div>
+                        <form method="post" class="form-group mx-auto mt-2">
+                            {% csrf_token %}
+
+                            {{ error }}
+
+                            {{ form.as_p }}
+                            <div class="text-center">
+                                <a class="btn btn-secondary rounded-pill btn-md w-25"
+                                   href="{% url 'competitions' %}">Cancel</a>
+                                <button type="submit" class="btn btn-primary rounded-pill btn-md w-25">Submit</button>
+                                <button type="submit" class="btn btn-success rounded-pill btn-md w-25"><a
+                                        class="text-decoration-none text-light" href="{% url 'new_sport' %}">New
+                                    Sport</a></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="myMap" style="width: 800px; height: 600px;"></div>
+    <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=loadMapScenario' async
+            defer></script>
+    <script src="{% static 'js/map.js' %}"></script>
+
+    <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=loadMapScenario' async
+            defer></script>
+
+
+
+
+{% endblock %}
+```
