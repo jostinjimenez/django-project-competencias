@@ -1,3 +1,5 @@
+import random
+
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -67,10 +69,23 @@ class Competition(models.Model):
 class Season(models.Model):
     name = models.CharField(max_length=50)
     competition = models.ForeignKey(Competition, on_delete=models.CASCADE, related_name='seasons', null=True)
-    number_grups = models.IntegerField(blank=True, null=True)
+    number_grups = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
+
+    def assign_teams_to_groups(self):
+        equipos_inscritos = self.competition.teams.all()
+        grupos = self.groups.all()
+
+        # Shuffle the registered teams randomly
+        equipos_mezclados = list(equipos_inscritos)
+        random.shuffle(equipos_mezclados)
+
+        # Assign each team to a group in random order
+        for i, equipo in enumerate(equipos_mezclados):
+            grupo = grupos[i % len(grupos)]
+            grupo.teams.add(equipo)
 
 
 class Team(models.Model):
@@ -79,6 +94,7 @@ class Team(models.Model):
     country = models.CharField(max_length=50, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='teams')
     competition = models.ManyToManyField(Competition, through='Inscription', related_name='teams')
+    groups = models.ForeignKey('Group', on_delete=models.CASCADE, null=True, related_name='teams')
 
     def __str__(self):
         return self.name
@@ -135,11 +151,22 @@ class PlayerTeamSeason(models.Model):
 
 
 class Group(models.Model):
-    letter = models.CharField(max_length=1)
+    letter = models.CharField(max_length=40)
     season = models.ForeignKey(Season, on_delete=models.CASCADE, related_name='groups', null=True)
 
     def __str__(self):
         return self.letter
+
+
+class Stadium(models.Model):
+    name = models.CharField(max_length=50)
+    number_seats = models.IntegerField(default=0)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='stadiums')
+    addres = map_fields.AddressField(max_length=200)
+    geolocation = map_fields.GeoLocationField(max_length=200)
+
+    def __str__(self):
+        return self.name
 
 
 # Función para crear automáticamente los grupos cuando se crea una temporada

@@ -8,8 +8,7 @@ from django.db import IntegrityError, transaction
 from django.contrib.auth.decorators import login_required
 
 from .forms import PlayerForm, SportForm, CompetitionForm, CustomPlayerForm, TeamForm, SeasonForm
-from .models import Competition, Season, Sport, Group, Team, Player, Game, State, PlayerTeamSeason, Inscription
-from .utils import sort_teams_in_groups
+from .models import Competition, Season, Sport, Group, Team, Player, Game, State, PlayerTeamSeason
 
 
 def inscription_team(request, id_competition, id_team):
@@ -34,17 +33,16 @@ def inscription_team(request, id_competition, id_team):
 
 
 @login_required  # Asegúrate de que el usuario esté autenticado para crear un equipo
-def new_team(request, id):
-    competition = get_object_or_404(Competition, pk=id)
+def new_team(request, id_competition):
+    competition = get_object_or_404(Competition, pk=id_competition)
 
     if request.method == 'POST':
         form = TeamForm(request.POST)
         if form.is_valid():
             team = form.save(commit=False)
-            team.user = request.user  # Asignar el usuario al equipo
-            team.competition = competition  # Asignar la competencia al equipo
             team.save()
-            return redirect('competition_detail', id=id)
+            team.competition.add(competition)
+            return redirect('competition_detail', id=id_competition)
     else:
         form = TeamForm()
 
@@ -341,13 +339,14 @@ def season_teams(request, id_competition, id_season):
 
     teams = Team.objects.all()
     groups = Group.objects.filter(season=season)
+    equipos_sin_grupo = Team.objects.filter(group__isnull=True)
+
     return render(request, 'season_teams.html',
-                  {'competition': competition, 'season': season, 'teams': teams, 'groups': groups})
+                  {'competition': competition, 'season': season, 'teams': teams, 'groups': groups,
+                   'teams_null': equipos_sin_grupo})
 
 
-def draw_groups(request, id_competencia, id_season):
-    season = Season.objects.get(id=id_season)  # Get the Temporada object for the specific season
-    sort_teams_in_groups(season)
-
-    # Redirect to the page that shows the teams in the current season
-    return redirect('season_teams', id_competencia=id_competencia, id_season=id_season)
+def sortear_grupos(request, id_competition, id_season):
+    season = Season.objects.get(id=id_season)
+    season.assign_teams_to_groups()
+    return redirect('competition_seasons', id_competition=id_competition)

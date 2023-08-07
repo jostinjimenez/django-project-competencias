@@ -6,12 +6,17 @@
         <div class="row">
             <div class="col-md-2 d-flex">
                 <div>
-                    <button class="btn btn-primary" onclick="sortTeamsInGroups()">Sortear Equipos en Grupos</button>
+                    <form action="{% url 'sortear_grupos' competition.id season.id %}" method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-primary" type="submit">Sortear Grupos</button>
+                    </form>
                 </div>
             </div>
-
         </div>
     </div>
+
+    
+
 
     <h2>Equipos</h2>
     <div class="container mt-5">
@@ -29,28 +34,25 @@
     </div>
 
     <h2>Grupos</h2>
-    <div class="container mt-5">
-        <div class="row">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
             {% for group in groups %}
-                <div class="col-md-2 mb-4">
-                    <div class="card text-dark team-card">
-                        <div class="card-body text-center">
-                            <p class="card-title">{{ group.letter }}</p>
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ group.letter }}</h5>
+                            <div class="card">
+                                <ul class="list-group list-group-flush">
+                                    {% for team in group.teams.all %}
+                                        <li class="list-group-item">{{ team.name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
     </div>
-
-    <script>
-        function sortTeamsInGroups() {
-            var idCompetencia = {{ competition.id }};
-            var idSeason = {{ season.id }};
-            var url = `/competitions/${idCompetencia}/seasons/${idSeason}/draw_groups/`;
-            console.log(url); // Agregar un console.log para verificar la URL
-            //window.location.href = url;
-        }
-    </script>
 
 {% endblock %}

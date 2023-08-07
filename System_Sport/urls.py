@@ -18,7 +18,7 @@ urlpatterns = [
     path('signin/', views.signin, name='signin'),
     path('competitions/', views.competition_list, name='competitions'),
     path('competitions/<int:id>/', views.competition_detail, name='competition_detail'),
-    path('competitions/competitions_detail<int:id>/new_team/', views.new_team, name='new_team'),
+    path('competitions/competitions_detail<int:id_competition>/new_team/', views.new_team, name='new_team'),
     path('new_player/', views.new_player, name='new_player'),
     path('new_sport/', views.new_sport, name='new_sport'),
     path('teams/', views.team_list, name='teams'),
@@ -31,8 +31,8 @@ urlpatterns = [
     path('competitions/<int:id_competition>/seasons/<int:id_season>/', views.season_teams,
          name='season_teams'),
 
-    path('competitions/<int:id_competencia>/seasons/<int:id_season>/draw_groups/', views.draw_groups,
-         name='draw_groups'),
+    path('competitions/<int:id_competition>/seasons/<int:id_season>/sortear_grupos/', views.sortear_grupos,
+         name='sortear_grupos'),
 
     path('players', views.player_list, name='players'),
     path('player/<int:id>/', views.player_detail, name='player_detail'),
