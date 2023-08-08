@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import JsonResponse
 from django.urls import path
@@ -29,7 +30,7 @@ urlpatterns = [
     path('competitions/<int:id_competition>/seasons/', views.competition_seasons,
          name='competition_seasons'),
 
-    path('competitions/<int:id_competition>/seasons/new_stadium', views.new_stadium,
+    path('competitions/<int:id_competition>/seasons/new_stadium', login_required(views.new_stadium),
          name='new_stadium'),
 
     path('competitions/<int:id_competition>/seasons/<int:id_season>/', views.season_teams,
@@ -37,6 +38,13 @@ urlpatterns = [
 
     path('competitions/<int:id_competition>/seasons/<int:id_season>/sortear_grupos/', views.sortear_grupos,
          name='sortear_grupos'),
+
+    path('competitions/<int:id_competition>/seasons/<int:id_season>/generate_time', login_required(views.generate_time),
+         name='generate_time'),
+
+    path('competitions/<int:id_competition>/seasons/<int:id_season>/generate_time/',
+         login_required(views.generate_time),
+         name='generate_time'),
 
     path('players', views.player_list, name='players'),
     path('player/<int:id>/', views.player_detail, name='player_detail'),

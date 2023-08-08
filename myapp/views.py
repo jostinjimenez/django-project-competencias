@@ -7,8 +7,9 @@ from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError, transaction
 from django.contrib.auth.decorators import login_required
 
-from .forms import PlayerForm, SportForm, CompetitionForm, CustomPlayerForm, TeamForm, SeasonForm, StadiumForm
-from .models import Competition, Season, Sport, Group, Team, Player, Game, State, PlayerTeamSeason
+from .forms import PlayerForm, SportForm, CompetitionForm, CustomPlayerForm, TeamForm, SeasonForm, LocationForm, \
+    AvailabilityForm
+from .models import Competition, Season, Sport, Group, Team, Player, Game, State, PlayerTeamSeason, Location
 
 
 def inscription_team(request, id_competition, id_team):
@@ -52,20 +53,30 @@ def new_team(request, id_competition):
     })
 
 
+@login_required
 def new_stadium(request, id_competition):
     competition = get_object_or_404(Competition, pk=id_competition)
 
     if request.method == 'POST':
-        form = StadiumForm(request.POST)
+        form = LocationForm(request.POST)
         if form.is_valid():
+            geolocation = request.POST.get('geolocation')
+
             stadium = form.save(commit=False)
-            stadium.save()
-            return redirect('competition_detail', id=id_competition)
+            stadium.geolocation = geolocation
+            stadium.user = request.user  # Asigna el usuario actual al estadio
+
+            try:
+                stadium.save()
+                return redirect('competition_detail', id=id_competition)
+            except Exception as e:
+                form.add_error(None, f"An error occurred: {e}")
     else:
-        form = StadiumForm()
+        form = LocationForm()
 
     return render(request, 'new_stadium.html', {
         'form': form,
+        'competition': competition,
     })
 
 
@@ -303,31 +314,6 @@ def competition_detail(request, id):
     })
 
 
-def competition_seasons(request, id_competition):
-    if request.method == 'GET':
-        form = SeasonForm()
-        competition = get_object_or_404(Competition, pk=id_competition)
-        seasons = Season.objects.filter(competition=competition)
-        return render(request, 'competition_seasons.html', {
-            'competition': competition,
-            'seasons': seasons,
-            'form': form,
-        })
-    else:
-        try:
-            form = SeasonForm(request.POST)
-            if form.is_valid():
-                season = form.save(commit=False)
-                season.competition = get_object_or_404(Competition, pk=id_competition)
-                season.save()
-                return redirect('competition_seasons', id_competition=id_competition)
-        except ValueError:
-            return render(request, 'competition_seasons.html', {
-                'form': form,
-                'error': 'Bad data passed in. Try again.'
-            })
-
-
 @login_required
 @transaction.atomic  # Aplicamos el decorador para asegurar el uso de transacciones
 def new_competition(request):
@@ -365,3 +351,47 @@ def sortear_grupos(request, id_competition, id_season):
     season = Season.objects.get(id=id_season)
     season.assign_teams_to_groups()
     return redirect('competition_seasons', id_competition=id_competition)
+
+
+def competition_seasons(request, id_competition):
+    if request.method == 'GET':
+        form = SeasonForm()
+        competition = get_object_or_404(Competition, pk=id_competition)
+        seasons = Season.objects.filter(competition=competition)
+        return render(request, 'competition_seasons.html', {
+            'competition': competition,
+            'seasons': seasons,
+            'form': form,
+        })
+    else:
+        try:
+            form = SeasonForm(request.POST)
+            if form.is_valid():
+                season = form.save(commit=False)
+                season.competition = get_object_or_404(Competition, pk=id_competition)
+                season.save()
+                return redirect('competition_seasons', id_competition=id_competition)
+        except ValueError:
+            return render(request, 'competition_seasons.html', {
+                'form': form,
+                'error': 'Bad data passed in. Try again.'
+            })
+
+
+def generate_time(request, id_competition, id_season):
+    if request.method == 'POST':
+        form = AvailabilityForm(request.POST)
+        if form.is_valid():
+            availability = form.save(commit=False)
+            availability.location = form.cleaned_data['location']
+            availability.save()
+            return redirect('generate_time')
+    else:
+        form = AvailabilityForm()
+
+    locations = Location.objects.all()
+
+    return render(request, 'generate_time.html', {
+        'locations': locations,
+        'form': form,
+    })

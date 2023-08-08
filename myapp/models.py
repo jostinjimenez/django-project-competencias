@@ -158,15 +158,36 @@ class Group(models.Model):
         return self.letter
 
 
-class Stadium(models.Model):
+class Location(models.Model):
     name = models.CharField(max_length=50)
     number_seats = models.IntegerField(default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='stadiums')
     addres = models.CharField(max_length=200)
-    geolocation = models.CharField(max_length=200)
+    geolocation = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
         return self.name
+
+
+class Availability(models.Model):
+    DAYS_CHOICES = (
+        ('mon', 'Lunes'),
+        ('tue', 'Martes'),
+        ('wed', 'Miércoles'),
+        ('thu', 'Jueves'),
+        ('fri', 'Viernes'),
+        ('sat', 'Sábado'),
+        ('sun', 'Domingo'),
+    )
+    days_available = models.CharField(max_length=50, choices=DAYS_CHOICES, default='mon')
+    opening_time = models.TimeField(default='00:00:00')
+    closing_time = models.TimeField(blank=True, default='00:00:00')
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='availabilities')
+    date = models.DateField(blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='availabilities')
+
+    def __str__(self):
+        return self.location.name + ' - ' + self.days_available
 
 
 # Función para crear automáticamente los grupos cuando se crea una temporada

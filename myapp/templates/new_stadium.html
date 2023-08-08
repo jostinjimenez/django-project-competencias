@@ -4,27 +4,41 @@
 
     {{ form.media }}
 
+    <style>
+        #myMap {
+            width: 100%; /* Utiliza el 100% del ancho disponible */
+            height: 400px; /* Altura fija para mantener proporciones adecuadas */
+            margin-top: 20px; /* Margen superior para separar del contenido anterior */
+            border: 2px solid #ccc;
+        }
+    </style>
+
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-xl-8 col-lg-10 col-md-9">
                 <div class="card o-hidden border-0 shadow-lg">
                     <div class="card-body p-5">
                         <div class="text-center">
-                            <h1 class="h4 text-gray-900 mb-4">New Competition</h1>
+                            <h1 class="h4 text-gray-900 mb-4">Nuevo Lugar</h1>
                         </div>
                         <form method="post" class="form-group mx-auto mt-2">
                             {% csrf_token %}
 
                             {{ error }}
 
+                            {% if form.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    <strong>Error:</strong> There was a problem with the form submission.
+                                </div>
+                            {% endif %}
+
                             {{ form.as_p }}
+                            <input type="hidden" id="geolocation" name="geolocation">
+                            <div id="myMap"></div>
                             <div class="text-center">
                                 <a class="btn btn-secondary rounded-pill btn-md w-25"
-                                   href="{% url 'competitions' %}">Cancel</a>
+                                   href="{% url 'competition_detail' competition.id %}">Cancel</a>
                                 <button type="submit" class="btn btn-primary rounded-pill btn-md w-25">Submit</button>
-                                <button type="submit" class="btn btn-success rounded-pill btn-md w-25"><a
-                                        class="text-decoration-none text-light" href="{% url 'new_sport' %}">New
-                                    Sport</a></button>
                             </div>
                         </form>
                     </div>
@@ -34,15 +48,38 @@
     </div>
 
 
-    <div id="myMap" style="width: 800px; height: 600px;"></div>
-    <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=loadMapScenario' async
-            defer></script>
-    <script src="{% static 'js/map.js' %}"></script>
 
-    <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=loadMapScenario' async
-            defer></script>
+    <script type="text/javascript"
+            src="https://www.bing.com/api/maps/mapcontrol?key=ApzrK8-qiiRRdCt-zCJCBU42D-OCpYnOW-Yu47cE30jPPlILtWr52Z_ySM0wErJA&callback=loadMapScenario"
+            async defer></script>
 
+    <script>
+        function loadMapScenario() {
+            map = new Microsoft.Maps.Map(document.getElementById('myMap'),
+                {
+                    credentials: 'ApzrK8-qiiRRdCt-zCJCBU42D-OCpYnOW-Yu47cE30jPPlILtWr52Z_ySM0wErJA'
+                });
 
+            Microsoft.Maps.Events.addHandler(map, 'click', function (e) {
+
+                if (e.targetType == 'map') {
+
+                    var point = new Microsoft.Maps.Point(e.getX(), e.getY());
+                    var location = e.target.tryPixelToLocation(point);
+
+                    var pushpin = new Microsoft.Maps.Pushpin(location, {
+                        color: 'red'
+                    });
+
+                    map.entities.clear();
+                    map.entities.push(pushpin);
+
+                    // Actualiza el valor del campo geolocation con las coordenadas
+                    document.getElementById('geolocation').value = location.latitude + ',' + location.longitude;
+                }
+            });
+        }
+    </script>
 
 
 {% endblock %}

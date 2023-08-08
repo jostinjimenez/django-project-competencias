@@ -1,6 +1,6 @@
-from bootstrap_datepicker_plus.widgets import DatePickerInput
+from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput
 from django import forms
-from .models import Player, Sport, Competition, PlayerTeamSeason, Team, Season, Stadium
+from .models import Player, Sport, Competition, PlayerTeamSeason, Team, Season, Location, Availability
 
 
 class CustomPlayerForm(forms.ModelForm):
@@ -100,9 +100,9 @@ class SeasonForm(forms.ModelForm):
         }
 
 
-class StadiumForm(forms.ModelForm):
+class LocationForm(forms.ModelForm):
     class Meta:
-        model = Stadium
+        model = Location
         fields = ['name', 'number_seats', 'addres', 'geolocation']
 
         widgets = {
@@ -110,4 +110,22 @@ class StadiumForm(forms.ModelForm):
             'number_seats': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
             'addres': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
             'geolocation': forms.HiddenInput(),
+        }
+
+
+class AvailabilityForm(forms.ModelForm):
+    class Meta:
+        model = Availability
+        fields = ['days_available', 'opening_time', 'closing_time', 'date']
+
+        widgets = {
+            'days_available': forms.CheckboxSelectMultiple(attrs={'class': 'list-unstyled'}),
+            'opening_time': TimePickerInput(attrs={'class': 'form-control border-2 rounded-pill'}),
+            'closing_time': TimePickerInput(attrs={'class': 'form-control border-2 rounded-pill'}),
+            'date': DatePickerInput(format='%Y-%m-%d', options={
+                'locale': 'es',
+                'showClose': True,
+                'showClear': True,
+                'showTodayButton': True,
+            }, attrs={'class': 'form-control border-2 rounded-pill'}),
         }

@@ -2,6 +2,12 @@
 
     {% load static %}
 
+    <nav class="nav mt-5">
+        <a class="nav-link active" aria-current="page" href="{% url 'generate_time' competition.id season.id %}">Partidos</a>
+    </nav>
+
+    <hr>
+
     <div class="container mt-5 mb-4">
         <div class="row">
             <div class="col-md-2 d-flex">
@@ -14,9 +20,6 @@
             </div>
         </div>
     </div>
-
-
-
 
     <h2>Equipos</h2>
     <div class="container mt-5">
