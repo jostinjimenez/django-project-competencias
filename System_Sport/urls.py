@@ -42,10 +42,6 @@ urlpatterns = [
     path('competitions/<int:id_competition>/seasons/<int:id_season>/generate_time', login_required(views.generate_time),
          name='generate_time'),
 
-    path('competitions/<int:id_competition>/seasons/<int:id_season>/generate_time/',
-         login_required(views.generate_time),
-         name='generate_time'),
-
     path('players', views.player_list, name='players'),
     path('player/<int:id>/', views.player_detail, name='player_detail'),
     path('games/', views.game_list, name='game_list'),

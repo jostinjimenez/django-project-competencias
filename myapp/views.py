@@ -9,7 +9,8 @@ from django.contrib.auth.decorators import login_required
 
 from .forms import PlayerForm, SportForm, CompetitionForm, CustomPlayerForm, TeamForm, SeasonForm, LocationForm, \
     AvailabilityForm
-from .models import Competition, Season, Sport, Group, Team, Player, Game, State, PlayerTeamSeason, Location
+from .models import Competition, Season, Sport, Group, Team, Player, Game, State, PlayerTeamSeason, Location, \
+    Availability
 
 
 def inscription_team(request, id_competition, id_team):
@@ -383,9 +384,11 @@ def generate_time(request, id_competition, id_season):
         form = AvailabilityForm(request.POST)
         if form.is_valid():
             availability = form.save(commit=False)
-            availability.location = form.cleaned_data['location']
+            location_id = request.POST.get('location_id')  # Capturar el ID de la ubicación
+            location = Location.objects.get(id=location_id)
+            availability.location = location
             availability.save()
-            return redirect('generate_time')
+            return redirect('generate_time', id_competition=id_competition, id_season=id_season)
     else:
         form = AvailabilityForm()
 

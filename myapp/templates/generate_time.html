@@ -6,30 +6,39 @@
 
 
     <div class="container">
-        <a class="py-5" href="{% url 'game_list' %}">Ir a lista de partidos</a>
+    <a class="py-5" href="{% url 'game_list' %}">Ir a lista de partidos</a>
 
-        <div class="card">
-            <div class="card-header">
-                Instalaciones y Horarios
-            </div>
-            <ul class="list-group list-group-flush">
-                {% for location in locations %}
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col">
-                                {{ location.name }}
-                            </div>
-                            <div class="col">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+    <div class="card">
+        <div class="card-header">
+            Instalaciones y Horarios
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for location in locations %}
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col">
+                            {{ location.name }}
+                        </div>
+                        <div class="col">
+                            <form method="post" action="{% url 'generate_time' competition.id id_season %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="location_id" value="{{ location.id }}">
+                                <button type="submit" class="btn btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#exampleModal">
                                     Agregar Disponibilidad
                                 </button>
-                            </div>
+                            </form>
                         </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
+                        <div class="col">
+                            {% for availability in location.availability_set.all %}
+                                {{ availability.days_available }} - {{ availability.opening_time }} -
+                                {{ availability.closing_time }}<br>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
 
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
@@ -43,6 +52,7 @@
                     <div class="modal-body">
                         <form method="post">
                             {% csrf_token %}
+                            <input type="hidden" name="location_id" id="location_id">
                             <div class="form-group">
                                 <label for="{{ form.days_available.id_for_label }}">Días Disponibles:</label><br>
                                 {% for check in form.days_available %}
@@ -71,6 +81,9 @@
                                 <label for="{{ form.date.id_for_label }}">Fecha:</label>
                                 {{ form.date }}
                             </div>
+                            <div class="form-group">
+                                <input type="hidden" name="location_id" value="{{ selected_location.id }}">
+                            </div>
 
                             <button type="submit" class="btn btn-primary mt-3">Guardar</button>
                         </form>
@@ -84,13 +97,16 @@
 
     <script>
         $(document).ready(function () {
-            $('.timepicker').timepicker({
-                showMeridian: false, // Opción para mostrar o no AM/PM
-                minuteStep: 1,       // Intervalo de minutos
-                defaultTime: false   // Hora predeterminada (puede ser false o una hora específica)
+            $('.btn-primary[data-bs-toggle="modal"]').click(function () {
+                var locationId = $(this).data('location-id');
+                $('#location_id').val(locationId);
             });
         });
     </script>
+
+
+
+
 
 
 
