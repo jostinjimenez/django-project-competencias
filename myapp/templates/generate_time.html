@@ -20,7 +20,7 @@
                             {{ location.name }}
                         </div>
                         <div class="col">
-                            <form method="post" action="{% url 'generate_time' competition.id id_season %}">
+                            <form method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name="location_id" value="{{ location.id }}">
                                 <button type="submit" class="btn btn-primary" data-bs-toggle="modal"
