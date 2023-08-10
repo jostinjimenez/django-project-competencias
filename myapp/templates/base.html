@@ -117,15 +117,55 @@
     </div>
 
 {% else %}
+    <style>
+        .body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
 
-    <div class="container-fluid">
-        <ul>
-            <li><a href="{% url 'signin' %}">Login</a></li>
-            <li><a href="{% url 'signup' %}">Sign Up</a></li>
-        </ul>
+        .container-fluid {
+            background-color: #004d99;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            display: inline-block;
+            margin: 0 15px;
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: #ff9900;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+    </style>
+    <div class="body">
+        <div class="container-fluid">
+            <h1>¡Bienvenido a Competencias Deportivas!</h1>
+            <ul>
+                <li><a href="{% url 'signin' %}">Login</a></li>
+                <li><a href="{% url 'signup' %}">Sign Up</a></li>
+            </ul>
+        </div>
     </div>
-
 {% endif %}
-
 </body>
 </html>
