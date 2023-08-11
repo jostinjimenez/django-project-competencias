@@ -1,13 +1,54 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load static %}
+    <style>
+        .player-details {
+            display: flex;
+            align-items: center;
+        }
+
+        .player-image {
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            margin-right: 60px;
+        }
+
+        .player-info {
+            flex: 1;
+        }
+
+        .player-name {
+            font-size: 55px;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .player-position {
+            font-size: 18px;
+            color: #888;
+            margin: 0;
+        }
+    </style>
 
     <head>
         <title>{{ player.name }} - Player Details</title>
     </head>
 
+
     <main>
-        <h1>{{ player.name }}</h1>
-        <p>Position: {{ player.position }}</p>
+        <div class="player-details">
+            {% if player.image %}
+                <img src="{{ player.image.url }}" alt="{{ player.name }} Image" class="player-image">
+            {% else %}
+                <img src="{% static 'img/generic-avatar.png' %}" alt="Default Player Image" class="player-image">
+            {% endif %}
+
+            <div class="player-info">
+                <h1 class="player-name">{{ player.name }}</h1>
+                <p class="player-position">Position: {{ player.position }}</p>
+            </div>
+        </div>
         <h2>Seasons:</h2>
         <ul>
             {% for player_team_season in player.playerteamseason_set.all %}
@@ -22,5 +63,11 @@
         </ul>
         <a href="{% url 'edit_player' player.id %}" class="btn btn-primary">Editar Jugador</a>
     </main>
+
+
+
+
+
+
 
 {% endblock %}
