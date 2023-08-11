@@ -3,9 +3,28 @@
 
     <h2>{{ season.name }}</h2>
 
-    <div class="">
-        <div class="row">
-            <p>Partido y Grupos</p>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col">
+                <p>Partido y Grupos</p>
+            </div>
+            <div class="col-md-2 d-flex">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        Administrar Partidos
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" href="{% url 'generate_time' competition.id season.id %}">Calendario
+                                Automatico</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="">Exportar Equipos</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
         <div class="row">
             <main class="mt-5">
@@ -23,7 +42,7 @@
                     </form>
                 </div>
 
-                <table class="table table-hover " id="team_table">
+                <table class="table table-hover table-responsive" id="team_table">
                     <thead class="table-light">
                     <tr>
                         <th scope="col">Estado</th>

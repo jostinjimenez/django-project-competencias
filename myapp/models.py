@@ -182,15 +182,15 @@ class PlayerTeamSeason(models.Model):
 
 class Availability(models.Model):
     DAYS_CHOICES = (
-        ('mon', 'Lunes'),
-        ('tue', 'Martes'),
-        ('wed', 'Miércoles'),
-        ('thu', 'Jueves'),
-        ('fri', 'Viernes'),
-        ('sat', 'Sábado'),
-        ('sun', 'Domingo'),
+        ('Lunes', 'Lunes'),
+        ('Martes', 'Martes'),
+        ('Miercoles', 'Miércoles'),
+        ('Jueves', 'Jueves'),
+        ('Viernes', 'Viernes'),
+        ('Sabado', 'Sábado'),
+        ('Domingo', 'Domingo'),
     )
-    days_available = models.CharField(max_length=50, choices=DAYS_CHOICES, default='mon')
+    days_available = models.CharField(max_length=50, choices=DAYS_CHOICES, default='Lunes')
     opening_time = models.TimeField(default='00:00:00')
     closing_time = models.TimeField(blank=True, default='00:00:00')
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='availabilities')

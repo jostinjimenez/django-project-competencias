@@ -30,7 +30,7 @@ urlpatterns = [
     path('competitions/<int:id_competition>/seasons/', views.competition_seasons,
          name='competition_seasons'),
 
-    path('competitions/<int:id_competition>/seasons/new_stadium', login_required(views.new_stadium),
+    path('competitions/<int:id_competition>/seasons/<int:id_season>/new_stadium', login_required(views.new_stadium),
          name='new_stadium'),
 
     path('competitions/<int:id_competition>/seasons/<int:id_season>/', views.season_teams,
@@ -41,8 +41,14 @@ urlpatterns = [
 
     path('competitions/<int:id_competition>/seasons/<int:id_season>/match_season', login_required(views.match_season),
          name='match_season'),
+
     path('competitions/<int:id_competition>/seasons/<int:id_season>/generate_time', login_required(views.generate_time),
          name='generate_time'),
+
+    path('competitions/<int:id_competition>/seasons/<int:id_season>/generate_time/add_availability/<int:id_location>',
+         login_required(views.agregar_disponibilidad), name='add_availability'),
+    path('competitions/<int:id_competition>/seasons/<int:id_season>/generate_time/add_availability/delete_availability',
+         login_required(views.delete_availability), name='delete_availability'),
 
     path('players', views.player_list, name='players'),
     path('player/<int:id>/', views.player_detail, name='player_detail'),
