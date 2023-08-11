@@ -41,8 +41,13 @@ urlpatterns = [
 
     path('competitions/<int:id_competition>/seasons/<int:id_season>/match_season', login_required(views.match_season),
          name='match_season'),
+
     path('competitions/<int:id_competition>/seasons/<int:id_season>/generate_time', login_required(views.generate_time),
          name='generate_time'),
+
+    path('competitions/<int:id_competition>/seasons/<int:id_season>/generate_time/add_availability/<int:id_location>',
+         login_required(views.agregar_disponibilidad),
+         name='add_availability'),
 
     path('players', views.player_list, name='players'),
     path('player/<int:id>/', views.player_detail, name='player_detail'),

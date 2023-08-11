@@ -380,32 +380,29 @@ def competition_seasons(request, id_competition):
             })
 
 
+@login_required
 def generate_time(request, id_competition, id_season):
-    if request.method == 'POST':
-        form = AvailabilityForm(request.POST)
-        if form.is_valid():
-            availability = form.save(commit=False)
-
-            location_id = form.cleaned_data['location_id']  # Obtener el ID de la ubicación desde el formulario
-            location = Location.objects.get(id=location_id)
-
-            availability.location = location
-            availability.save()
-
-            return redirect('generate_time', id_competition=id_competition, id_season=id_season)
-    else:
-        form = AvailabilityForm()
-
     locations = Location.objects.all()
     competition = get_object_or_404(Competition, pk=id_competition)
     season = get_object_or_404(Season, pk=id_season)
+    form = AvailabilityForm()
 
-    return render(request, 'generate_time.html', {
+    context = {
         'locations': locations,
         'form': form,
         'competition': competition,
         'season': season,
-    })
+    }
+
+    return render(request, 'generate_time.html', context)
+
+
+def agregar_disponibilidad(request, id_competition, id_season, id_location):
+    if request.method == 'POST':
+        location = Location.objects.get(pk=id_location)
+        availability = Availability(location=location)
+        availability.save()
+        return redirect('generate_time', id_competition=id_competition, id_season=id_season)
 
 
 def match_season(request, id_competition, id_season):
