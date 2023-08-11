@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-
+{% load static %}
     <head>
         <title>{{ player.name }} - Player Details</title>
     </head>
@@ -8,6 +8,12 @@
     <main>
         <h1>{{ player.name }}</h1>
         <p>Position: {{ player.position }}</p>
+        {% if player.image %}
+            <img src="{{ player.image.url }}" alt="{{ player.name }} Image" width="200">
+        {% else %}
+            <img src="{% static 'img/generic-avatar.png' %}" alt="Default Player Image" width="200">
+        {% endif %}
+
         <h2>Seasons:</h2>
         <ul>
             {% for player_team_season in player.playerteamseason_set.all %}

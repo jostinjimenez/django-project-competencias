@@ -6,12 +6,15 @@ from .models import Player, Sport, Competition, PlayerTeamSeason, Team, Season, 
 class PlayerForm(forms.ModelForm):
     class Meta:
         model = Player
-        fields = ['name', 'number_player', 'position']
+        fields = ['name', 'number_player', 'position', 'image']
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
-
+            'number_player': forms.NumberInput(attrs={'class': 'form-control border-2 rounded-pill'}),
+            'position': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
+            'image': forms.FileInput(attrs={'class': 'form-control border-2 rounded-pill'}),
         }
+
 
 
 class SportForm(forms.ModelForm):

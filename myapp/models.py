@@ -165,6 +165,7 @@ class Player(models.Model):
     name = models.CharField(max_length=50)
     number_player = models.IntegerField()
     position = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='player_images/', blank=True, null=True)
 
     def __str__(self):
         return self.name

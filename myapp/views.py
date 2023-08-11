@@ -193,7 +193,7 @@ def teams_detail(request, id):
 @login_required
 def new_player(request):
     if request.method == 'POST':
-        form = PlayerForm(request.POST)
+        form = PlayerForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('player_list')
