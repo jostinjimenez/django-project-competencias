@@ -29,22 +29,11 @@ class SportForm(forms.ModelForm):
 class CompetitionForm(forms.ModelForm):
     class Meta:
         model = Competition
-        fields = ['name', 'date_start', 'date_end', 'sport', 'genre', 'type_competition', 'is_active']
+        fields = ['name', 'sport', 'genre', 'type_competition', 'is_active']
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
-            'date_start': DatePickerInput(format='%Y-%m-%d', options={
-                'locale': 'es',
-                'showClose': True,
-                'showClear': True,
-                'showTodayButton': True,
-            }, attrs={'class': 'form-control border-2 rounded-pill'}),  # Agregamos la clase 'rounded-pill' aquí
-            'date_end': DatePickerInput(format='%Y-%m-%d', options={
-                'locale': 'es',
-                'showClose': True,
-                'showClear': True,
-                'showTodayButton': True,
-            }, attrs={'class': 'form-control border-2 rounded-pill'}),  # Agregamos la clase 'rounded-pill' aquí
+
             'genre': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
             'sport': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
             'type_competition': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
@@ -67,10 +56,22 @@ class TeamForm(forms.ModelForm):
 class SeasonForm(forms.ModelForm):
     class Meta:
         model = Season
-        fields = ['name', 'number_grups']
+        fields = ['name', 'number_grups', 'date_start', 'date_end']
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
+            'date_start': DatePickerInput(format='%Y-%m-%d', options={
+                'locale': 'es',
+                'showClose': True,
+                'showClear': True,
+                'showTodayButton': True,
+            }, attrs={'class': 'form-control border-2 rounded-pill'}),  # Agregamos la clase 'rounded-pill' aquí
+            'date_end': DatePickerInput(format='%Y-%m-%d', options={
+                'locale': 'es',
+                'showClose': True,
+                'showClear': True,
+                'showTodayButton': True,
+            }, attrs={'class': 'form-control border-2 rounded-pill'}),  # Agregamos la clase 'rounded-pill' aquí
             'number_grups': forms.NumberInput(attrs={'class': 'form-control border-2 rounded-pill'}),
         }
 

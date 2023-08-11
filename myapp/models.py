@@ -39,8 +39,6 @@ class State(models.TextChoices):
 
 class Competition(models.Model):
     name = models.CharField(max_length=50, blank=True)
-    date_start = models.DateField(null=True)
-    date_end = models.DateField(blank=True, null=True)
     SPORT_lIST = (
         ('F', 'Football'),
         ('B', 'Basketball'),
@@ -69,6 +67,8 @@ class Competition(models.Model):
 
 class Season(models.Model):
     name = models.CharField(max_length=50)
+    date_start = models.DateField(null=True)
+    date_end = models.DateField(blank=True, null=True)
     competition = models.ForeignKey(Competition, on_delete=models.CASCADE, related_name='seasons', null=True)
     number_grups = models.IntegerField(default=0)
 
@@ -86,6 +86,16 @@ class Season(models.Model):
         for index, team in enumerate(teams):
             group_index = index % self.number_grups  # Asignar equipos de manera circular a los grupos
             groups[group_index].teams.add(team)
+
+    def get_teams_per_group(self):
+        teams_per_group = {}
+        groups = self.groups.all()
+
+        for group in groups:
+            teams_count = group.teams.count()
+            teams_per_group[group] = teams_count
+
+        return teams_per_group
 
 
 class Group(models.Model):

@@ -387,6 +387,11 @@ def generate_time(request, id_competition, id_season):
     season = get_object_or_404(Season, pk=id_season)
     form = AvailabilityForm()
 
+    date_start = season.date_start
+    date_end = season.date_end
+    num_groups = season.number_grups
+    teams_per_group = season.get_teams_per_group()
+
     # Obtén las disponibilidades actualizadas para cada ubicación
     availability_data = {}
     for location in locations:
