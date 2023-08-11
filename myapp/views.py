@@ -7,7 +7,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError, transaction
 from django.contrib.auth.decorators import login_required
 
-from .forms import PlayerForm, SportForm, CompetitionForm, CustomPlayerForm, TeamForm, SeasonForm, LocationForm, \
+from .forms import PlayerForm, SportForm, CompetitionForm, TeamForm, SeasonForm, LocationForm, \
     AvailabilityForm
 from .models import Competition, Season, Sport, Group, Team, Player, Game, State, PlayerTeamSeason, Location, \
     Availability
@@ -18,7 +18,7 @@ def inscription_team(request, id_competition, id_team):
     competition = get_object_or_404(Competition, pk=id_competition)
 
     if request.method == 'POST':
-        form = CustomPlayerForm(request.POST)
+        form = PlayerForm(request.POST)
         if form.is_valid():
             player = form.save(commit=False)
             player.user = request.user
@@ -26,15 +26,16 @@ def inscription_team(request, id_competition, id_team):
             return redirect('competition_detail', id_competition=id_competition)
 
     else:
-        form = CustomPlayerForm()
+        form = PlayerForm()
 
     return render(request, 'inscription_team.html', {
         'form': form,
         'team': team,
+        'competition': competition,
     })
 
 
-@login_required  # Asegúrate de que el usuario esté autenticado para crear un equipo
+@login_required
 def new_team(request, id_competition):
     competition = get_object_or_404(Competition, pk=id_competition)
 
@@ -192,12 +193,12 @@ def teams_detail(request, id):
 @login_required
 def new_player(request):
     if request.method == 'POST':
-        form = CustomPlayerForm(request.POST)
+        form = PlayerForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('player_list')
     else:
-        form = CustomPlayerForm()
+        form = PlayerForm()
 
     return render(request, 'new_player.html', {'form': form})
 
@@ -384,10 +385,13 @@ def generate_time(request, id_competition, id_season):
         form = AvailabilityForm(request.POST)
         if form.is_valid():
             availability = form.save(commit=False)
-            location_id = request.POST.get('location_id')  # Capturar el ID de la ubicación
+
+            location_id = form.cleaned_data['location_id']  # Obtener el ID de la ubicación desde el formulario
             location = Location.objects.get(id=location_id)
+
             availability.location = location
             availability.save()
+
             return redirect('generate_time', id_competition=id_competition, id_season=id_season)
     else:
         form = AvailabilityForm()
@@ -398,3 +402,10 @@ def generate_time(request, id_competition, id_season):
         'locations': locations,
         'form': form,
     })
+
+
+def match(request, id_competition, id_season):
+    competition = get_object_or_404(Competition, pk=id_competition)
+    season = get_object_or_404(Season, pk=id_season)
+
+    return redirect('competition_seasons', id_competition=id_competition)

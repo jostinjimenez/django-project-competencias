@@ -3,6 +3,7 @@ import random
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
+from enum import Enum
 
 # Create your models here.
 import enum
@@ -29,7 +30,7 @@ class Sport(models.Model):
 
 
 class State(models.TextChoices):
-    PLAYED = 'Played'
+    FINALLY = 'Finally'
     NOT_PLAYED = 'Not played'
     SUSPENDED = 'Suspended'
     CANCELLED = 'Cancelled'
@@ -82,10 +83,22 @@ class Season(models.Model):
         equipos_mezclados = list(equipos_inscritos)
         random.shuffle(equipos_mezclados)
 
-        # Assign each team to a group in random order
+        # Clear existing team assignments for this season
+        for grupo in grupos:
+            grupo.teams.clear()
+
+        # Assign each team to a group in random order for this season
         for i, equipo in enumerate(equipos_mezclados):
             grupo = grupos[i % len(grupos)]
             grupo.teams.add(equipo)
+
+
+class Group(models.Model):
+    letter = models.CharField(max_length=40)
+    season = models.ForeignKey(Season, on_delete=models.CASCADE, related_name='groups', null=True)
+
+    def __str__(self):
+        return self.letter
 
 
 class Team(models.Model):
@@ -94,7 +107,7 @@ class Team(models.Model):
     country = models.CharField(max_length=50, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='teams')
     competition = models.ManyToManyField(Competition, through='Inscription', related_name='teams')
-    groups = models.ForeignKey('Group', on_delete=models.CASCADE, null=True, related_name='teams')
+    groups = models.ManyToManyField(Group, related_name='teams', blank=True)
 
     def __str__(self):
         return self.name
@@ -108,6 +121,25 @@ class Inscription(models.Model):
         return self.team.name + ' - ' + self.competition.name
 
 
+class Location(models.Model):
+    name = models.CharField(max_length=50)
+    number_seats = models.IntegerField(default=0)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='stadiums')
+    addres = models.CharField(max_length=200)
+    geolocation = models.CharField(max_length=200, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Phase(Enum):
+    GROUP = 'Group'
+    ROUND_OF_16 = '16th Round'
+    QUARTER_FINALS = 'Quarter Finals'
+    SEMI_FINALS = 'Semi Finals'
+    FINAL = 'Final'
+
+
 class Game(models.Model):
     date = models.DateField()
     hour = models.TimeField(default='00:00:00')
@@ -117,6 +149,8 @@ class Game(models.Model):
                              default=State.NOT_PLAYED.value)
     winner = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True, related_name='winning_games')
     loser = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True, related_name='losing_games')
+    location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True)
+    phase = models.CharField(max_length=50, choices=[(tag.name, tag.value) for tag in Phase], default=Phase.GROUP.value)
 
     def __str__(self):
         return self.team_local.name + ' vs ' + self.team_visitor.name
@@ -148,25 +182,6 @@ class PlayerTeamSeason(models.Model):
 
     def __str__(self):
         return f"{self.player.name} - {self.team.name} ({self.season.name})"
-
-
-class Group(models.Model):
-    letter = models.CharField(max_length=40)
-    season = models.ForeignKey(Season, on_delete=models.CASCADE, related_name='groups', null=True)
-
-    def __str__(self):
-        return self.letter
-
-
-class Location(models.Model):
-    name = models.CharField(max_length=50)
-    number_seats = models.IntegerField(default=0)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='stadiums')
-    addres = models.CharField(max_length=200)
-    geolocation = models.CharField(max_length=200, blank=True)
-
-    def __str__(self):
-        return self.name
 
 
 class Availability(models.Model):
