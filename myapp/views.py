@@ -404,8 +404,8 @@ def generate_time(request, id_competition, id_season):
     })
 
 
-def match(request, id_competition, id_season):
+def match_season(request, id_competition, id_season):
     competition = get_object_or_404(Competition, pk=id_competition)
     season = get_object_or_404(Season, pk=id_season)
 
-    return redirect('competition_seasons', id_competition=id_competition)
+    return render(request, 'match_season.html', {'competition': competition, 'season': season})
