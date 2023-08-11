@@ -397,10 +397,14 @@ def generate_time(request, id_competition, id_season):
         form = AvailabilityForm()
 
     locations = Location.objects.all()
+    competition = get_object_or_404(Competition, pk=id_competition)
+    season = get_object_or_404(Season, pk=id_season)
 
     return render(request, 'generate_time.html', {
         'locations': locations,
         'form': form,
+        'competition': competition,
+        'season': season,
     })
 
 
