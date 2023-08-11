@@ -407,8 +407,17 @@ def generate_time(request, id_competition, id_season):
 def agregar_disponibilidad(request, id_competition, id_season, id_location):
     if request.method == 'POST':
         location = Location.objects.get(pk=id_location)
-        availability = Availability(location=location)
-        availability.save()
+        days_available = request.POST.getlist('days_available')  # Obtener la lista de días seleccionados
+
+        for day in days_available:
+            availability = Availability(
+                location=location,
+                days_available=day,
+                opening_time=request.POST.get('opening_time'),
+                closing_time=request.POST.get('closing_time'),
+                date=request.POST.get('date'),
+            )
+            availability.save()
 
     return redirect('generate_time', id_competition=id_competition, id_season=id_season)
 

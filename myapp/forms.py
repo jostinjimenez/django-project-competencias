@@ -89,12 +89,16 @@ class LocationForm(forms.ModelForm):
 
 
 class AvailabilityForm(forms.ModelForm):
+    days_available = forms.MultipleChoiceField(
+        choices=Availability.DAYS_CHOICES,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'list-unstyled'}),
+    )
+
     class Meta:
         model = Availability
         fields = ['days_available', 'opening_time', 'closing_time', 'date']
 
         widgets = {
-            'days_available': forms.CheckboxSelectMultiple(attrs={'class': 'list-unstyled'}),
             'opening_time': TimePickerInput(attrs={'class': 'form-control border-2 rounded-pill'}),
             'closing_time': TimePickerInput(attrs={'class': 'form-control border-2 rounded-pill'}),
             'date': DatePickerInput(format='%Y-%m-%d', options={
