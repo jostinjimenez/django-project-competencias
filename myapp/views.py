@@ -56,7 +56,7 @@ def new_team(request, id_competition):
 
 
 @login_required
-def new_stadium(request, id_competition):
+def new_stadium(request, id_competition, id_season):
     competition = get_object_or_404(Competition, pk=id_competition)
 
     if request.method == 'POST':
@@ -70,7 +70,7 @@ def new_stadium(request, id_competition):
 
             try:
                 stadium.save()
-                return redirect('competition_detail', id=id_competition)
+                return redirect('generate_time', id_competition=id_competition, id_season=id_season)
             except Exception as e:
                 form.add_error(None, f"An error occurred: {e}")
     else:
@@ -418,6 +418,12 @@ def agregar_disponibilidad(request, id_competition, id_season, id_location):
                 date=request.POST.get('date'),
             )
             availability.save()
+
+    return redirect('generate_time', id_competition=id_competition, id_season=id_season)
+
+
+def delete_availability(request, id_competition, id_season):
+    Availability.objects.all().delete()
 
     return redirect('generate_time', id_competition=id_competition, id_season=id_season)
 

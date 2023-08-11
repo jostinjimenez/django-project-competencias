@@ -8,6 +8,19 @@
     <div class="container">
         <a class="" href="{% url 'match_season' competition.id season.id %}">Ir a lista de partidos</a>
 
+
+        <div class="row">
+            <div class="col">
+                <a class="btn btn-primary mt-3" href="{% url 'new_stadium' competition.id season.id %}">Agregar
+                    Instalación</a>
+            </div>
+            <div class="col-md-2 d-flex">
+                <a class="btn btn-danger mt-3" href="{% url 'delete_availability' competition.id season.id %}">Limpiar
+                    Disponibilidad</a>
+            </div>
+        </div>
+
+
         <div class="card mt-3">
             <div class="card-header">
                 Instalaciones y Horarios
@@ -93,6 +106,19 @@
                 {% endfor %}
             </ul>
         </div>
+
+        <section class="mt-5">
+            <div class="row">
+                <div class="col">
+                </div>
+                <div class="col-md-2 d-flex">
+                    <a class="btn btn-secondary mt-3" href="#">Generar
+                        Calendario</a>
+                </div>
+            </div>
+        </section>
     </div>
+
+
 
 {% endblock %}
