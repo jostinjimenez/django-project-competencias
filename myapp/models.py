@@ -76,21 +76,16 @@ class Season(models.Model):
         return self.name
 
     def assign_teams_to_groups(self):
-        equipos_inscritos = self.competition.teams.all()
-        grupos = self.groups.all()
+        # Obtener los equipos inscritos en esta competencia y temporada
+        teams = Team.objects.filter(competition=self.competition)
 
-        # Shuffle the registered teams randomly
-        equipos_mezclados = list(equipos_inscritos)
-        random.shuffle(equipos_mezclados)
+        # Obtener los grupos de esta temporada
+        groups = self.groups.all()
 
-        # Clear existing team assignments for this season
-        for grupo in grupos:
-            grupo.teams.clear()
-
-        # Assign each team to a group in random order for this season
-        for i, equipo in enumerate(equipos_mezclados):
-            grupo = grupos[i % len(grupos)]
-            grupo.teams.add(equipo)
+        # Asignar los equipos a los grupos de manera equitativa (esto es solo un ejemplo)
+        for index, team in enumerate(teams):
+            group_index = index % self.number_grups  # Asignar equipos de manera circular a los grupos
+            groups[group_index].teams.add(team)
 
 
 class Group(models.Model):
