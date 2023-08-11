@@ -1,109 +1,54 @@
 {% extends 'base.html' %}
 {% block content %}
 
-    {% load static %}
-    {{ form.media }}
+    <h2>{{ season.name }}</h2>
 
+    <div class="">
+        <div class="row">
+            <p>Partido y Grupos</p>
+        </div>
+        <div class="row">
+            <main class="mt-5">
+                <h3>Equipos</h3>
 
-    <div class="container">
-        <a class="py-5" href="{% url 'game_list' %}">Ir a lista de partidos</a>
-
-        <div class="card">
-            <div class="card-header">
-                Instalaciones y Horarios
-            </div>
-            <ul class="list-group list-group-flush">
-                {% for location in locations %}
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col">
-                                {{ location.name }}
-                            </div>
-                            <div class="col">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal"
-                                        data-location-id="{{ location.id }}" id="add-availability-button">
-                                    Agregar Disponibilidad
-                                </button>
-
-
-                            </div>
-                            <div class="col">
-                                {% for availability in location.availability_set.all %}
-                                    {{ availability.days_available }}<br>
-                                {% endfor %}
-                            </div>
+                <div class="d-flex justify-content-end">
+                    <form class="d-none d-sm-inline-block form-inline mr-2 mr-md-3 my-2 my-md-0 mw-100">
+                        <div class="input-group">
+                            <label class="sr-only" for="search">Search:</label>
+                            <input type="text" class="form-control bg-light border-0 rounded-pill py-2 px-3"
+                                   name="search"
+                                   id="search-table" aria-label="Search" aria-describedby="basic-addon2"
+                                   onkeyup="searchTableTeam()">
                         </div>
-                    </li>
-                {% endfor %}
-            </ul>
-
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Añadir Disponibilidad</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="location_id" id="location_id">
-                                <div class="form-group">
-                                    <label for="{{ form.days_available.id_for_label }}">Días Disponibles:</label><br>
-                                    {% for check in form.days_available %}
-                                        <div class="form-check form-check-inline">
-                                            {{ check.tag }}
-                                            <label class="form-check-label"
-                                                   for="{{ check.id_for_label }}">{{ check.choice_label }}</label>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mt-3">
-                                            <label for="{{ form.opening_time.id_for_label }}">Hora de Apertura:</label>
-                                            {{ form.opening_time }}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mt-3">
-                                            <label for="{{ form.closing_time.id_for_label }}">Hora de Cierre:</label>
-                                            {{ form.closing_time }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mt-3">
-                                    <label for="{{ form.date.id_for_label }}">Fecha:</label>
-                                    {{ form.date }}
-                                </div>
-                                <div class="form-group">
-                                    <input type="hidden" name="location_id" value="{{ selected_location.id }}">
-                                </div>
-
-                                <button type="submit" class="btn btn-primary mt-3">Guardar</button>
-                            </form>
-
-                        </div>
-                    </div>
+                    </form>
                 </div>
-            </div>
+
+                <table class="table table-hover " id="team_table">
+                    <thead class="table-light">
+                    <tr>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Equipo 1</th>
+                        <th scope="col">Resultado</th>
+                        <th scope="col">Equipo 2</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Hora</th>
+                        <th scope="col">Ronda</th>
+                        <th scope="col">Lugar</th>
+                        <th scope="col">Albitro</th>
+                    </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+
+                    </tbody>
+                </table>
+
+                <div id="no-results-message" style="display: none; margin-top: 10px;">
+                    No se encontraron registros coincidentes.
+                </div>
+
+            </main>
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var addAvailabilityButton = document.getElementById('add-availability-button');
-            var locationIdInput = document.getElementById('location_id');
-
-            addAvailabilityButton.addEventListener('click', function (event) {
-                var locationId = event.currentTarget.getAttribute('data-location-id');
-                locationIdInput.value = locationId;
-            });
-        });
-    </script>
 
 
 {% endblock %}
