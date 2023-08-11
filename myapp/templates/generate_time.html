@@ -20,10 +20,14 @@
                                 {{ location.name }}
                             </div>
                             <div class="col">
-                                {% for availability in location.availability_set.all %}
-                                    {{ availability.days_available }}<br>
-                                    {{ availability.opening_time }} - {{ availability.closing_time }}<br>
-                                    {{ availability.date }}<br>
+                                {% for availability in availability_data.items %}
+                                    {% if location.id == availability.0 %}
+                                        {% for avail in availability.1 %}
+                                            {{ avail.days_available }}<br>
+                                            {{ avail.opening_time }} - {{ avail.closing_time }}<br>
+                                            {{ avail.date }}<br>
+                                        {% endfor %}
+                                    {% endif %}
                                 {% endfor %}
                             </div>
                             <div class="col">

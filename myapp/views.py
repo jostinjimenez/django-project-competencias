@@ -387,11 +387,18 @@ def generate_time(request, id_competition, id_season):
     season = get_object_or_404(Season, pk=id_season)
     form = AvailabilityForm()
 
+    # Obtén las disponibilidades actualizadas para cada ubicación
+    availability_data = {}
+    for location in locations:
+        availability_data[
+            location.id] = location.availabilities.all()  # Usar 'availabilities' en lugar de 'availability_set'
+
     context = {
         'locations': locations,
         'form': form,
         'competition': competition,
         'season': season,
+        'availability_data': availability_data,
     }
 
     return render(request, 'generate_time.html', context)
@@ -402,7 +409,8 @@ def agregar_disponibilidad(request, id_competition, id_season, id_location):
         location = Location.objects.get(pk=id_location)
         availability = Availability(location=location)
         availability.save()
-        return redirect('generate_time', id_competition=id_competition, id_season=id_season)
+
+    return redirect('generate_time', id_competition=id_competition, id_season=id_season)
 
 
 def match_season(request, id_competition, id_season):
