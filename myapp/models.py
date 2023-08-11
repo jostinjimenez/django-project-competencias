@@ -156,6 +156,7 @@ class Game(models.Model):
     loser = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True, related_name='losing_games')
     location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True)
     phase = models.CharField(max_length=50, choices=[(tag.name, tag.value) for tag in Phase], default=Phase.GROUP.value)
+    season = models.ForeignKey(Season, on_delete=models.CASCADE, null=True, related_name='games')
 
     def __str__(self):
         return self.team_local.name + ' vs ' + self.team_visitor.name

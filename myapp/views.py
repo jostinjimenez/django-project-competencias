@@ -11,6 +11,7 @@ from .forms import PlayerForm, SportForm, CompetitionForm, TeamForm, SeasonForm,
     AvailabilityForm
 from .models import Competition, Season, Sport, Group, Team, Player, Game, State, PlayerTeamSeason, Location, \
     Availability
+from .utils import generate_game_schedule
 
 
 def inscription_team(request, id_competition, id_team):
@@ -380,17 +381,32 @@ def competition_seasons(request, id_competition):
             })
 
 
+def generate_calendar(request, id_competition, id_season):
+    competition = Competition.objects.get(pk=id_competition)
+    season = Season.objects.get(pk=id_season)
+    locations = Location.objects.all()  # Obtener todas las ubicaciones disponibles
+
+    # Generar el calendario de enfrentamientos
+    teams_per_group = season.get_teams_per_group()
+    generate_game_schedule(season, teams_per_group, locations)
+
+    # Redirigir a la plantilla match_season
+    return redirect('match_season', id_competition=id_competition, id_season=id_season)
+
+
+def match_season(request, id_competition, id_season):
+    competition = get_object_or_404(Competition, pk=id_competition)
+    season = get_object_or_404(Season, pk=id_season)
+
+    return render(request, 'match_season.html', {'competition': competition, 'season': season})
+
+
 @login_required
 def generate_time(request, id_competition, id_season):
     locations = Location.objects.all()
     competition = get_object_or_404(Competition, pk=id_competition)
     season = get_object_or_404(Season, pk=id_season)
     form = AvailabilityForm()
-
-    date_start = season.date_start
-    date_end = season.date_end
-    num_groups = season.number_grups
-    teams_per_group = season.get_teams_per_group()
 
     # Obtén las disponibilidades actualizadas para cada ubicación
     availability_data = {}
@@ -431,10 +447,3 @@ def delete_availability(request, id_competition, id_season):
     Availability.objects.all().delete()
 
     return redirect('generate_time', id_competition=id_competition, id_season=id_season)
-
-
-def match_season(request, id_competition, id_season):
-    competition = get_object_or_404(Competition, pk=id_competition)
-    season = get_object_or_404(Season, pk=id_season)
-
-    return render(request, 'match_season.html', {'competition': competition, 'season': season})
