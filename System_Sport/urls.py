@@ -53,6 +53,7 @@ urlpatterns = [
          login_required(views.generate_calendar), name='generate_calendar'),
 
     path('update_game/<int:game_id>', login_required(views.update_game), name='update_game'),
+    path('delete_selected_games/', views.delete_selected_games, name='delete_selected_games'),
 
     path('players', views.player_list, name='players'),
     path('player/<int:id>/', views.player_detail, name='player_detail'),

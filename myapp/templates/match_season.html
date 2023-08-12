@@ -55,45 +55,40 @@
                     </form>
                 </div>
 
-                <div class="row mb-5">
+
+                <div class="row row mt-3 mb-5">
                     <div class="col">
-                        <button id="action-menu-btn" class="btn btn-secondary mt-3">Acciones</button>
+                        <div id="select-menu" class="btn-group">
+                            <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                Seleccionar
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" id="select-all">Seleccionar todo</a></li>
+                                <li><a class="dropdown-item" href="#" id="select-none">Seleccionar ninguno</a></li>
+                            </ul>
+                        </div>
+
                     </div>
-                </div>
-
-
-                <div id="action-menu" class="row mt-3" {% if selected_game_ids %}style="display: block;"
-                     {% else %}style="display: none;"{% endif %}>
                     <div class="col">
-                        <div class="btn-group" role="group">
-                            <div class="btn-group dropup">
-                                <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
-                                    <i class="fas fa-cogs"></i> Acciones
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-trash-alt"></i> Eliminar</a>
-                                    </li>
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-user-plus"></i> Añadir
-                                        árbitro</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-map-marker-alt"></i> Añadir
-                                        lugar</a></li>
-                                </ul>
+                        <div id="action-menu" class="row" {% if selected_game_ids %}style="display: block;"
+                             {% else %}style="display: none;"{% endif %}>
+                            <div class="col">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-light">
+                                        Eliminar
+                                    </button>
+                                    <button type="button" class="btn btn-light">
+                                        <i class="fas fa-user-plus"></i> Añadir árbitro
+                                    </button>
+                                    <button type="button" class="btn btn-light">
+                                        <i class="fas fa-map-marker-alt"></i> Añadir lugar
+                                    </button>
+                                </div>
                             </div>
-                            <button type="button" class="btn btn-light">
-                                <i class="fas fa-trash-alt"></i> Eliminar
-                            </button>
-                            <button type="button" class="btn btn-light">
-                                <i class="fas fa-user-plus"></i> Añadir árbitro
-                            </button>
-                            <button type="button" class="btn btn-light">
-                                <i class="fas fa-map-marker-alt"></i> Añadir lugar
-                            </button>
                         </div>
                     </div>
                 </div>
-
-
 
                 {% if messages %}
                     <div class="messages">
@@ -221,24 +216,76 @@
             </div>
         {% endfor %}
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const selectAllLink = document.getElementById("select-all");
+            const selectNoneLink = document.getElementById("select-none");
+            const selectedGames = document.querySelectorAll('input[name="selected_games"]');
 
+            selectAllLink.addEventListener("click", function (event) {
+                event.preventDefault();
+                selectedGames.forEach(function (checkbox) {
+                    checkbox.checked = true;
+                });
+            });
+
+            selectNoneLink.addEventListener("click", function (event) {
+                event.preventDefault();
+                selectedGames.forEach(function (checkbox) {
+                    checkbox.checked = false;
+                });
+            });
+        });
+    </script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const actionMenu = document.getElementById("action-menu");
             const selectedGames = document.querySelectorAll('input[name="selected_games"]');
 
+            function updateActionMenu() {
+                const selectedGameIds = Array.from(selectedGames).filter(checkbox => checkbox.checked).map(checkbox => checkbox.value);
+                if (selectedGameIds.length > 0) {
+                    actionMenu.style.display = "block";
+                } else {
+                    actionMenu.style.display = "none";
+                }
+            }
+
             selectedGames.forEach(function (checkbox) {
                 checkbox.addEventListener("change", function () {
-                    const selectedGameIds = Array.from(selectedGames).filter(checkbox => checkbox.checked).map(checkbox => checkbox.value);
-                    if (selectedGameIds.length > 0) {
-                        actionMenu.style.display = "block";
-                    } else {
-                        actionMenu.style.display = "none";
-                    }
+                    updateActionMenu();
                 });
             });
+
+            actionMenu.addEventListener("mouseleave", function () {
+                updateActionMenu();
+            });
+
+            const selectAllLink = document.getElementById("select-all");
+            selectAllLink.addEventListener("click", function (event) {
+                event.preventDefault();
+                selectedGames.forEach(function (checkbox) {
+                    checkbox.checked = true;
+                });
+                updateActionMenu();
+            });
+
+            const selectNoneLink = document.getElementById("select-none");
+            selectNoneLink.addEventListener("click", function (event) {
+                event.preventDefault();
+                selectedGames.forEach(function (checkbox) {
+                    checkbox.checked = false;
+                });
+                updateActionMenu();
+            });
+
         });
     </script>
+
+
+
+
+
 
 
 

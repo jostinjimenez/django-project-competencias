@@ -412,6 +412,17 @@ def update_game(request, game_id):
     return redirect('match_season', id_competition=game.season.competition.id, id_season=game.season.id)
 
 
+def delete_selected_games(request):
+    try:
+        if request.method == "POST":
+            game_ids = request.POST.getlist("game_ids[]")  # Obtener los IDs de los partidos seleccionados
+            Game.objects.filter(id__in=game_ids).delete()  # Eliminar los partidos seleccionados
+            return JsonResponse({"message": "Partidos eliminados con éxito"})
+        return JsonResponse({"message": "Método no permitido"}, status=405)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+
 def match_season(request, id_competition, id_season):
     competition = get_object_or_404(Competition, pk=id_competition)
     season = get_object_or_404(Season, pk=id_season)
