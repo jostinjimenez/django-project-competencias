@@ -174,12 +174,10 @@
     h1 {
         text-align: center;
     }
-    .container-fluid2 {
-            background-color: #282a34;
-            padding: 20px;
-            color: white;
-            text-align: left;
-        }
+    .pic img {
+        border-radius: 50%;
+    }
+
     </style>
 
     <section id="hero" class="clearfix">
@@ -234,7 +232,9 @@
     </section>
 
 
-
+    <div id ="sport-News-Title">
+    <h2>Somes sport news</h2>
+    </div>
     <div id="wg-api-football-games">
      data-host="v3.football.api-sports.io"
      data-key="0304c43f05msh6c69f0df2b39183p1b067fjsn902b7105573f"
@@ -250,17 +250,65 @@
      data-modal-standings="true"
      data-modal-show-logos="true"
     </div>
-<div class="container-fluid2">
-            <h2>¡Members!</h2>
-            <ul>
-                <li>Jostin Jimenez</li><br>
-                <li>Juan Alverca</li><br>
-                <li>Jhostin Rojas</li><br>
-                <li>Geovanny Romero</li>
-            </ul>
+ <div class="row">
+          <div class="col-lg-6" data-aos="zoom-in" data-aos-delay="100">
+            <div class="member d-flex align-items-start">
+              <div class="pic"><img src="{%static 'img/jhostin.png'%}"></div>
+              <div class="member-info">
+                <h4>Jhostin Rojas</h4>
+                <span></span>
+                <p>Explicabo voluptatem mollitia et repellat qui dolorum quasi</p>
+                <div class="social">
+                  <a href=""><i class=""></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6 mt-4 mt-lg-0" data-aos="zoom-in" data-aos-delay="200">
+            <div class="member d-flex align-items-start">
+              <div class="pic"><img src="{%static 'img/Geoanny.png'%}"></div>
+              <div class="member-info">
+                <h4>Geovanny Romero</h4>
+                <span></span>
+                <p>Aut maiores voluptates amet et quis praesentium qui senda para</p>
+                <div class="social">
+                  <a href=""><i class=""></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6 mt-4" data-aos="zoom-in" data-aos-delay="300">
+            <div class="member d-flex align-items-start">
+              <div class="pic"><img src="{%static 'img/Jostin.png'%}"></div>
+              <div class="member-info">
+                <h4>Jostin Jimenez</h4>
+                <span></span>
+                <p>Quisquam facilis cum velit laborum corrupti fuga rerum quia</p>
+                <div class="social">
+                  <a href=""><i class=""></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6 mt-4" data-aos="zoom-in" data-aos-delay="400">
+            <div class="member d-flex align-items-start">
+              <div class="pic"><img src="{%static 'img/Juan.png'%}"></div>
+              <div class="member-info">
+                <h4>Juan Alverca</h4>
+                <span></span>
+                <p>Dolorum tempora officiis odit laborum officiis et et accusamus</p>
+                <div class="social">
+                  <a href=""><i class=""></i></a>
+              </div>
+            </div>
+          </div>
+
         </div>
-
-
+      </div>
+    </section>
 
 {% endif %}
 </body>
