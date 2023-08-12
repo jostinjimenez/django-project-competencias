@@ -397,8 +397,9 @@ def generate_calendar(request, id_competition, id_season):
 def match_season(request, id_competition, id_season):
     competition = get_object_or_404(Competition, pk=id_competition)
     season = get_object_or_404(Season, pk=id_season)
+    games = Game.objects.filter(season=season)
 
-    return render(request, 'match_season.html', {'competition': competition, 'season': season})
+    return render(request, 'match_season.html', {'competition': competition, 'season': season, 'games': games})
 
 
 @login_required

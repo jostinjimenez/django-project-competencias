@@ -7,12 +7,11 @@ from .models import Game, Location, Phase
 
 def generate_game_schedule(season, teams_per_group, locations):
     group_matches = generate_group_matches(season, teams_per_group)
-    assign_dates_and_locations(group_matches, season.date_start, locations)
+    assign_dates_and_locations(group_matches, season.date_start, locations, season)
 
 
 def generate_group_matches(season, teams_per_group):
-    groups = season.groups.all()  # Obtener los grupos de la temporada
-    print(groups)
+    groups = season.groups.all()
     group_matches = []
 
     for group in groups:
@@ -25,7 +24,7 @@ def generate_group_matches(season, teams_per_group):
     return group_matches
 
 
-def assign_dates_and_locations(group_matches, start_date, locations):
+def assign_dates_and_locations(group_matches, start_date, locations, season):
     days_between_matches = 3  # Intervalo entre partidos en días
     current_date = start_date
 
@@ -33,7 +32,7 @@ def assign_dates_and_locations(group_matches, start_date, locations):
         home_team, away_team = match
         location = get_random_location(locations)
 
-        create_game(home_team, away_team, current_date, location)
+        create_game(home_team, away_team, current_date, location, season)
 
         current_date += timedelta(days=days_between_matches)
 
@@ -42,11 +41,12 @@ def get_random_location(locations):
     return random.choice(locations)
 
 
-def create_game(home_team, away_team, game_date, location):
-    game = Game.objects.create(
+def create_game(home_team, away_team, game_date, location, season):
+    Game.objects.create(
         team_local=home_team,
         team_visitor=away_team,
         date=game_date,
         location=location,
-        phase=Phase.GROUP.value
+        phase=Phase.GROUP.value,
+        season=season  # Vincular el juego a la temporada
     )

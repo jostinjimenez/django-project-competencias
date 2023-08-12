@@ -58,6 +58,20 @@
                     </thead>
                     <tbody class="table-group-divider">
 
+                    {% for game in games %}
+                        <tr>
+                            <td>{{ game.state }}</td>
+                            <td>{{ game.team_local.name }}</td>
+                            <td>Resultado</td>
+                            <td>{{ game.team_visitor.name }}</td>
+                            <td>{{ game.date }}</td>
+                            <td>{{ game.hour }}</td>
+                            <td>{{ game.phase }}</td>
+                            <td>{{ game.location.name }}</td>
+                            <td>Árbitro</td>
+                        </tr>
+                    {% endfor %}
+
                     </tbody>
                 </table>
 
