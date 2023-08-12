@@ -4,7 +4,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
     <title>Competition Sport</title>
+
+    <link href="{% static 'img/icon.png' %}" rel="icon">
+
+    <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,400,500,700" rel="stylesheet">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
@@ -121,6 +128,7 @@
 
             </div>
         </div>
+    </div>
     </nav>
 
 
@@ -129,7 +137,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="navbar-nav">
             <a class="navbar-brand" href="#">
-                <img src="{% static 'img/Captura de pantalla 2023-08-11 183840.png' %}" alt="Logo" width="70" height="64" class="d-inline-block align-text-top">
+                <img src="{% static 'img/icon.png' %}" alt="Logo" width="70" height="64" class="d-inline-block align-text-top">
                 Competencias deportivas
             </a>
             <ul class="navbar-nav ml-auto">
@@ -137,8 +145,91 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">Sign Up</a></li>
             </ul>
         </div><br>
+    </nav>
 
-    <div id="wg-api-football-games"
+    <style>
+    #hero {
+        width: 100%;
+        padding: 200px 0 120px 0;
+        background: url("{% static 'img/hero-bg.png' %}") top center;
+        background-size: cover;
+        position: relative;
+    }
+    @media (max-width: 991px) {
+      #hero {
+        padding: 140px 0 60px 0;
+      }
+    }
+
+    @media (max-width: 574px) {
+      #hero {
+        padding: 100px 0 20px 0;
+      }
+    }
+
+    #hero .hero-img {
+      width: 30%;
+      float: right;
+    }
+    h1 {
+        text-align: center;
+    }
+    </style>
+
+    <section id="hero" class="clearfix">
+        <div class="container" data-aos="fade-up">
+
+          <div class="hero-img" data-aos="zoom-out" data-aos-delay="200">
+            <img src="{% static 'img/logo-color.svg' %}" alt="" class="img-fluid">
+          </div>
+
+          <div class="hero-info" data-aos="zoom-in" data-aos-delay="100">
+            <h2>We provide<br><span>solutions</span><br>for your business!</h2>
+          </div>
+        </div>
+  </section>
+
+    <section id="features">
+    <h2>Caracteristicas</h2><br>
+        <div class="row about-extra">
+          <div class="col-lg-6" data-aos="fade-right">
+            <img src="" class="img-fluid" alt="">
+          </div>
+          <div class="col-lg-6 pt-5 pt-lg-0" data-aos="fade-left">
+            <h4>Voluptatem dignissimos provident quasi corporis voluptates sit assumenda.</h4>
+            <p>
+              Ipsum in aspernatur ut possimus sint. Quia omnis est occaecati possimus ea. Quas molestiae perspiciatis occaecati qui rerum. Deleniti quod porro sed quisquam saepe. Numquam mollitia recusandae non ad at et a.
+            </p>
+            <p>
+              Ad vitae recusandae odit possimus. Quaerat cum ipsum corrupti. Odit qui asperiores ea corporis deserunt veritatis quidem expedita perferendis. Qui rerum eligendi ex doloribus quia sit. Porro rerum eum eum.
+            </p>
+          </div>
+        </div>
+
+        <div class="row about-extra">
+          <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left">
+            <img src="assets/img/about-extra-2.svg" class="img-fluid" alt="">
+          </div>
+
+          <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-right">
+            <h4>Neque saepe temporibus repellat ea ipsum et. Id vel et quia tempora facere reprehenderit.</h4>
+            <p>
+              Delectus alias ut incidunt delectus nam placeat in consequatur. Sed cupiditate quia ea quis. Voluptas nemo qui aut distinctio. Cumque fugit earum est quam officiis numquam. Ducimus corporis autem at blanditiis beatae incidunt sunt.
+            </p>
+            <p>
+              Voluptas saepe natus quidem blanditiis. Non sunt impedit voluptas mollitia beatae. Qui esse molestias. Laudantium libero nisi vitae debitis. Dolorem cupiditate est perferendis iusto.
+            </p>
+            <p>
+              Eum quia in. Magni quas ipsum a. Quis ex voluptatem inventore sint quia modi. Numquam est aut fuga mollitia exercitationem nam accusantium provident quia.
+            </p>
+          </div>
+
+        </div>
+    </section>
+
+
+    <!--
+    <div id="wg-api-football-games">
      data-host="v3.football.api-sports.io"
      data-key="0304c43f05msh6c69f0df2b39183p1b067fjsn902b7105573f"
      data-date=""
@@ -151,18 +242,10 @@
      data-show-logos="true"
      data-modal-game="true"
      data-modal-standings="true"
-     data-modal-show-logos="true">
-</div>
+     data-modal-show-logos="true"
+    </div>  -->
 
-    </div>
-</div>
-</div><br>
-     <div class="descripcion">
-            <h2>¡About Us!</h2>
-            <p>This web application was created in order to be able to manage sports competitions, in which
-                 they can register teams, players, competitions and matches. In addition, you can view the table of
-                 positions of each competition and the results of the matches.</p>
-</div>
+
 {% endif %}
 </body>
 </html>
