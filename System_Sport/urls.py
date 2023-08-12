@@ -52,6 +52,8 @@ urlpatterns = [
     path('competitions/<int:id_competition>/seasons/<int:id_season>/generate_time/generate_calendar',
          login_required(views.generate_calendar), name='generate_calendar'),
 
+    path('update_game/<int:game_id>', login_required(views.update_game), name='update_game'),
+
     path('players', views.player_list, name='players'),
     path('player/<int:id>/', views.player_detail, name='player_detail'),
     path('games/', views.game_list, name='game_list'),

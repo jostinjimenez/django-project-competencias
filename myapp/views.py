@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -384,14 +385,31 @@ def competition_seasons(request, id_competition):
 def generate_calendar(request, id_competition, id_season):
     competition = Competition.objects.get(pk=id_competition)
     season = Season.objects.get(pk=id_season)
-    locations = Location.objects.all()  # Obtener todas las ubicaciones disponibles
 
-    # Generar el calendario de enfrentamientos
-    teams_per_group = season.get_teams_per_group()
-    generate_game_schedule(season, teams_per_group, locations)
+    if season.games.exists():
+        messages.warning(request, 'Los enfrentamientos ya se han generado previamente.')
+    else:
+        locations = Location.objects.all()  # Obtener todas las ubicaciones disponibles
+        teams_per_group = season.get_teams_per_group()
+        generate_game_schedule(season, teams_per_group, locations)
 
-    # Redirigir a la plantilla match_season
     return redirect('match_season', id_competition=id_competition, id_season=id_season)
+
+
+def update_game(request, game_id):
+    game = get_object_or_404(Game, pk=game_id)
+
+    if request.method == 'POST':
+        team_local_goals = request.POST.get('team_local_goals', 0)
+        team_visitor_goals = request.POST.get('team_visitor_goals', 0)
+        game_state = request.POST.get('game_state', '')
+
+        game.team_local_goals = team_local_goals
+        game.team_visitor_goals = team_visitor_goals
+        game.state = game_state
+        game.save()
+
+    return redirect('match_season', id_competition=game.season.competition.id, id_season=game.season.id)
 
 
 def match_season(request, id_competition, id_season):
