@@ -2,34 +2,17 @@
 {% block content %}
 {% load static %}
     <style>
-        .player-details {
-            display: flex;
-            align-items: center;
-        }
+    .card {
+      border: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
 
-        .player-image {
-            width: 170px;
-            height: 170px;
-            border-radius: 50%;
-            margin-right: 60px;
-        }
-
-        .player-info {
-            flex: 1;
-        }
-
-        .player-name {
-            font-size: 55px;
-            margin: 0;
-            font-family: 'Roboto', sans-serif;
-        }
-
-        .player-position {
-            font-size: 18px;
-            color: #888;
-            margin: 0;
-        }
-    </style>
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+  </style>
 
     <head>
         <title>{{ player.name }} - Player Details</title>
@@ -37,18 +20,27 @@
 
 
     <main>
-        <div class="player-details">
-            {% if player.image %}
-                <img src="{{ player.image.url }}" alt="{{ player.name }} Image" class="player-image">
-            {% else %}
-                <img src="{% static 'img/generic-avatar.png' %}" alt="Default Player Image" class="player-image">
-            {% endif %}
-
-            <div class="player-info">
-                <h1 class="player-name">{{ player.name }}</h1>
-                <p class="player-position">Position: {{ player.position }}</p>
+        <div class="container mt-4">
+          <div class="card">
+            <div class="row no-gutters">
+              <div class="col-md-4">
+                  {% if player.image %}
+                    <img src="{{ player.image.url }}" alt="{{ player.name }} Image" class="card-img img-fluid">
+                  {% else %}
+                    <img src="{% static 'img/generic-avatar.png' %}" alt="Default Player Image" class="card-img" style="max-width: 100%;height: auto;">
+                  {% endif %}
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h1 class="player-name">{{ player.name }}</h1>
+                  <p class="player-position">Position: {{ player.position }}</p>
+                  <p class="player-number">Number: {{ player.number_player }}</p>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
+
         <h2>Seasons:</h2>
         <ul>
             {% for player_team_season in player.playerteamseason_set.all %}
@@ -63,11 +55,5 @@
         </ul>
         <a href="{% url 'edit_player' player.id %}" class="btn btn-primary">Editar Jugador</a>
     </main>
-
-
-
-
-
-
 
 {% endblock %}
