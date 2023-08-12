@@ -16,6 +16,13 @@
     
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script
+
+    type="module"
+    src="https://widgets.api-sports.io/2.0.3/widgets.js">
+
+</script>
+
 
 
 </head>
@@ -164,7 +171,24 @@
                 <li><a href="{% url 'signin' %}">Login</a></li>
                 <li><a href="{% url 'signup' %}">Sign Up</a></li>
             </ul>
-        </div>
+        </div><br>
+
+    <div id="wg-api-football-games"
+     data-host="v3.football.api-sports.io"
+     data-key="0304c43f05msh6c69f0df2b39183p1b067fjsn902b7105573f"
+     data-date=""
+     data-league=""
+     data-season=""
+     data-theme=""
+     data-refresh="15"
+     data-show-toolbar="true"
+     data-show-errors="false"
+     data-show-logos="true"
+     data-modal-game="true"
+     data-modal-standings="true"
+     data-modal-show-logos="true">
+</div>
+
     </div>
 {% endif %}
 </body>
