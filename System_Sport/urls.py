@@ -61,6 +61,7 @@ urlpatterns = [
          name='add_team_to_competition'),
     path('generate_test_teams/<int:competition_id>/<int:num_teams>/', views.generate_test_teams,
          name='generate_test_teams'),
+    path('toggle_competition/<int:competition_id>/', views.toggle_competition, name='toggle_competition'),
 
     path('players', views.player_list, name='players'),
     path('player/<int:id>/', views.player_detail, name='player_detail'),

@@ -7,14 +7,24 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError, transaction
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_protect
-from django.views.decorators.http import require_http_methods
 
 from .forms import PlayerForm, SportForm, CompetitionForm, TeamForm, SeasonForm, LocationForm, \
     AvailabilityForm
+
 from .models import Competition, Season, Sport, Group, Team, Player, Game, State, PlayerTeamSeason, Location, \
     Availability, Inscription, TeamSeasonInscription
+
 from .utils import generate_game_schedule
+
+
+def toggle_competition(request, competition_id):
+    competition = get_object_or_404(Competition, pk=competition_id)
+    competition.is_active = not competition.is_active
+    competition.save()
+
+    message = 'La competición ha sido activada' if competition.is_active else 'La competición ha sido desactivada'
+
+    return JsonResponse({'message': message, 'is_active': competition.is_active})
 
 
 def inscription_team(request, id_competition, id_team):
@@ -47,7 +57,7 @@ def new_team(request, id_competition):
     competition = get_object_or_404(Competition, pk=id_competition)
 
     if request.method == 'POST':
-        form = TeamForm(request.POST)
+        form = TeamForm(request.POST, request.FILES)
         if form.is_valid():
             team = form.save(commit=False)
             team.user = request.user  # Asignar el usuario actual al equipo
@@ -409,10 +419,16 @@ def season_teams(request, id_competition, id_season):
     season = get_object_or_404(Season, pk=id_season)
 
     teams = Team.objects.filter(competition=competition, user=request.user)
+    teams_in_seasons = Team.objects.filter(teamseasoninscription__season__competition=competition, user=request.user)
+
     groups = Group.objects.filter(season=season)
 
-    return render(request, 'season_teams.html',
-                  {'competition': competition, 'season': season, 'teams': teams, 'groups': groups})
+    return render(request, 'season_teams.html', {
+        'competition': competition,
+        'season': season, 'teams': teams,
+        'groups': groups,
+        'teams_in_seasons': teams_in_seasons,
+    })
 
 
 def sortear_grupos(request, id_competition, id_season):

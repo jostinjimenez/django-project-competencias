@@ -5,22 +5,20 @@
 
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-xl-8 col-lg-10 col-md-9">
-                <div class="card o-hidden border-0 shadow-lg">
+            <div class="col-lg-8">
+                <div class="card shadow-lg">
                     <div class="card-body p-5">
-                        <div class="text-center">
-                            <h1 class="h4 text-gray-900 mb-4">New Equipo</h1>
-                        </div>
-                        <form method="post" class="form-group mx-auto mt-2">
+                        <h1 class="h3 text-center text-primary mb-4">Nuevo
+                            Equipo</h1>
+                        <form method="post" class="form-group" enctype="multipart/form-data">
                             {% csrf_token %}
-
                             {{ error }}
-
                             {{ form.as_p }}
-                            <div class="text-center">
-                                <a class="btn btn-secondary rounded-pill btn-md w-25"
+
+                            <div class="text-center mt-4">
+                                <a class="btn btn-secondary btn-md mr-3"
                                    href="{% url 'competition_detail' competition.id %}">Cancelar</a>
-                                <button type="submit" class="btn btn-primary rounded-pill btn-md w-25">Guardar</button>
+                                <button type="submit" class="btn btn-primary btn-md">Guardar</button>
                             </div>
                         </form>
                     </div>

@@ -30,8 +30,14 @@
             <div class=" col-md-4 d-flex ">
                 <div id="liveAlertPlaceholder" style="position: absolute; top: 25px; right: 25px;"></div>
                 <button type="button" style="height: fit-content" class="btn btn-primary ms-auto" id="liveAlertBtn">
-                    Activar Competencia
+                    {% if competition.is_active %}
+                        Desactivar Competencia
+                    {% else %}
+                        Activar Competencia
+                    {% endif %}
                 </button>
+
+
             </div>
         </div>
         <hr>
@@ -153,9 +159,9 @@
                 <th scope="col">Escudo</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">N°jugadores</th>
-                <th scope="col">Temporada</th>
-                <th scope="col">Estado</th>
+                <th scope="col">Inscripcion</th>
                 <th scope="col">Ciudad</th>
+                <th scope="col">Pais</th>
             </tr>
             </thead>
             <tbody class="table-group-divider">
@@ -172,8 +178,8 @@
                     <td><a href="{% url 'teams_detail' team.id %}">{{ team.name }}</a></td>
                     <td><a href="{% url 'inscription_team' competition.id team.id %}">Añadir Jugadores</a></td>
                     <td>Competencia</td>
-                    <td>{{ team.status }}</td>
                     <td>{{ team.city }}</td>
+                    <td>{{ team.country }}</td>
                 </tr>
             {% empty %}
                 <tr>
@@ -198,10 +204,7 @@
                     <td>{{ team.status }}</td>
                     <td>{{ team.city }}</td>
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="5">No hay equipos inscritos en ninguna temporada de la competencia.</td>
-                </tr>
+
             {% endfor %}
             </tbody>
         </table>
@@ -243,7 +246,49 @@
             });
         });
     </script>
-    <script src="{% static 'js/script_competetition_detail.js' %}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+
+            const appendAlert = (message, type) => {
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = [
+                    `<div class="alert alert-${type} alert-dismissible fade show" role="alert">`,
+                    `   <div>${message}</div>`,
+                    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                    '</div>'
+                ].join('');
+
+                alertPlaceholder.appendChild(wrapper);
+
+                // Agregamos la clase 'fade-out' después de agregar el mensaje de alerta
+                wrapper.firstChild.classList.add('fade-out');
+
+                // Después de 3 segundos, eliminamos la alerta del DOM
+                setTimeout(() => {
+                    wrapper.remove();
+                }, 3000);
+            };
+
+            const alertTrigger = document.getElementById('liveAlertBtn');
+            if (alertTrigger) {
+                alertTrigger.addEventListener('click', () => {
+                    const competitionId = "{{ competition.id }}";  // Obtén el ID de la competencia desde tu contexto
+
+                    fetch(`/toggle_competition/${competitionId}/`)
+                        .then(response => response.json())
+                        .then(data => {
+                            appendAlert(data.message, 'success');
+                            // Cambiar el texto del botón según el nuevo estado
+                            alertTrigger.innerText = data.is_active ? 'Desactivar Competencia' : 'Activar Competencia';
+                        })
+                        .catch(error => {
+                            appendAlert('Error al cambiar el estado de la competencia', 'danger');
+                        });
+                });
+            }
+        });
+    </script>
 
 
 

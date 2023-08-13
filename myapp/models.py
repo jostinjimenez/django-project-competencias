@@ -110,6 +110,7 @@ class Team(models.Model):
     name = models.CharField(max_length=50)
     city = models.CharField(max_length=50, blank=True)
     country = models.CharField(max_length=50, blank=True)
+    image = models.ImageField(upload_to='team_images/', blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='teams')
     competition = models.ManyToManyField(Competition, through='Inscription', related_name='teams')
     groups = models.ManyToManyField(Group, related_name='teams', blank=True)
