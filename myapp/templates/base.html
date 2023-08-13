@@ -12,6 +12,9 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,400,500,700"
           rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300&family=Sen:wght@500&display=swap" rel="stylesheet">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
@@ -145,131 +148,207 @@
     </nav>
 
     <style>
-        #hero {
-            width: 100%;
-            padding: 200px 0 120px 0;
-            background: url("{% static 'img/hero-bg.png' %}") top center;
-            background-size: cover;
-            position: relative;
-        }
+    #hero {
+        width: 100%;
+        padding: 200px 0 120px 0;
+        background: url("{% static 'img/hero-bg.png' %}") top center;
+        background-size: cover;
+        position: relative;
+    }
+    @media (max-width: 991px) {
+      #hero {
+        padding: 140px 0 60px 0;
+      }
+    }
 
-        @media (max-width: 991px) {
-            #hero {
-                padding: 140px 0 60px 0;
-            }
-        }
+    @media (max-width: 574px) {
+      #hero {
+        padding: 100px 0 20px 0;
+      }
+    }
 
-        @media (max-width: 574px) {
-            #hero {
-                padding: 100px 0 20px 0;
-            }
-        }
+    #hero .hero-img {
+      width: 30%;
+      float: right;
+    }
+    h1 {
+        font-family: 'Mitr', sans-serif;
+        font-family: 'Sen', sans-serif;
+        color: whitesmoke;
+        font-size: 90px;
+    }
+    .pic img {
+        border-radius: 50%;
+    }
+    .container2 {
+        width: 100%;
+        margin: 0% auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        color : #fff;
+        background-color: #444444;
+        align-items: center;
+    }
+    h2 {
+        font-family: 'Mitr', sans-serif;
+        font-family: 'Sen', sans-serif;
+        color: #bbbaba;
+        font-size: 65px;
+    }
 
-        #hero .hero-img {
-            width: 30%;
-            float: right;
-        }
+    .features-section {
+        overflow: hidden;
+        position: relative;
+        margin: 0;
+        opacity: 1;
+        transform: translateY(0);
+        transition: opacity 1s ease, transform 1s ease;
+    }
 
-        h1 {
-            text-align: center;
-        }
+    .features-section.scrolled {
+        opacity: 0;
+        transform: translateY(10%); /* Ajusta el valor para controlar la cantidad de desplazamiento */
+    }
 
-        .pic img {
-            border-radius: 50%;
-        }
-
-        .container2 {
-            width: 100%;
-            margin: 0% auto;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            color: #fff;
-            background-color: #444444;
-            align-items: center;
-        }
+    .features-section.scrolled-up {
+        opacity: 1;
+        transform: translateY(0);
+        transition: opacity 0.5s ease, transform 0.5s ease; /* Configura una transición más rápida al volver a la posición original */
+    }
+    .rounded-section {
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 10px;
+        margin-bottom: 20px;
+        /* Other styling properties if needed */
+    }
     </style>
+
+    <script>
+      window.addEventListener("scroll", function () {
+        var featuresSections = document.querySelectorAll(".features-section");
+
+        featuresSections.forEach(function (section) {
+            if (window.scrollY > section.offsetTop - window.innerHeight / 4) {
+                section.classList.add("scrolled");
+                section.classList.remove("scrolled-up");
+            } else {
+                section.classList.remove("scrolled");
+                section.classList.add("scrolled-up");
+            }
+        });
+    });
+    </script>
 
     <section id="hero" class="clearfix">
         <div class="container" data-aos="fade-up">
 
-            <div class="hero-img" data-aos="zoom-out" data-aos-delay="200">
-                <img src="{% static 'img/logo-color.svg' %}" alt="" class="img-fluid">
-            </div>
+          <div class="hero-img" data-aos="zoom-out" data-aos-delay="200">
+            <img src="{% static 'img/logo-color.svg' %}" alt="" class="img-fluid">
+          </div>
 
-            <div class="hero-info" data-aos="zoom-in" data-aos-delay="100">
-                <h2>We provide<br><span>solutions</span><br>for your business!</h2>
-            </div>
+          <div class="hero-info" data-aos="zoom-in" data-aos-delay="100">
+            <h1>Welcome<br><span>to</span><br>PlayOffProo</h1>
+          </div>
         </div>
     </section>
 
-    <section id="features">
-        <h2>About us!</h2><br>
-        <div class="row about-extra">
-            <div class="col-lg-6" data-aos="fade-right">
-                <img src="" class="img-fluid" alt="">
+    <div class="section-container rounded-section pt-3 mt-5">
+        <section class="mt-5 mb-5 px-4 features-section">
+            <div class="row about-extra">
+                <div class="col-lg-6 order-1 order-lg-2"data-aos="fade-left">
+                    <img src="{% static 'img/no-image.png' %}" class="img-fluid" alt="">
+                </div>
+                <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1" data-aos="fade-right">
+                    <h2>Description</h2>
+                    <p>
+                        This web application was created in order to be able to manage sports competitions, in which
+                        they can register teams, players, competitions and matches. In addition, you can view the table of
+                        positions of each competition and the results of the matches.
+                    </p>
+                    <p>
+                        The application was developed with the Django framework, which is a framework that is based on the
+                        model-view-template architecture, which allows the separation of the logic of the application from the
+                        presentation of the data. In addition, it has a database in which the data of the teams, players,
+                        competitions and matches are stored.
+                    </p>
+                </div>
             </div>
-            <div class="col-lg-6 pt-5 pt-lg-0" data-aos="fade-left">
-                <h4>Description</h4>
-                <p>
-                    This web application was created in order to be able to manage sports competitions, in which
-                    they can register teams, players, competitions and matches. In addition, you can view the table of
-                    positions of each competition and the results of the matches.
-                </p>
-                <p>
-                    The application was developed with the Django framework, which is a framework that is based on the
-                    model-view-template architecture, which allows the separation of the logic of the application from
-                    the
-                    presentation of the data. In addition, it has a database in which the data of the teams, players,
-                    competitions and matches are stored.
-                </p>
-            </div>
-        </div>
-
-        <div class="row about-extra">
-            <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left">
-                <img src="assets/img/about-extra-2.svg" class="img-fluid" alt="">
-            </div>
-
-            <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-right">
-                <h4>Neque saepe temporibus repellat ea ipsum et. Id vel et quia tempora facere reprehenderit.</h4>
-                <p>
-                    Delectus alias ut incidunt delectus nam placeat in ex voluptatum. Odio sed accusantium iure
-                    repudiandae quisquam cupiditate placeat quisquam velit. Non dolore sunt reprehenderit voluptate.
-                    Voluptatem officiis et sunt.
-                </p>
-                <p>
-                    Voluptas saepe natus quidem blanditiis. Non sunt impedit voluptas mollitia beatae. Qui esse
-                    molestias. Laudantium libero nisi vitae debitis. Dolorem cupiditate est perferendis iusto.
-                </p>
-                <p>
-                    Eum quia in. Magni quas ipsum a. Quis ex voluptatem inventore sint quia modi. Numquam est aut fuga
-                    mollitia exercitationem nam accusantium provident quia.
-                </p>
-            </div>
-
-        </div>
-    </section>
-
-
-    <div id="sport-News-Title">
-        <h2>Somes sport news</h2>
+        </section>
     </div>
-    <div id="wg-api-football-games">
-        data-host="v3.football.api-sports.io"
-        data-key="0304c43f05msh6c69f0df2b39183p1b067fjsn902b7105573f"
-        data-date=""
-        data-league=""
-        data-season=""
-        data-theme=""
-        data-refresh="15"
-        data-show-toolbar="true"
-        data-show-errors="false"
-        data-show-logos="true"
-        data-modal-game="true"
-        data-modal-standings="true"
-        data-modal-show-logos="true"
-    </div><br>
+
+
+<h2 class="text-center mt-5">Features</h2>
+
+<section class="mt-5 mb-5 px-4 features-section">
+    <div class="row about-extra">
+        <div class="col-lg-6 order-2 order-lg-1" data-aos="fade-left">
+            <img src="{% static 'img/no-image.png' %}" class="img-fluid" alt="">
+        </div>
+
+        <div class="col-lg-6 pt-4 pt-lg-0 order-1 order-lg-2" data-aos="fade-right">
+            <h4>Neque saepe temporibus repellat ea ipsum et. Id vel et quia tempora facere reprehenderit.</h4>
+            <p>
+                Delectus alias ut incidunt delectus nam placeat in ex voluptatum. Odio sed accusantium iure repudiandae
+                quisquam cupiditate placeat quisquam velit. Non dolore sunt reprehenderit voluptate. Voluptatem officiis
+                et sunt.
+            </p>
+            <p>
+                Voluptas saepe natus quidem blanditiis. Non sunt impedit voluptas mollitia beatae. Qui esse molestias.
+                Laudantium libero nisi vitae debitis. Dolorem cupiditate est perferendis iusto.
+            </p>
+            <p>
+                Eum quia in. Magni quas ipsum a. Quis ex voluptatem inventore sint quia modi. Numquam est aut fuga
+                mollitia exercitationem nam accusantium provident quia.
+            </p>
+        </div>
+    </div>
+</section>
+
+     <section class="mt-5 mb-5 px-4 features-section">
+    <div class="row about-extra">
+        <div class="col-lg-6 order-1 order-lg-2"data-aos="fade-left">
+            <img src="{% static 'img/no-image.png' %}" class="img-fluid" alt="">
+        </div>
+        <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1" data-aos="fade-right">
+            <h3>Description</h3>
+            <p>
+                This web application was created in order to be able to manage sports competitions, in which
+                they can register teams, players, competitions and matches. In addition, you can view the table of
+                positions of each competition and the results of the matches.
+            </p>
+            <p>
+                The application was developed with the Django framework, which is a framework that is based on the
+                model-view-template architecture, which allows the separation of the logic of the application from the
+                presentation of the data. In addition, it has a database in which the data of the teams, players,
+                competitions and matches are stored.
+            </p>
+        </div>
+    </div>
+    </section>
+
+
+    <div id="sport-News-Title" class="mt-6">
+        <h2>Somes sport news</h2>
+
+        <div id="wg-api-football-games">
+            data-host="v3.football.api-sports.io"
+            data-key="0304c43f05msh6c69f0df2b39183p1b067fjsn902b7105573f"
+            data-date=""
+            data-league=""
+            data-season=""
+            data-theme=""
+            data-refresh="15"
+            data-show-toolbar="true"
+            data-show-errors="false"
+            data-show-logos="true"
+            data-modal-game="true"
+            data-modal-standings="true"
+            data-modal-show-logos="true"
+        </div><br>
+    </div>
+
     <h2>Developers's Team</h2>
     <div class="container2">
         <div class="col-lg-6" data-aos="zoom-in" data-aos-delay="100">
