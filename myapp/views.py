@@ -181,7 +181,7 @@ def game_list(request):
 
 @login_required
 def player_list(request):
-    players = Player.objects.all()
+    players = Player.objects.filter(user=request.user)
     return render(request, 'players.html', {'players': players})
 
 

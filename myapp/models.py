@@ -189,6 +189,7 @@ class Player(models.Model):
     number_player = models.IntegerField()
     position = models.CharField(max_length=50)
     image = models.ImageField(upload_to='player_images/', blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='players')
 
     def __str__(self):
         return self.name
