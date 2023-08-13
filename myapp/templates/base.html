@@ -4,7 +4,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
     <title>Competition Sport</title>
+
+    <link href="{% static 'img/icon.png' %}" rel="icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,400,500,700"
+          rel="stylesheet">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
@@ -13,9 +21,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
             crossorigin="anonymous"></script>
-    
+
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script
+
+            type="module"
+            src="https://widgets.api-sports.io/2.0.3/widgets.js">
+
+    </script>
 
 
 </head>
@@ -36,51 +50,51 @@
                         id="menu">
                         <li class="nav-item mt-5">
                             <a href="#" class="nav-link align-middle px-0">
-                                <i class="fs-4 bi-house"></i> <img src="{% static 'img/default_male.png' %}"
-                                                                   class="card-img-top img-fluid"
-                                                                   style="width: 100px; height: 100px;">
+                                <img src="{% static 'img/default_male.png' %}"
+                                     class="card-img-top img-fluid"
+                                     style="width: 100px; height: 100px;">
                             </a>
                         </li>
                         <li class="nav-item mt-5">
                             <a href="{% url 'home' %}" class="nav-link align-middle px-0">
                                 <img src="{% static 'img/calendar.png' %}" alt="hugenerd" width="30" height="30">
-                                <i class="fs-4 bi-house"></i> <span
-                                    class="ms-1 d-none d-sm-inline text-light">Home</span>
+                                <span
+                                        class="ms-1 d-none d-sm-inline text-light">Home</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{% url 'competitions' %}" class="nav-link align-middle px-0">
                                 <img src="{% static 'img/calendar.png' %}" alt="hugenerd" width="30" height="30">
-                                <i class="fs-4 bi-house"></i> <span
-                                    class="ms-1 d-none d-sm-inline text-light">Competiciones</span>
+                                <span
+                                        class="ms-1 d-none d-sm-inline text-light">Competiciones</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{% url 'teams' %}" class="nav-link align-middle px-0">
                                 <img src="{% static 'img/calendar.png' %}" alt="hugenerd" width="30" height="30">
-                                <i class="fs-4 bi-house"></i> <span
-                                    class=" text-light ms-1 d-none d-sm-inline">Equipos</span>
+                                <span
+                                        class=" text-light ms-1 d-none d-sm-inline">Equipos</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{% url 'players' %}" class="nav-link align-middle px-0">
                                 <img src="{% static 'img/calendar.png' %}" alt="hugenerd" width="30" height="30">
-                                <i class="fs-4 bi-house"></i> <span
-                                    class="text-light ms-1 d-none d-sm-inline">Jugadores</span>
+                                <span
+                                        class="text-light ms-1 d-none d-sm-inline">Jugadores</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{% url 'standings_table' %}" class="nav-link align-middle px-0">
                                 <img src="{% static 'img/calendar.png' %}" alt="hugenerd" width="30" height="30">
-                                <i class="fs-4 bi-house"></i> <span
-                                    class=" text-light ms-1 d-none d-sm-inline">Tabla de Posiciones</span>
+                                <span
+                                        class=" text-light ms-1 d-none d-sm-inline">Tabla de Posiciones</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="" class="nav-link align-middle px-0">
                                 <img src="{% static 'img/calendar.png' %}" alt="hugenerd" width="30" height="30">
-                                <i class="fs-4 bi-house"></i> <span
-                                    class="text-light ms-1 d-none d-sm-inline">Inscripciones</span>
+                                <span
+                                        class="text-light ms-1 d-none d-sm-inline">Inscripciones</span>
                             </a>
                         </li>
                     </ul>
@@ -115,57 +129,213 @@
             </div>
         </div>
     </div>
+    </nav>
+
+
 
 {% else %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="navbar-nav">
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'img/icon.png' %}" alt="Logo" width="70" height="64"
+                     class="d-inline-block align-text-top">
+                Competencias deportivas
+            </a>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="{% url 'signin' %}">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">Sign Up</a></li>
+            </ul>
+        </div>
+        <br>
+    </nav>
+
     <style>
-        .body {
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
+        #hero {
+            width: 100%;
+            padding: 200px 0 120px 0;
+            background: url("{% static 'img/hero-bg.png' %}") top center;
+            background-size: cover;
+            position: relative;
         }
 
-        .container-fluid {
-            background-color: #004d99;
-            padding: 20px;
-            color: white;
-            text-align: center;
+        @media (max-width: 991px) {
+            #hero {
+                padding: 140px 0 60px 0;
+            }
         }
 
-        ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
+        @media (max-width: 574px) {
+            #hero {
+                padding: 100px 0 20px 0;
+            }
         }
 
-        li {
-            display: inline-block;
-            margin: 0 15px;
-        }
-
-        a {
-            text-decoration: none;
-            color: white;
-            font-size: 18px;
-            transition: color 0.3s;
-        }
-
-        a:hover {
-            color: #ff9900;
+        #hero .hero-img {
+            width: 30%;
+            float: right;
         }
 
         h1 {
-            font-size: 36px;
-            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .pic img {
+            border-radius: 50%;
+        }
+
+        .container2 {
+            width: 100%;
+            margin: 0% auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            color: #fff;
+            background-color: #444444;
+            align-items: center;
         }
     </style>
-    <div class="body">
-        <div class="container-fluid">
-            <h1>¡Bienvenido a Competencias Deportivas!</h1>
-            <ul>
-                <li><a href="{% url 'signin' %}">Login</a></li>
-                <li><a href="{% url 'signup' %}">Sign Up</a></li>
-            </ul>
+
+    <section id="hero" class="clearfix">
+        <div class="container" data-aos="fade-up">
+
+            <div class="hero-img" data-aos="zoom-out" data-aos-delay="200">
+                <img src="{% static 'img/logo-color.svg' %}" alt="" class="img-fluid">
+            </div>
+
+            <div class="hero-info" data-aos="zoom-in" data-aos-delay="100">
+                <h2>We provide<br><span>solutions</span><br>for your business!</h2>
+            </div>
+        </div>
+    </section>
+
+    <section id="features">
+        <h2>About us!</h2><br>
+        <div class="row about-extra">
+            <div class="col-lg-6" data-aos="fade-right">
+                <img src="" class="img-fluid" alt="">
+            </div>
+            <div class="col-lg-6 pt-5 pt-lg-0" data-aos="fade-left">
+                <h4>Description</h4>
+                <p>
+                    This web application was created in order to be able to manage sports competitions, in which
+                    they can register teams, players, competitions and matches. In addition, you can view the table of
+                    positions of each competition and the results of the matches.
+                </p>
+                <p>
+                    The application was developed with the Django framework, which is a framework that is based on the
+                    model-view-template architecture, which allows the separation of the logic of the application from
+                    the
+                    presentation of the data. In addition, it has a database in which the data of the teams, players,
+                    competitions and matches are stored.
+                </p>
+            </div>
+        </div>
+
+        <div class="row about-extra">
+            <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left">
+                <img src="assets/img/about-extra-2.svg" class="img-fluid" alt="">
+            </div>
+
+            <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-right">
+                <h4>Neque saepe temporibus repellat ea ipsum et. Id vel et quia tempora facere reprehenderit.</h4>
+                <p>
+                    Delectus alias ut incidunt delectus nam placeat in ex voluptatum. Odio sed accusantium iure
+                    repudiandae quisquam cupiditate placeat quisquam velit. Non dolore sunt reprehenderit voluptate.
+                    Voluptatem officiis et sunt.
+                </p>
+                <p>
+                    Voluptas saepe natus quidem blanditiis. Non sunt impedit voluptas mollitia beatae. Qui esse
+                    molestias. Laudantium libero nisi vitae debitis. Dolorem cupiditate est perferendis iusto.
+                </p>
+                <p>
+                    Eum quia in. Magni quas ipsum a. Quis ex voluptatem inventore sint quia modi. Numquam est aut fuga
+                    mollitia exercitationem nam accusantium provident quia.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <div id="sport-News-Title">
+        <h2>Somes sport news</h2>
+    </div>
+    <div id="wg-api-football-games">
+        data-host="v3.football.api-sports.io"
+        data-key="0304c43f05msh6c69f0df2b39183p1b067fjsn902b7105573f"
+        data-date=""
+        data-league=""
+        data-season=""
+        data-theme=""
+        data-refresh="15"
+        data-show-toolbar="true"
+        data-show-errors="false"
+        data-show-logos="true"
+        data-modal-game="true"
+        data-modal-standings="true"
+        data-modal-show-logos="true"
+    </div><br>
+    <h2>Developers's Team</h2>
+    <div class="container2">
+        <div class="col-lg-6" data-aos="zoom-in" data-aos-delay="100">
+            <div class="member d-flex align-items-start">
+                <div class="pic"><img src="{% static 'img/Jostin.png' %}"></div>
+                <div class="member-info">
+                    <h4>Jostin Jimenez</h4>
+                    <span>Manager</span>
+                    <p>Explicabo voluptatem mollitia et repellat qui dolorum quasi</p>
+                    <div class="social">
+                        <a href=""><i class=""></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mt-4 mt-lg-0" data-aos="zoom-in" data-aos-delay="200">
+            <div class="member d-flex align-items-start">
+                <div class="pic"><img src="{% static 'img/Geoanny.png' %}"></div>
+                <div class="member-info">
+                    <h4>Geovanny Romero</h4>
+                    <span>Developer</span>
+                    <p>Aut maiores voluptates amet et quis praesentium qui senda para</p>
+                    <div class="social">
+                        <a href=""><i class=""></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mt-4" data-aos="zoom-in" data-aos-delay="300">
+            <div class="member d-flex align-items-start">
+                <div class="pic"><img src="{% static 'img/Jhostin.png' %}"></div>
+                <div class="member-info">
+                    <h4>Jhostin Rojas</h4>
+                    <span>Developer</span>
+                    <p>Quisquam facilis cum velit laborum corrupti fuga rerum quia</p>
+                    <div class="social">
+                        <a href=""><i class=""></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mt-4" data-aos="zoom-in" data-aos-delay="400">
+            <div class="member d-flex align-items-start">
+                <div class="pic"><img src="{% static 'img/Juan.png' %}"></div>
+                <div class="member-info">
+                    <h4>Juan Alverca</h4>
+                    <span>Developer</span>
+                    <p></p>
+                    <div class="social">
+                        <a href=""><i class=""></i></a>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
+    </section>
+
 {% endif %}
 </body>
 </html>

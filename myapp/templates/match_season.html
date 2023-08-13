@@ -1,11 +1,43 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 
-    <h2>{{ season.name }}</h2>
 
-    <div class="">
+    <div class="container">
+
         <div class="row">
-            <p>Partido y Grupos</p>
+            <div class="col">
+                <a class="" href="{% url 'competition_seasons' competition.id %}"><img
+                        src="{% static 'img/back.png' %}"
+                        alt=""></a>
+            </div>
+
+            <h2 class="text-center">{{ season.name }}</h2>
+
+        </div>
+
+
+        <div class="row mt-5">
+            <div class="col">
+                <p>Partido y Grupos</p>
+            </div>
+            <div class="col-md-2 d-flex">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        Administrar Partidos
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" href="{% url 'generate_time' competition.id season.id %}">Calendario
+                                Automatico</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="">Agregar Partido</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
         <div class="row">
             <main class="mt-5">
@@ -23,9 +55,53 @@
                     </form>
                 </div>
 
-                <table class="table table-hover " id="team_table">
+
+                <div class="row row mt-3 mb-5">
+                    <div class="col">
+                        <div id="select-menu" class="btn-group">
+                            <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                Seleccionar
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" id="select-all">Seleccionar todo</a></li>
+                                <li><a class="dropdown-item" href="#" id="select-none">Seleccionar ninguno</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="col">
+                        <div id="action-menu" class="row" {% if selected_game_ids %}style="display: block;"
+                             {% else %}style="display: none;"{% endif %}>
+                            <div class="col">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-light">
+                                        Eliminar
+                                    </button>
+                                    <button type="button" class="btn btn-light">
+                                        <i class="fas fa-user-plus"></i> Añadir árbitro
+                                    </button>
+                                    <button type="button" class="btn btn-light">
+                                        <i class="fas fa-map-marker-alt"></i> Añadir lugar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if messages %}
+                    <div class="messages">
+                        {% for message in messages %}
+                            <div{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <table class="table table-hover table-responsive" id="team_table">
                     <thead class="table-light">
                     <tr>
+                        <th scope="col"></th> <!-- Columna para las casillas de verificación -->
                         <th scope="col">Estado</th>
                         <th scope="col">Equipo 1</th>
                         <th scope="col">Resultado</th>
@@ -39,6 +115,28 @@
                     </thead>
                     <tbody class="table-group-divider">
 
+                    {% for game in games %}
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="selected_games" value="{{ game.id }}">
+                            </td>
+                            <td>{{ game.state }}</td>
+                            <td>{{ game.team_local.name }}</td>
+                            <td>
+                                <button type="button" class="btn btn-link" data-bs-toggle="modal"
+                                        data-bs-target="#myModal{{ game.id }}">
+                                    {{ game.team_local_goals }} - {{ game.team_visitor_goals }}
+                                </button>
+                            </td>
+                            <td>{{ game.team_visitor.name }}</td>
+                            <td>{{ game.date }}</td>
+                            <td>{{ game.hour }}</td>
+                            <td>{{ game.phase }}</td>
+                            <td>{{ game.location.name }}</td>
+                            <td>Árbitro</td>
+                        </tr>
+                    {% endfor %}
+
                     </tbody>
                 </table>
 
@@ -48,7 +146,148 @@
 
             </main>
         </div>
+
+        {% for game in games %}
+            <div class="modal fade" id="myModal{{ game.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Actualizar Resultado</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form method="post" action="{% url 'update_game' game.id %}">
+                            {% csrf_token %}
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {% if game.team_local.image %}
+                                            <img src="{{ game.team_local.image.url }}" alt="{{ game.team_local.name }}"
+                                                 width="50">
+                                        {% else %}
+                                            <img src="{% static 'img/team_default.png' %}" alt="Equipo por defecto"
+                                                 width="50">
+                                        {% endif %}
+                                        <p>{{ game.team_local.name }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        {% if game.team_visitor.image %}
+                                            <img src="{{ game.team_visitor.image.url }}"
+                                                 alt="{{ game.team_visitor.name }}" width="50">
+                                        {% else %}
+                                            <img src="{% static 'img/team_default.png' %}" alt="Equipo por defecto"
+                                                 width="50">
+                                        {% endif %}
+                                        <p>{{ game.team_visitor.name }}</p>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="team_local_goals">Goles {{ game.team_local.name }}:</label>
+                                    <input type="number" class="form-control" id="team_local_goals"
+                                           name="team_local_goals" value="{{ game.team_local_goals }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="team_visitor_goals">Goles {{ game.team_visitor.name }}:</label>
+                                    <input type="number" class="form-control" id="team_visitor_goals"
+                                           name="team_visitor_goals" value="{{ game.team_visitor_goals }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="game_state">Estado del Partido:</label>
+                                    <select class="form-control" id="game_state" name="game_state">
+                                        <option value="NOT_PLAYED"
+                                                {% if game.state == 'NOT_PLAYED' %}selected{% endif %}>No Jugado
+                                        </option>
+                                        <option value="IN_PROGRESS"
+                                                {% if game.state == 'IN_PROGRESS' %}selected{% endif %}>En Progreso
+                                        </option>
+                                        <option value="FINISHED" {% if game.state == 'FINISHED' %}selected{% endif %}>
+                                            Finalizado
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Actualizar</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const selectAllLink = document.getElementById("select-all");
+            const selectNoneLink = document.getElementById("select-none");
+            const selectedGames = document.querySelectorAll('input[name="selected_games"]');
+
+            selectAllLink.addEventListener("click", function (event) {
+                event.preventDefault();
+                selectedGames.forEach(function (checkbox) {
+                    checkbox.checked = true;
+                });
+            });
+
+            selectNoneLink.addEventListener("click", function (event) {
+                event.preventDefault();
+                selectedGames.forEach(function (checkbox) {
+                    checkbox.checked = false;
+                });
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const actionMenu = document.getElementById("action-menu");
+            const selectedGames = document.querySelectorAll('input[name="selected_games"]');
+
+            function updateActionMenu() {
+                const selectedGameIds = Array.from(selectedGames).filter(checkbox => checkbox.checked).map(checkbox => checkbox.value);
+                if (selectedGameIds.length > 0) {
+                    actionMenu.style.display = "block";
+                } else {
+                    actionMenu.style.display = "none";
+                }
+            }
+
+            selectedGames.forEach(function (checkbox) {
+                checkbox.addEventListener("change", function () {
+                    updateActionMenu();
+                });
+            });
+
+            actionMenu.addEventListener("mouseleave", function () {
+                updateActionMenu();
+            });
+
+            const selectAllLink = document.getElementById("select-all");
+            selectAllLink.addEventListener("click", function (event) {
+                event.preventDefault();
+                selectedGames.forEach(function (checkbox) {
+                    checkbox.checked = true;
+                });
+                updateActionMenu();
+            });
+
+            const selectNoneLink = document.getElementById("select-none");
+            selectNoneLink.addEventListener("click", function (event) {
+                event.preventDefault();
+                selectedGames.forEach(function (checkbox) {
+                    checkbox.checked = false;
+                });
+                updateActionMenu();
+            });
+
+        });
+    </script>
+
+
+
+
+
+
+
 
 
 {% endblock %}

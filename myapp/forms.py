@@ -6,12 +6,15 @@ from .models import Player, Sport, Competition, PlayerTeamSeason, Team, Season, 
 class PlayerForm(forms.ModelForm):
     class Meta:
         model = Player
-        fields = ['name', 'number_player', 'position']
+        fields = ['name', 'number_player', 'position', 'image']
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
-
+            'number_player': forms.NumberInput(attrs={'class': 'form-control border-2 rounded-pill'}),
+            'position': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
+            'image': forms.FileInput(attrs={'class': 'form-control border-2 rounded-pill'}),
         }
+
 
 
 class SportForm(forms.ModelForm):
@@ -29,22 +32,11 @@ class SportForm(forms.ModelForm):
 class CompetitionForm(forms.ModelForm):
     class Meta:
         model = Competition
-        fields = ['name', 'date_start', 'date_end', 'sport', 'genre', 'type_competition', 'is_active']
+        fields = ['name', 'sport', 'genre', 'type_competition', 'is_active']
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
-            'date_start': DatePickerInput(format='%Y-%m-%d', options={
-                'locale': 'es',
-                'showClose': True,
-                'showClear': True,
-                'showTodayButton': True,
-            }, attrs={'class': 'form-control border-2 rounded-pill'}),  # Agregamos la clase 'rounded-pill' aquí
-            'date_end': DatePickerInput(format='%Y-%m-%d', options={
-                'locale': 'es',
-                'showClose': True,
-                'showClear': True,
-                'showTodayButton': True,
-            }, attrs={'class': 'form-control border-2 rounded-pill'}),  # Agregamos la clase 'rounded-pill' aquí
+
             'genre': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
             'sport': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
             'type_competition': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
@@ -67,10 +59,22 @@ class TeamForm(forms.ModelForm):
 class SeasonForm(forms.ModelForm):
     class Meta:
         model = Season
-        fields = ['name', 'number_grups']
+        fields = ['name', 'number_grups', 'date_start', 'date_end']
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
+            'date_start': DatePickerInput(format='%Y-%m-%d', options={
+                'locale': 'es',
+                'showClose': True,
+                'showClear': True,
+                'showTodayButton': True,
+            }, attrs={'class': 'form-control border-2 rounded-pill'}),  # Agregamos la clase 'rounded-pill' aquí
+            'date_end': DatePickerInput(format='%Y-%m-%d', options={
+                'locale': 'es',
+                'showClose': True,
+                'showClear': True,
+                'showTodayButton': True,
+            }, attrs={'class': 'form-control border-2 rounded-pill'}),  # Agregamos la clase 'rounded-pill' aquí
             'number_grups': forms.NumberInput(attrs={'class': 'form-control border-2 rounded-pill'}),
         }
 
@@ -89,12 +93,16 @@ class LocationForm(forms.ModelForm):
 
 
 class AvailabilityForm(forms.ModelForm):
+    days_available = forms.MultipleChoiceField(
+        choices=Availability.DAYS_CHOICES,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'list-unstyled'}),
+    )
+
     class Meta:
         model = Availability
         fields = ['days_available', 'opening_time', 'closing_time', 'date']
 
         widgets = {
-            'days_available': forms.CheckboxSelectMultiple(attrs={'class': 'list-unstyled'}),
             'opening_time': TimePickerInput(attrs={'class': 'form-control border-2 rounded-pill'}),
             'closing_time': TimePickerInput(attrs={'class': 'form-control border-2 rounded-pill'}),
             'date': DatePickerInput(format='%Y-%m-%d', options={

@@ -30,7 +30,7 @@ urlpatterns = [
     path('competitions/<int:id_competition>/seasons/', views.competition_seasons,
          name='competition_seasons'),
 
-    path('competitions/<int:id_competition>/seasons/new_stadium', login_required(views.new_stadium),
+    path('competitions/<int:id_competition>/seasons/<int:id_season>/new_stadium', login_required(views.new_stadium),
          name='new_stadium'),
 
     path('competitions/<int:id_competition>/seasons/<int:id_season>/', views.season_teams,
@@ -41,8 +41,19 @@ urlpatterns = [
 
     path('competitions/<int:id_competition>/seasons/<int:id_season>/match_season', login_required(views.match_season),
          name='match_season'),
+
     path('competitions/<int:id_competition>/seasons/<int:id_season>/generate_time', login_required(views.generate_time),
          name='generate_time'),
+
+    path('competitions/<int:id_competition>/seasons/<int:id_season>/generate_time/add_availability/<int:id_location>',
+         login_required(views.agregar_disponibilidad), name='add_availability'),
+    path('competitions/<int:id_competition>/seasons/<int:id_season>/generate_time/add_availability/delete_availability',
+         login_required(views.delete_availability), name='delete_availability'),
+    path('competitions/<int:id_competition>/seasons/<int:id_season>/generate_time/generate_calendar',
+         login_required(views.generate_calendar), name='generate_calendar'),
+
+    path('update_game/<int:game_id>', login_required(views.update_game), name='update_game'),
+    path('delete_selected_games/', views.delete_selected_games, name='delete_selected_games'),
 
     path('players', views.player_list, name='players'),
     path('player/<int:id>/', views.player_detail, name='player_detail'),
@@ -51,6 +62,8 @@ urlpatterns = [
     path('standings/', views.standings_table, name='standings_table'),
     path('edit_player/<int:id>/', views.edit_player, name='edit_player'),
     path('new_competition/', views.new_competition, name='new_competition'),
+
+    path('player_list/', views.player_list, name='player_list'),
 
     path('accounts/', include('allauth.urls')),
 ]

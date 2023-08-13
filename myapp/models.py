@@ -39,8 +39,6 @@ class State(models.TextChoices):
 
 class Competition(models.Model):
     name = models.CharField(max_length=50, blank=True)
-    date_start = models.DateField(null=True)
-    date_end = models.DateField(blank=True, null=True)
     SPORT_lIST = (
         ('F', 'Football'),
         ('B', 'Basketball'),
@@ -69,6 +67,8 @@ class Competition(models.Model):
 
 class Season(models.Model):
     name = models.CharField(max_length=50)
+    date_start = models.DateField(null=True)
+    date_end = models.DateField(blank=True, null=True)
     competition = models.ForeignKey(Competition, on_delete=models.CASCADE, related_name='seasons', null=True)
     number_grups = models.IntegerField(default=0)
 
@@ -86,6 +86,16 @@ class Season(models.Model):
         for index, team in enumerate(teams):
             group_index = index % self.number_grups  # Asignar equipos de manera circular a los grupos
             groups[group_index].teams.add(team)
+
+    def get_teams_per_group(self):
+        teams_per_group = {}
+        groups = self.groups.all()
+
+        for group in groups:
+            teams_count = group.teams.count()
+            teams_per_group[group] = teams_count
+
+        return teams_per_group
 
 
 class Group(models.Model):
@@ -146,6 +156,9 @@ class Game(models.Model):
     loser = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True, related_name='losing_games')
     location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True)
     phase = models.CharField(max_length=50, choices=[(tag.name, tag.value) for tag in Phase], default=Phase.GROUP.value)
+    season = models.ForeignKey(Season, on_delete=models.CASCADE, null=True, related_name='games')
+    team_local_goals = models.IntegerField(default=0)
+    team_visitor_goals = models.IntegerField(default=0)
 
     def __str__(self):
         return self.team_local.name + ' vs ' + self.team_visitor.name
@@ -165,6 +178,7 @@ class Player(models.Model):
     name = models.CharField(max_length=50)
     number_player = models.IntegerField()
     position = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='player_images/', blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -181,15 +195,15 @@ class PlayerTeamSeason(models.Model):
 
 class Availability(models.Model):
     DAYS_CHOICES = (
-        ('mon', 'Lunes'),
-        ('tue', 'Martes'),
-        ('wed', 'Miércoles'),
-        ('thu', 'Jueves'),
-        ('fri', 'Viernes'),
-        ('sat', 'Sábado'),
-        ('sun', 'Domingo'),
+        ('Lunes', 'Lunes'),
+        ('Martes', 'Martes'),
+        ('Miercoles', 'Miércoles'),
+        ('Jueves', 'Jueves'),
+        ('Viernes', 'Viernes'),
+        ('Sabado', 'Sábado'),
+        ('Domingo', 'Domingo'),
     )
-    days_available = models.CharField(max_length=50, choices=DAYS_CHOICES, default='mon')
+    days_available = models.CharField(max_length=50, choices=DAYS_CHOICES, default='Lunes')
     opening_time = models.TimeField(default='00:00:00')
     closing_time = models.TimeField(blank=True, default='00:00:00')
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='availabilities')
