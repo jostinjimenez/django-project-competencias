@@ -20,17 +20,19 @@ urlpatterns = [
     path('competitions/', views.competition_list, name='competitions'),
     path('competitions/<int:id>/', views.competition_detail, name='competition_detail'),
     path('competitions/competitions_detail<int:id_competition>/new_team/', views.new_team, name='new_team'),
-    path('new_player/', views.new_player, name='new_player'),
+    path('competitions/<int:id_competition>/inscription_player/<int:id_team>/new_player/', views.new_player,
+         name='new_player'),
+    path('competitions/<int:id_competition>/inscription_player/<int:id_team>/', views.inscription_team,
+         name='inscription_team'),
+
     path('new_sport/', views.new_sport, name='new_sport'),
     path('teams/', views.team_list, name='teams'),
     path('teams/<int:id>/', views.teams_detail, name='teams_detail'),
-    path('competitions/<int:id_competition>/inscription_player/<int:id_team>', views.inscription_team,
-         name='inscription_team'),
 
     path('competitions/<int:id_competition>/seasons/', views.competition_seasons,
          name='competition_seasons'),
 
-    path('competitions/<int:id_competition>/seasons/<int:id_season>/new_stadium', login_required(views.new_stadium),
+    path('competitions/<int:id_competition>/seasons/<int:id_season>/new_stadium/', login_required(views.new_stadium),
          name='new_stadium'),
 
     path('competitions/<int:id_competition>/seasons/<int:id_season>/', views.season_teams,

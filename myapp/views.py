@@ -32,24 +32,33 @@ def inscription_team(request, id_competition, id_team):
     competition = get_object_or_404(Competition, pk=id_competition)
     players = Player.objects.filter(playerteamseason__team=team)  # Filtrar por el equipo en PlayerTeamSeason
 
-    if request.method == 'POST':
-        form = PlayerForm(request.POST)
-        if form.is_valid():
-            player = form.save(commit=False)
-            player.save()
-            # Crear la relación entre el jugador, el equipo y la temporada
-            PlayerTeamSeason.objects.create(player=player, team=team, season=competition.current_season)
-            return redirect('competition_detail', id=id_competition)
-
-    else:
-        form = PlayerForm()
-
     return render(request, 'inscription_team.html', {
-        'form': form,
         'team': team,
         'competition': competition,
         'players': players,
     })
+
+
+@login_required
+def new_player(request, id_competition, id_team):
+    competition = get_object_or_404(Competition, pk=id_competition)
+    team = get_object_or_404(Team, pk=id_team)
+
+    if request.method == 'POST':
+        form = PlayerForm(request.POST)
+        if form.is_valid():
+            player = form.save(commit=False)
+            player.user = request.user  # Asigna el usuario actual al jugador
+            player.save()
+
+            PlayerTeamSeason.objects.create(player=player, team=team)
+
+            return redirect('inscription_team', id_competition=id_competition, id_team=id_team)
+
+    else:
+        form = PlayerForm()
+
+    return render(request, 'new_player.html', {'form': form})
 
 
 @login_required
@@ -206,19 +215,6 @@ def teams_detail(request, id):
         'team': team,
         'players': players,
     })
-
-
-@login_required
-def new_player(request, id_team):
-    if request.method == 'POST':
-        form = PlayerForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('player_list')
-    else:
-        form = PlayerForm()
-
-    return render(request, 'new_player.html', {'form': form})
 
 
 @login_required

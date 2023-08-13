@@ -14,7 +14,8 @@
           rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300&family=Sen:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300&family=Sen:wght@500&display=swap"
+          rel="stylesheet">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
@@ -105,7 +106,7 @@
                             <span class="d-none d-sm-inline mx-1">{{ user.username }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                            <li><a class="dropdown-item" href="#">New project...</a></li>
+                            <li><a class="dropdown-item" href="/admin">Administrador</a></li>
                             <li><a class="dropdown-item" href="#">Settings</a></li>
                             <li><a class="dropdown-item" href="#">Profile</a></li>
                             <li>
@@ -148,130 +149,140 @@
     </nav>
 
     <style>
-    #hero {
-        width: 100%;
-        padding: 200px 0 120px 0;
-        background: url("{% static 'img/hero-bg.png' %}") top center;
-        background-size: cover;
-        position: relative;
-    }
-    @media (max-width: 991px) {
-      #hero {
-        padding: 140px 0 60px 0;
-      }
-    }
+        #hero {
+            width: 100%;
+            padding: 200px 0 120px 0;
+            background: url("{% static 'img/hero-bg.png' %}") top center;
+            background-size: cover;
+            position: relative;
+        }
 
-    @media (max-width: 574px) {
-      #hero {
-        padding: 100px 0 20px 0;
-      }
-    }
+        @media (max-width: 991px) {
+            #hero {
+                padding: 140px 0 60px 0;
+            }
+        }
 
-    #hero .hero-img {
-      width: 30%;
-      float: right;
-    }
-    h1 {
-        font-family: 'Mitr', sans-serif;
-        font-family: 'Sen', sans-serif;
-        color: whitesmoke;
-        font-size: 90px;
-    }
-    .pic img {
-        border-radius: 50%;
-    }
-    .container2 {
-        height: 70vh;
-        width: 100%;
-        margin: 0% auto;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        color : #fff;
-        background-color: #444444;
-        align-items: center;
-    }
-    h2 {
-        font-family: 'Mitr', sans-serif;
-        font-family: 'Sen', sans-serif;
-        color: #bbbaba;
-        font-size: 65px;
-    }
+        @media (max-width: 574px) {
+            #hero {
+                padding: 100px 0 20px 0;
+            }
+        }
 
-    .features-section {
-        overflow: hidden;
-        position: relative;
-        margin: 0;
-        opacity: 1;
-        transform: translateY(0);
-        transition: opacity 2s ease, transform 2s ease;
-    }
+        #hero .hero-img {
+            width: 30%;
+            float: right;
+        }
 
-    .features-section.scrolled {
-        opacity: 0;
-        transform: translateY(10%); /* Ajusta el valor para controlar la cantidad de desplazamiento */
-    }
+        h1 {
+            font-family: 'Mitr', sans-serif;
+            font-family: 'Sen', sans-serif;
+            color: whitesmoke;
+            font-size: 90px;
+        }
 
-    .features-section.scrolled-up {
-        opacity: 1;
-        transform: translateY(0);
-        transition: opacity 0.3s ease, transform 0.3s ease; /* Configura una transición más rápida al volver a la posición original */
-    }
-    .rounded-section {
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        padding: 10px;
-        margin-bottom: 20px;
-        /* Other styling properties if needed */
-    }
+        .pic img {
+            border-radius: 50%;
+        }
+
+        .container2 {
+            height: 70vh;
+            width: 100%;
+            margin: 0% auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            color: #fff;
+            background-color: #444444;
+            align-items: center;
+        }
+
+        h2 {
+            font-family: 'Mitr', sans-serif;
+            font-family: 'Sen', sans-serif;
+            color: #bbbaba;
+            font-size: 65px;
+        }
+
+        .features-section {
+            overflow: hidden;
+            position: relative;
+            margin: 0;
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 2s ease, transform 2s ease;
+        }
+
+        .features-section.scrolled {
+            opacity: 0;
+            transform: translateY(10%); /* Ajusta el valor para controlar la cantidad de desplazamiento */
+        }
+
+        .features-section.scrolled-up {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.3s ease, transform 0.3s ease; /* Configura una transición más rápida al volver a la posición original */
+        }
+
+        .rounded-section {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 20px;
+            /* Other styling properties if needed */
+        }
     </style>
 
     <script>
-      window.addEventListener("scroll", function () {
-        var featuresSections = document.querySelectorAll(".features-section");
+        window.addEventListener("scroll", function () {
+            var featuresSections = document.querySelectorAll(".features-section");
 
-        featuresSections.forEach(function (section) {
-            if (window.scrollY > section.offsetTop - window.innerHeight / 40) {
-                section.classList.add("scrolled");
-                section.classList.remove("scrolled-up");
-            } else {
-                section.classList.remove("scrolled");
-                section.classList.add("scrolled-up");
-            }
+            featuresSections.forEach(function (section) {
+                if (window.scrollY > section.offsetTop - window.innerHeight / 40) {
+                    section.classList.add("scrolled");
+                    section.classList.remove("scrolled-up");
+                } else {
+                    section.classList.remove("scrolled");
+                    section.classList.add("scrolled-up");
+                }
+            });
         });
-    });
     </script>
 
     <section id="hero" class="clearfix">
         <div class="container" data-aos="fade-up">
 
-          <div class="hero-img" data-aos="zoom-out" data-aos-delay="200">
-            <img src="{% static 'img/logo-color.svg' %}" alt="" class="img-fluid">
-          </div>
+            <div class="hero-img" data-aos="zoom-out" data-aos-delay="200">
+                <img src="{% static 'img/logo-color.svg' %}" alt="" class="img-fluid">
+            </div>
 
-          <div class="hero-info" data-aos="zoom-in" data-aos-delay="100">
-            <h1>Welcome<br><span>to</span><br>PlayOffProo</h1>
-          </div>
+            <div class="hero-info" data-aos="zoom-in" data-aos-delay="100">
+                <h1>Welcome<br><span>to</span><br>PlayOffProo</h1>
+            </div>
         </div>
     </section>
 
     <div class="section-container rounded-section pt-3 mt-5">
         <section class="mt-5 mb-5 px-4 features-section">
             <div class="row about-extra">
-                <div class="col-lg-6 order-1 order-lg-2"data-aos="fade-left">
+                <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left">
                     <img src="{% static 'img/no-image.png' %}" class="img-fluid" alt="">
                 </div>
                 <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1" data-aos="fade-right">
                     <h2>Description</h2>
                     <p>
                         This web application was created in order to be able to manage sports competitions, in which
-                        they can register teams, players, competitions and matches. In addition, you can view the table of
+                        they can register teams, players, competitions and matches. In addition, you can view the table
+                        of
                         positions of each competition and the results of the matches.
                     </p>
                     <p>
-                        The application was developed with the Django framework, which is a framework that is based on the
-                        model-view-template architecture, which allows the separation of the logic of the application from the
-                        presentation of the data. In addition, it has a database in which the data of the teams, players,
+                        The application was developed with the Django framework, which is a framework that is based on
+                        the
+                        model-view-template architecture, which allows the separation of the logic of the application
+                        from the
+                        presentation of the data. In addition, it has a database in which the data of the teams,
+                        players,
                         competitions and matches are stored.
                     </p>
                 </div>
@@ -280,58 +291,59 @@
     </div>
 
 
-<h2 class="text-center mt-5">Create your own sporting event</h2>
+    <h2 class="text-center mt-5">Create your own sporting event</h2>
 
-<section class="mt-5 mb-5 px-4 features-section">
-    <div class="row about-extra">
-        <div class="col-lg-6 order-2 order-lg-1" data-aos="fade-left">
-            <img src="{% static 'img/no-image.png' %}" class="img-fluid" alt="">
-        </div>
+    <section class="mt-5 mb-5 px-4 features-section">
+        <div class="row about-extra">
+            <div class="col-lg-6 order-2 order-lg-1" data-aos="fade-left">
+                <img src="{% static 'img/no-image.png' %}" class="img-fluid" alt="">
+            </div>
 
-        <div class="col-lg-6 pt-4 pt-lg-0 order-1 order-lg-2" data-aos="fade-right">
-            <p>
-                Imagine the excitement of designing and hosting your own soccer tournament, basketball competition,
-                track meet, or any other sporting event you love. From the choice of location and dates, to the selection
-                of teams or participants, every detail is in your hands.
-            </p>
-            <p>
-                Our application offers you an intuitive and easy-to-use interface that will guide you through each
-                step of the process. You can customize the rules, set the prizes and trophies, invite your friends
-                and family, and watch the action unfold in real time through live updates and real-time statistics.
-            </p>
-            <p>
-                It doesn't matter if you are a professional athlete, a passionate fan or just someone who enjoys
-                organizing exciting activities, our app gives you the perfect platform to bring your sports ideas
-                to life.
-            </p>
+            <div class="col-lg-6 pt-4 pt-lg-0 order-1 order-lg-2" data-aos="fade-right">
+                <p>
+                    Imagine the excitement of designing and hosting your own soccer tournament, basketball competition,
+                    track meet, or any other sporting event you love. From the choice of location and dates, to the
+                    selection
+                    of teams or participants, every detail is in your hands.
+                </p>
+                <p>
+                    Our application offers you an intuitive and easy-to-use interface that will guide you through each
+                    step of the process. You can customize the rules, set the prizes and trophies, invite your friends
+                    and family, and watch the action unfold in real time through live updates and real-time statistics.
+                </p>
+                <p>
+                    It doesn't matter if you are a professional athlete, a passionate fan or just someone who enjoys
+                    organizing exciting activities, our app gives you the perfect platform to bring your sports ideas
+                    to life.
+                </p>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-     <section class="mt-5 mb-5 px-4 features-section">
-    <div class="row about-extra">
-        <div class="col-lg-6 order-1 order-lg-2"data-aos="fade-left">
-            <img src="{% static 'img/no-image.png' %}" class="img-fluid" alt="">
+    <section class="mt-5 mb-5 px-4 features-section">
+        <div class="row about-extra">
+            <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left">
+                <img src="{% static 'img/no-image.png' %}" class="img-fluid" alt="">
+            </div>
+            <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1" data-aos="fade-right">
+                <h3>Features</h3>
+                <p>
+                    The sports event tracking app offers you an exceptional level of customization. From choosing the
+                    sport to setting up specific rules, every detail is in your hands. Design tournaments, leagues,
+                    individual or team competitions based on your unique vision.
+                </p>
+                <p>
+                    You can also choose the location, dates, and times of your event. Whether you want to host a
+                    tournament in your own backyard or in a professional stadium, our app gives you the flexibility
+                    to choose the perfect venue.
+                </p>
+                <p>
+                    Explore a wide range of sports and activities available for your events. Whether you prefer soccer,
+                    basketball, volleyball, or even more unique activities like obstacle courses, you can customize
+                    each event to suit your sports interests and passions.
+                </p>
+            </div>
         </div>
-        <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1" data-aos="fade-right">
-            <h3>Features</h3>
-            <p>
-                The sports event tracking app offers you an exceptional level of customization. From choosing the
-                sport to setting up specific rules, every detail is in your hands. Design tournaments, leagues,
-                individual or team competitions based on your unique vision.
-            </p>
-            <p>
-                You can also choose the location, dates, and times of your event. Whether you want to host a
-                tournament in your own backyard or in a professional stadium, our app gives you the flexibility
-                to choose the perfect venue.
-            </p>
-            <p>
-               Explore a wide range of sports and activities available for your events. Whether you prefer soccer,
-                basketball, volleyball, or even more unique activities like obstacle courses, you can customize
-                each event to suit your sports interests and passions.
-            </p>
-        </div>
-    </div>
     </section>
 
 
@@ -352,7 +364,8 @@
             data-modal-game="true"
             data-modal-standings="true"
             data-modal-show-logos="true"
-        </div><br>
+        </div>
+        <br>
     </div>
 
     <h2>Developers's Team</h2>
@@ -413,8 +426,8 @@
             </div>
 
         </div>
-    <p>If you need Support Contact US a own Us gmail :</p>
-    <p>&nbsp;PlayOfPro11@gmail.com</p>
+        <p>If you need Support Contact US a own Us gmail :</p>
+        <p>&nbsp;PlayOfPro11@gmail.com</p>
     </div>
 {% endif %}
 </body>

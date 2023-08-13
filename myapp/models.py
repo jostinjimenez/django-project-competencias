@@ -197,10 +197,9 @@ class Player(models.Model):
 class PlayerTeamSeason(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
-    season = models.ForeignKey(Season, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.player.name} - {self.team.name} ({self.season.name})"
+        return self.player.name + ' - ' + self.team.name
 
 
 class Availability(models.Model):
