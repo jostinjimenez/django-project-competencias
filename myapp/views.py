@@ -45,6 +45,7 @@ def new_team(request, id_competition):
         form = TeamForm(request.POST)
         if form.is_valid():
             team = form.save(commit=False)
+            team.user = request.user  # Asignar el usuario actual al equipo
             team.save()
             team.competition.add(competition)
             return redirect('competition_detail', id=id_competition)
