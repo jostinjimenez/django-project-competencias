@@ -5,6 +5,26 @@
 
     <head>
         <title>{{ competition.name }} - Competition details</title>
+        <style>
+            /* Personalización de la tabla */
+            .table {
+                font-size: 14px;
+            }
+
+            .table th,
+            .table td {
+                vertical-align: middle;
+            }
+
+            .table a {
+                color: #f53d08;
+                text-decoration: none;
+            }
+
+            .table a:hover {
+                text-decoration: underline;
+            }
+        </style>
 
     </head>
 
@@ -17,11 +37,23 @@
                     alt=""></a>
         </div>
 
-        <h1 class="mb-5 text-center">{{ competition.name }}</h1>
+        <h1 class="mb-5 text-center "
+            style="color: #de4418; font-weight: bold;  font-size: 45px">{{ competition.name }}</h1>
     </div>
 
 
-
+    <nav class="nav">
+        <a class="nav-link nav-hover-highlight"
+           style="font-weight: bold;  font-size: 1.2rem; color: #2d2a2a"
+           href="{% url 'competition_seasons' competition.id %}">Temporadas</a>
+        <a class="nav-link active nav-hover-highlight" aria-current="page"
+           href="{% url 'game_list' %} "
+           style="font-weight: bold;  font-size: 1.2rem; color: #2d2a2a">Partidos</a>
+        <a class=" nav-link nav-hover-highlight"
+           style="font-weight: bold; font-size: 1.2rem; color: #2d2a2a"
+           href="#">####</a>
+    </nav>
+    <hr class="border-3">
     <div class="container mt-5 mb-4">
         <div class="row">
             <div class="col ">
@@ -29,7 +61,8 @@
             </div>
             <div class=" col-md-4 d-flex ">
                 <div id="liveAlertPlaceholder" style="position: absolute; top: 25px; right: 25px;"></div>
-                <button type="button" style="height: fit-content" class="btn btn-primary ms-auto" id="liveAlertBtn">
+                <button type="button" style="height: fit-content; background-color: #f53d08"
+                        class="btn ms-auto text-light" id="liveAlertBtn">
                     {% if competition.is_active %}
                         Desactivar Competencia
                     {% else %}
@@ -40,21 +73,20 @@
 
             </div>
         </div>
-        <hr>
     </div>
 
-    <nav class="nav">
-        <a class="nav-link" href="{% url 'competition_seasons' competition.id %}">Temporadas</a>
-        <a class="nav-link active" aria-current="page" href="{% url 'game_list' %}">Partidos</a>
-        <a class="nav-link" href="">####</a>
 
-    </nav>
+    <style>
+        .nav-hover-highlight:hover {
+            background-color: #f53d08; /* Cambia este color al color naranja deseado */
+            color: white; /* Cambia el color del texto para que sea legible */
+        }
+    </style>
 
-    <hr>
-
-
-    <div class="btn-group">
-        <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    <div class="btn-group ">
+        <button type="button" class="btn dropdown-toggle text-light" style="background-color: #f53d08"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
             Gestionar Equipos
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
@@ -93,7 +125,7 @@
             </div>
         </div>
     </div>
-    <hr>
+
 
     <!-- Modal de Equipos de Prueba -->
     <div class="modal fade" id="testTeamModal" tabindex="-1" aria-labelledby="testTeamModalLabel" aria-hidden="true">
@@ -117,6 +149,7 @@
             </div>
         </div>
     </div>
+
     <script>
         $(document).ready(function () {
             const generateTestTeamsButton = $('#generateTestTeams');
@@ -140,12 +173,12 @@
 
 
     <main class="mt-5">
-        <h3>Equipos</h3>
+        <h3>Equipos ({{ n_total_teams }})</h3>
 
-        <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-end mb-3">
             <form class="d-none d-sm-inline-block form-inline mr-2 mr-md-3 my-2 my-md-0 mw-100">
-                <div class="input-group">
-                    <label class="sr-only" for="search">Search:</label>
+                <div class="input-group align-items-center">
+                    <label class="sr-only mx-3" for="search">Search:</label>
                     <input type="text" class="form-control bg-light border-0 rounded-pill py-2 px-3" name="search"
                            id="search-table" aria-label="Search" aria-describedby="basic-addon2"
                            onkeyup="searchTableTeam()">
@@ -153,7 +186,8 @@
             </form>
         </div>
 
-        <table class="table table-hover " id="team_table">
+
+        <table class="table table-hover table-striped" id="team_table">
             <thead class="table-light">
             <tr>
                 <th scope="col">Escudo</th>
