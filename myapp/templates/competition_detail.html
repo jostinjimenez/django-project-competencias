@@ -10,8 +10,17 @@
 
     <body>
 
+    <div class="row">
+        <div class="col">
+            <a class="" href="{% url 'competitions' %}"><img
+                    src="{% static 'img/back.png' %}"
+                    alt=""></a>
+        </div>
 
-    <h1 class="mb-5">{{ competition.name }}</h1>
+        <h1 class="mb-5 text-center">{{ competition.name }}</h1>
+    </div>
+
+
 
     <div class="container mt-5 mb-4">
         <div class="row">

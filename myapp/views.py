@@ -7,11 +7,12 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError, transaction
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
 
 from .forms import PlayerForm, SportForm, CompetitionForm, TeamForm, SeasonForm, LocationForm, \
     AvailabilityForm
 from .models import Competition, Season, Sport, Group, Team, Player, Game, State, PlayerTeamSeason, Location, \
-    Availability
+    Availability, Inscription
 from .utils import generate_game_schedule
 
 
@@ -48,6 +49,7 @@ def new_team(request, id_competition):
             team.user = request.user  # Asignar el usuario actual al equipo
             team.save()
             team.competition.add(competition)
+
             return redirect('competition_detail', id=id_competition)
     else:
         form = TeamForm()
@@ -179,17 +181,11 @@ def teams_detail(request, id):
     team = get_object_or_404(Team, pk=id)
 
     player_team_seasons = PlayerTeamSeason.objects.filter(team=team)
-
     players = [player_team_season.player for player_team_season in player_team_seasons]
-
-    games_as_local = Game.objects.filter(team_local=team)
-    games_as_visitor = Game.objects.filter(team_visitor=team)
 
     return render(request, 'team_detail.html', {
         'team': team,
         'players': players,
-        'games_as_local': games_as_local,
-        'games_as_visitor': games_as_visitor,
     })
 
 
@@ -311,7 +307,7 @@ def default_page(request):
 def competition_detail(request, id):
     competition = get_object_or_404(Competition, pk=id)
     seasons = Season.objects.filter(competition=competition)
-    teams = Team.objects.all()
+    teams = Team.objects.filter(competition=competition, user=request.user)  # Filtrar por el usuario actual
     return render(request, 'competition_detail.html', {
         'competition': competition,
         'teams': teams,
@@ -345,7 +341,7 @@ def season_teams(request, id_competition, id_season):
     competition = get_object_or_404(Competition, pk=id_competition)
     season = get_object_or_404(Season, pk=id_season)
 
-    teams = Team.objects.all()
+    teams = Team.objects.filter(competition=competition, user=request.user)
     groups = Group.objects.filter(season=season)
 
     return render(request, 'season_teams.html',
@@ -411,6 +407,13 @@ def update_game(request, game_id):
         game.save()
 
     return redirect('match_season', id_competition=game.season.competition.id, id_season=game.season.id)
+
+
+@login_required
+def delete_season(request, id_competition, id_season):
+    season = get_object_or_404(Season, id=id_season)
+    season.delete()
+    return redirect('competition_seasons', id_competition=id_competition)
 
 
 def delete_selected_games(request):
