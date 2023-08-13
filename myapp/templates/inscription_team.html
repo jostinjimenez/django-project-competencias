@@ -38,7 +38,6 @@
                         </div>
                     </form>
                 </div>
-
                 <table class="table table-hover " id="player_table">
                     <thead class="table-dark">
                     <tr>
@@ -46,7 +45,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Position</th>
                         <th scope="col">Season</th>
-                        <th scope="col" colspan="2">Team</th>
+                        <th scope="col">Team</th>
                     </tr>
                     </thead>
                     <tbody class="table-group-divider">
@@ -56,13 +55,13 @@
                             <td>{{ player.name }}</td>
                             <td>{{ player.position }}</td>
                             <td>
-                                {% for team in player.teams.all %}
-                                    {{ team.season.name }}{% if not forloop.last %}, {% endif %}
+                                {% for player_team_season in player.playerteamseason_set.all %}
+                                    {{ player_team_season.season.name }}{% if not forloop.last %}, {% endif %}
                                 {% endfor %}
                             </td>
-                            <td colspan="2">
-                                {% for team in player.teams.all %}
-                                    {{ team.name }}{% if not forloop.last %}, {% endif %}
+                            <td>
+                                {% for player_team_season in player.playerteamseason_set.all %}
+                                    {{ player_team_season.team.name }}{% if not forloop.last %}, {% endif %}
                                 {% endfor %}
                             </td>
                         </tr>

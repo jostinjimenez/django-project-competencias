@@ -38,11 +38,10 @@
     </div>
 
     <nav class="nav">
-        <a class="nav-link active" aria-current="page" href="{% url 'game_list' %}">Partidos</a>
         <a class="nav-link" href="{% url 'competition_seasons' competition.id %}">Temporadas</a>
-        <a class="nav-link" href="">Resultados</a>
-        <a class="nav-link" href="#">Temporadas</a>
-        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+        <a class="nav-link active" aria-current="page" href="{% url 'game_list' %}">Partidos</a>
+        <a class="nav-link" href="">####</a>
+
     </nav>
 
     <hr>
@@ -58,11 +57,13 @@
                     Equipo</a>
             </li>
             <li>
-                <a class="dropdown-item" href="">Exportar Equipos</a>
+                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#testTeamModal">Equipos de
+                    prueba</a>
             </li>
         </ul>
     </div>
 
+    <!-- Modal de Añadir Equipos -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -72,16 +73,63 @@
                 </div>
                 <div class="modal-body">
                     <p>Busca a los equipos y agrégalos de la lista, <a href="{% url 'new_team' competition.id %}">o crea
-                        un nuevo perfil para
-                        ellos.</a></p>
+                        un nuevo perfil para ellos.</a></p>
+                    <select class="form-control" id="teamSearchInput">
+                        <option value="" selected>Selecciona un equipo</option>
+                        {% for team in all_teams %}
+                            <option value="{{ team.id }}">{{ team.name }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Añadir Equipo</button>
+                    <button type="button" class="btn btn-primary" id="addTeamButton" disabled>Añadir Equipo</button>
                 </div>
             </div>
         </div>
     </div>
     <hr>
+
+    <!-- Modal de Equipos de Prueba -->
+    <div class="modal fade" id="testTeamModal" tabindex="-1" aria-labelledby="testTeamModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="testTeamModalLabel">Generar Equipos de Prueba</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="testTeamForm">
+                        {% csrf_token %}
+                        <label for="numTeams">Número de Equipos de Prueba:</label>
+                        <input type="number" id="numTeams" name="numTeams" class="form-control" min="1" required>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="generateTestTeams">Generar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            const generateTestTeamsButton = $('#generateTestTeams');
+            const numTeamsInput = $('#numTeams');
+
+            generateTestTeamsButton.click(function () {
+                const numTeams = numTeamsInput.val();
+                const competitionId = {{ competition.id }};
+
+                $.ajax({
+                    type: 'POST',
+                    url: `/generate_test_teams/${competitionId}/${numTeams}/`,
+                    success: function (data) {
+                        location.reload(); // Recargar la página después de generar los equipos de prueba
+                    },
+                });
+            });
+        });
+    </script>
 
 
 
@@ -105,6 +153,7 @@
                 <th scope="col">Escudo</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">N°jugadores</th>
+                <th scope="col">Temporada</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Ciudad</th>
             </tr>
@@ -122,12 +171,36 @@
                     </td>
                     <td><a href="{% url 'teams_detail' team.id %}">{{ team.name }}</a></td>
                     <td><a href="{% url 'inscription_team' competition.id team.id %}">Añadir Jugadores</a></td>
+                    <td>Competencia</td>
                     <td>{{ team.status }}</td>
                     <td>{{ team.city }}</td>
                 </tr>
             {% empty %}
                 <tr>
                     <td colspan="5">No hay equipos inscritos en la competencia.</td>
+                </tr>
+            {% endfor %}
+            {% for team in teams_in_seasons %}
+                <tr data-team-id="{{ team.id }}">
+                    <td>
+                        {% if team.image %}
+                            <img src="{{ team.image.url }}" width="25px" alt="{{ team.name }}">
+                        {% else %}
+                            <img src="{% static 'img/team_default.png' %} " width="25px"
+                                 alt="{{ team.name }}">
+                        {% endif %}
+                    </td>
+                    <td><a href="{% url 'teams_detail' team.id %}">{{ team.name }}</a></td>
+                    <td><a href="{% url 'inscription_team' competition.id team.id %}">Añadir Jugadores</a></td>
+                    <td>{% for season in team.seasons.all %}
+                        {{ season.name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}</td>
+                    <td>{{ team.status }}</td>
+                    <td>{{ team.city }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">No hay equipos inscritos en ninguna temporada de la competencia.</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -138,8 +211,41 @@
         </div>
 
     </main>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const teamSearchInput = $('#teamSearchInput');
+            const addTeamButton = $('#addTeamButton');
 
+            teamSearchInput.change(function () {
+                const selectedTeamId = $(this).val();
+                if (selectedTeamId) {
+                    addTeamButton.prop('disabled', false);
+                } else {
+                    addTeamButton.prop('disabled', true);
+                }
+            });
+
+            addTeamButton.click(function () {
+                const selectedTeamId = teamSearchInput.val();
+                const competitionId = {{ competition.id }};
+
+                $.ajax({
+                    type: 'POST',
+                    url: `/add_team_to_competition/${competitionId}/${selectedTeamId}/`,
+                    success: function (data) {
+                        location.reload(); // Recargar la página después de añadir el equipo
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Error añadiendo equipo a la competencia:', error);
+                    }
+                });
+            });
+        });
+    </script>
     <script src="{% static 'js/script_competetition_detail.js' %}"></script>
+
+
 
 {% endblock %}
 ```

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Sport, Group, Season, Competition, Game, Score, Team, Player, PlayerTeamSeason, Inscription, \
-    Location, Availability
+    Location, Availability, TeamSeasonInscription
 
 # Register your models here.
 admin.site.register(Sport)
@@ -16,3 +16,4 @@ admin.site.register(PlayerTeamSeason)
 admin.site.register(Inscription)
 admin.site.register(Location)
 admin.site.register(Availability)
+admin.site.register(TeamSeasonInscription)

@@ -1,4 +1,5 @@
 const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+
 const appendAlert = (message, type) => {
     const wrapper = document.createElement('div');
     wrapper.innerHTML = [
@@ -59,3 +60,4 @@ function searchTableTeam() {
         noResultsMessage.style.display = "block";
     }
 }
+

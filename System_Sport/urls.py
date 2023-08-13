@@ -56,6 +56,11 @@ urlpatterns = [
     path('delete_selected_games/', views.delete_selected_games, name='delete_selected_games'),
     path('competitions/<int:id_competition>/seasons/<int:id_season>/delete_season', login_required(views.delete_season),
          name='delete_season'),
+    path('search_teams/', views.search_teams, name='search_teams'),
+    path('add_team_to_competition/<int:competition_id>/<int:team_id>/', views.add_team_to_competition,
+         name='add_team_to_competition'),
+    path('generate_test_teams/<int:competition_id>/<int:num_teams>/', views.generate_test_teams,
+         name='generate_test_teams'),
 
     path('players', views.player_list, name='players'),
     path('player/<int:id>/', views.player_detail, name='player_detail'),

@@ -16,7 +16,6 @@ class PlayerForm(forms.ModelForm):
         }
 
 
-
 class SportForm(forms.ModelForm):
     class Meta:
         model = Sport
@@ -45,6 +44,8 @@ class CompetitionForm(forms.ModelForm):
 
 
 class TeamForm(forms.ModelForm):
+    season = forms.ModelChoiceField(queryset=Season.objects.all(), required=False)
+
     class Meta:
         model = Team
         fields = ['name', 'city', 'country']

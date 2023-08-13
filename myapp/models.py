@@ -113,6 +113,7 @@ class Team(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='teams')
     competition = models.ManyToManyField(Competition, through='Inscription', related_name='teams')
     groups = models.ManyToManyField(Group, related_name='teams', blank=True)
+    seasons = models.ManyToManyField(Season, through='TeamSeasonInscription', related_name='teams')
 
     def __str__(self):
         return self.name
@@ -124,6 +125,14 @@ class Inscription(models.Model):
 
     def __str__(self):
         return self.team.name + ' - ' + self.competition.name
+
+
+class TeamSeasonInscription(models.Model):
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    season = models.ForeignKey(Season, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.team.name + ' - ' + self.season.name
 
 
 class Location(models.Model):
