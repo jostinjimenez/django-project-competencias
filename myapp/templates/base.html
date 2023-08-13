@@ -203,7 +203,7 @@
         margin: 0;
         opacity: 1;
         transform: translateY(0);
-        transition: opacity 1s ease, transform 1s ease;
+        transition: opacity 2s ease, transform 2s ease;
     }
 
     .features-section.scrolled {
@@ -214,7 +214,7 @@
     .features-section.scrolled-up {
         opacity: 1;
         transform: translateY(0);
-        transition: opacity 0.5s ease, transform 0.5s ease; /* Configura una transición más rápida al volver a la posición original */
+        transition: opacity 0.3s ease, transform 0.3s ease; /* Configura una transición más rápida al volver a la posición original */
     }
     .rounded-section {
         border: 1px solid #ccc;
@@ -230,7 +230,7 @@
         var featuresSections = document.querySelectorAll(".features-section");
 
         featuresSections.forEach(function (section) {
-            if (window.scrollY > section.offsetTop - window.innerHeight / 4) {
+            if (window.scrollY > section.offsetTop - window.innerHeight / 40) {
                 section.classList.add("scrolled");
                 section.classList.remove("scrolled-up");
             } else {
