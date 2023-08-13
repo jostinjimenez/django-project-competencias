@@ -335,12 +335,15 @@ def competition_detail(request, id):
     all_teams = Team.objects.exclude(competition=competition)  # Todos los equipos que no están en la competencia
     teams_in_seasons = Team.objects.filter(teamseasoninscription__season__competition=competition, user=request.user)
 
+    n_total_teams = len(teams) + len(teams_in_seasons)
+
     return render(request, 'competition_detail.html', {
         'competition': competition,
         'teams': teams,
         'all_teams': all_teams,
         'seasons': seasons,
         'teams_in_seasons': teams_in_seasons,
+        'n_total_teams': n_total_teams,
     })
 
 
