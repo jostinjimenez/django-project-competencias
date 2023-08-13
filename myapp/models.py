@@ -110,9 +110,11 @@ class Team(models.Model):
     name = models.CharField(max_length=50)
     city = models.CharField(max_length=50, blank=True)
     country = models.CharField(max_length=50, blank=True)
+    image = models.ImageField(upload_to='team_images/', blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='teams')
     competition = models.ManyToManyField(Competition, through='Inscription', related_name='teams')
     groups = models.ManyToManyField(Group, related_name='teams', blank=True)
+    seasons = models.ManyToManyField(Season, through='TeamSeasonInscription', related_name='teams')
 
     def __str__(self):
         return self.name
@@ -124,6 +126,14 @@ class Inscription(models.Model):
 
     def __str__(self):
         return self.team.name + ' - ' + self.competition.name
+
+
+class TeamSeasonInscription(models.Model):
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    season = models.ForeignKey(Season, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.team.name + ' - ' + self.season.name
 
 
 class Location(models.Model):
@@ -179,6 +189,7 @@ class Player(models.Model):
     number_player = models.IntegerField()
     position = models.CharField(max_length=50)
     image = models.ImageField(upload_to='player_images/', blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='players')
 
     def __str__(self):
         return self.name
@@ -187,10 +198,9 @@ class Player(models.Model):
 class PlayerTeamSeason(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
-    season = models.ForeignKey(Season, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.player.name} - {self.team.name} ({self.season.name})"
+        return self.player.name + ' - ' + self.team.name
 
 
 class Availability(models.Model):

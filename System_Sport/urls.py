@@ -20,17 +20,19 @@ urlpatterns = [
     path('competitions/', views.competition_list, name='competitions'),
     path('competitions/<int:id>/', views.competition_detail, name='competition_detail'),
     path('competitions/competitions_detail<int:id_competition>/new_team/', views.new_team, name='new_team'),
-    path('new_player/', views.new_player, name='new_player'),
+    path('competitions/<int:id_competition>/inscription_player/<int:id_team>/new_player/', views.new_player,
+         name='new_player'),
+    path('competitions/<int:id_competition>/inscription_player/<int:id_team>/', views.inscription_team,
+         name='inscription_team'),
+
     path('new_sport/', views.new_sport, name='new_sport'),
     path('teams/', views.team_list, name='teams'),
     path('teams/<int:id>/', views.teams_detail, name='teams_detail'),
-    path('competitions/<int:id_competition>/inscription_player/<int:id_team>', views.inscription_team,
-         name='inscription_team'),
 
     path('competitions/<int:id_competition>/seasons/', views.competition_seasons,
          name='competition_seasons'),
 
-    path('competitions/<int:id_competition>/seasons/<int:id_season>/new_stadium', login_required(views.new_stadium),
+    path('competitions/<int:id_competition>/seasons/<int:id_season>/new_stadium/', login_required(views.new_stadium),
          name='new_stadium'),
 
     path('competitions/<int:id_competition>/seasons/<int:id_season>/', views.season_teams,
@@ -54,6 +56,14 @@ urlpatterns = [
 
     path('update_game/<int:game_id>', login_required(views.update_game), name='update_game'),
     path('delete_selected_games/', views.delete_selected_games, name='delete_selected_games'),
+    path('competitions/<int:id_competition>/seasons/<int:id_season>/delete_season', login_required(views.delete_season),
+         name='delete_season'),
+    path('search_teams/', views.search_teams, name='search_teams'),
+    path('add_team_to_competition/<int:competition_id>/<int:team_id>/', views.add_team_to_competition,
+         name='add_team_to_competition'),
+    path('generate_test_teams/<int:competition_id>/<int:num_teams>/', views.generate_test_teams,
+         name='generate_test_teams'),
+    path('toggle_competition/<int:competition_id>/', views.toggle_competition, name='toggle_competition'),
 
     path('players', views.player_list, name='players'),
     path('player/<int:id>/', views.player_detail, name='player_detail'),

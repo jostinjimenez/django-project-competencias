@@ -16,7 +16,6 @@ class PlayerForm(forms.ModelForm):
         }
 
 
-
 class SportForm(forms.ModelForm):
     class Meta:
         model = Sport
@@ -45,15 +44,25 @@ class CompetitionForm(forms.ModelForm):
 
 
 class TeamForm(forms.ModelForm):
+    season = forms.ModelChoiceField(queryset=Season.objects.all(), required=False,
+                                    widget=forms.Select(attrs={'class': 'form-control border-2 rounded-pill'}))
+
     class Meta:
         model = Team
-        fields = ['name', 'city', 'country']
+        fields = ['name', 'city', 'country', 'image']
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
             'city': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
             'country': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
+            'image': forms.FileInput(attrs={'class': 'form-control border-2 rounded-pill'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if field.required:
+                field.label = f'{field.label} *'
 
 
 class SeasonForm(forms.ModelForm):

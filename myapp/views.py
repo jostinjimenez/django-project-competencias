@@ -10,31 +10,55 @@ from django.contrib.auth.decorators import login_required
 
 from .forms import PlayerForm, SportForm, CompetitionForm, TeamForm, SeasonForm, LocationForm, \
     AvailabilityForm
+
 from .models import Competition, Season, Sport, Group, Team, Player, Game, State, PlayerTeamSeason, Location, \
-    Availability
+    Availability, Inscription, TeamSeasonInscription
+
 from .utils import generate_game_schedule
+
+
+def toggle_competition(request, competition_id):
+    competition = get_object_or_404(Competition, pk=competition_id)
+    competition.is_active = not competition.is_active
+    competition.save()
+
+    message = 'La competición ha sido activada' if competition.is_active else 'La competición ha sido desactivada'
+
+    return JsonResponse({'message': message, 'is_active': competition.is_active})
 
 
 def inscription_team(request, id_competition, id_team):
     team = get_object_or_404(Team, pk=id_team)
     competition = get_object_or_404(Competition, pk=id_competition)
+    players = Player.objects.filter(playerteamseason__team=team)  # Filtrar por el equipo en PlayerTeamSeason
+
+    return render(request, 'inscription_team.html', {
+        'team': team,
+        'competition': competition,
+        'players': players,
+    })
+
+
+@login_required
+def new_player(request, id_competition, id_team):
+    competition = get_object_or_404(Competition, pk=id_competition)
+    team = get_object_or_404(Team, pk=id_team)
 
     if request.method == 'POST':
         form = PlayerForm(request.POST)
         if form.is_valid():
             player = form.save(commit=False)
-            player.user = request.user
+            player.user = request.user  # Asigna el usuario actual al jugador
             player.save()
-            return redirect('competition_detail', id_competition=id_competition)
+
+            PlayerTeamSeason.objects.create(player=player, team=team)
+
+            return redirect('inscription_team', id_competition=id_competition, id_team=id_team)
 
     else:
         form = PlayerForm()
 
-    return render(request, 'inscription_team.html', {
-        'form': form,
-        'team': team,
-        'competition': competition,
-    })
+    return render(request, 'new_player.html', {'form': form})
 
 
 @login_required
@@ -42,12 +66,18 @@ def new_team(request, id_competition):
     competition = get_object_or_404(Competition, pk=id_competition)
 
     if request.method == 'POST':
-        form = TeamForm(request.POST)
+        form = TeamForm(request.POST, request.FILES)
         if form.is_valid():
             team = form.save(commit=False)
             team.user = request.user  # Asignar el usuario actual al equipo
             team.save()
-            team.competition.add(competition)
+
+            selected_season = form.cleaned_data.get('season')
+            if selected_season:
+                TeamSeasonInscription.objects.create(team=team, season=selected_season)
+            else:
+                Inscription.objects.create(team=team, competition=competition)
+
             return redirect('competition_detail', id=id_competition)
     else:
         form = TeamForm()
@@ -151,7 +181,7 @@ def game_list(request):
 
 @login_required
 def player_list(request):
-    players = Player.objects.all()
+    players = Player.objects.filter(user=request.user)
     return render(request, 'players.html', {'players': players})
 
 
@@ -179,31 +209,12 @@ def teams_detail(request, id):
     team = get_object_or_404(Team, pk=id)
 
     player_team_seasons = PlayerTeamSeason.objects.filter(team=team)
-
     players = [player_team_season.player for player_team_season in player_team_seasons]
-
-    games_as_local = Game.objects.filter(team_local=team)
-    games_as_visitor = Game.objects.filter(team_visitor=team)
 
     return render(request, 'team_detail.html', {
         'team': team,
         'players': players,
-        'games_as_local': games_as_local,
-        'games_as_visitor': games_as_visitor,
     })
-
-
-@login_required
-def new_player(request):
-    if request.method == 'POST':
-        form = PlayerForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('player_list')
-    else:
-        form = PlayerForm()
-
-    return render(request, 'new_player.html', {'form': form})
 
 
 @login_required
@@ -307,16 +318,74 @@ def default_page(request):
         return redirect('home')
 
 
+def search_teams(request):
+    search_query = request.GET.get('q')
+    if search_query:
+        teams = Team.objects.filter(Q(name__icontains=search_query) | Q(city__icontains=search_query))
+        serialized_teams = [{'id': team.id, 'name': team.name} for team in teams]
+        return JsonResponse({'teams': serialized_teams})
+    return JsonResponse({'teams': []})
+
+
 @login_required
 def competition_detail(request, id):
     competition = get_object_or_404(Competition, pk=id)
     seasons = Season.objects.filter(competition=competition)
-    teams = Team.objects.all()
+    teams = Team.objects.filter(competition=competition, user=request.user)  # Filtrar por el usuario actual
+    all_teams = Team.objects.exclude(competition=competition)  # Todos los equipos que no están en la competencia
+    teams_in_seasons = Team.objects.filter(teamseasoninscription__season__competition=competition, user=request.user)
+
     return render(request, 'competition_detail.html', {
         'competition': competition,
         'teams': teams,
+        'all_teams': all_teams,
         'seasons': seasons,
+        'teams_in_seasons': teams_in_seasons,
     })
+
+
+@login_required
+def add_team_to_competition(request, competition_id, team_id):
+    print("competition_id:", competition_id)
+    print("team_id:", team_id)
+    competition = get_object_or_404(Competition, pk=competition_id)
+    team = get_object_or_404(Team, pk=team_id)
+
+    # Verificar si el equipo ya está inscrito en la competencia
+    if competition.teams.filter(id=team_id).exists():
+        messages.error(request, f"El equipo '{team.name}' ya está inscrito en esta competencia.")
+        return redirect('competition_detail', id=competition_id)
+
+    # Crear una nueva inscripción
+    inscription = Inscription(team=team, competition=competition)
+    inscription.save()
+
+    messages.success(request, f"El equipo '{team.name}' ha sido añadido a la competencia '{competition.name}'.")
+    return redirect('competition_detail', id=competition_id)
+
+
+@login_required
+def generate_test_teams(request, competition_id, num_teams):
+    try:
+        num_teams = int(num_teams)
+        competition = Competition.objects.get(id=competition_id)
+
+        generated_teams = []
+        for i in range(num_teams):
+            team_name = f"Equipo de Prueba {i + 1}"
+            new_team = Team.objects.create(name=team_name)
+
+            # Crear una nueva Inscripción para asociar el equipo y la competencia
+            Inscription.objects.create(team=new_team, competition=competition)
+
+            generated_teams.append(new_team)
+
+        return JsonResponse({'message': f'Se generaron {num_teams} equipos de prueba.'})
+
+    except ValueError:
+        return JsonResponse({'error': 'Número de equipos no válido.'}, status=400)
+    except Competition.DoesNotExist:
+        return JsonResponse({'error': 'Competencia no encontrada.'}, status=404)
 
 
 @login_required
@@ -345,11 +414,17 @@ def season_teams(request, id_competition, id_season):
     competition = get_object_or_404(Competition, pk=id_competition)
     season = get_object_or_404(Season, pk=id_season)
 
-    teams = Team.objects.all()
+    teams = Team.objects.filter(competition=competition, user=request.user)
+    teams_in_seasons = Team.objects.filter(teamseasoninscription__season__competition=competition, user=request.user)
+
     groups = Group.objects.filter(season=season)
 
-    return render(request, 'season_teams.html',
-                  {'competition': competition, 'season': season, 'teams': teams, 'groups': groups})
+    return render(request, 'season_teams.html', {
+        'competition': competition,
+        'season': season, 'teams': teams,
+        'groups': groups,
+        'teams_in_seasons': teams_in_seasons,
+    })
 
 
 def sortear_grupos(request, id_competition, id_season):
@@ -411,6 +486,13 @@ def update_game(request, game_id):
         game.save()
 
     return redirect('match_season', id_competition=game.season.competition.id, id_season=game.season.id)
+
+
+@login_required
+def delete_season(request, id_competition, id_season):
+    season = get_object_or_404(Season, id=id_season)
+    season.delete()
+    return redirect('competition_seasons', id_competition=id_competition)
 
 
 def delete_selected_games(request):

@@ -4,7 +4,14 @@
 
 {% block content %}
 
-    <div class="card mb-3">
+    <div class="row">
+        <div class="col">
+            <a class="" href="{% url 'competition_detail' competition.id %}"><img
+                    src="{% static 'img/back.png' %}"
+                    alt=""></a>
+        </div>
+    </div>
+    <div class="card mb-3 mt-3">
         <img src="{% static 'img/bannerPlaceholder.png' %}" class="card-img-top" alt="...">
         <div class="card-body">
             <h5 class="card-title">{{ team.name }}</h5>
@@ -14,7 +21,7 @@
         </div>
     </div>
 
-    <a href="{% url 'new_player' %}">Agregar Jugador</a>
+    <a href="{% url 'new_player' competition.id team.id %}">Agregar Jugador</a>
 
 
 
@@ -38,7 +45,6 @@
                         </div>
                     </form>
                 </div>
-
                 <table class="table table-hover " id="player_table">
                     <thead class="table-dark">
                     <tr>
@@ -46,7 +52,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Position</th>
                         <th scope="col">Season</th>
-                        <th scope="col" colspan="2">Team</th>
+                        <th scope="col">Team</th>
                     </tr>
                     </thead>
                     <tbody class="table-group-divider">
@@ -56,13 +62,13 @@
                             <td>{{ player.name }}</td>
                             <td>{{ player.position }}</td>
                             <td>
-                                {% for team in player.teams.all %}
-                                    {{ team.season.name }}{% if not forloop.last %}, {% endif %}
+                                {% for player_team_season in player.playerteamseason_set.all %}
+                                    {{ player_team_season.season.name }}{% if not forloop.last %}, {% endif %}
                                 {% endfor %}
                             </td>
-                            <td colspan="2">
-                                {% for team in player.teams.all %}
-                                    {{ team.name }}{% if not forloop.last %}, {% endif %}
+                            <td>
+                                {% for player_team_season in player.playerteamseason_set.all %}
+                                    {{ player_team_season.team.name }}{% if not forloop.last %}, {% endif %}
                                 {% endfor %}
                             </td>
                         </tr>
