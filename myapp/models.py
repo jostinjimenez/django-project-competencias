@@ -77,15 +77,30 @@ class Season(models.Model):
 
     def assign_teams_to_groups(self):
         # Obtener los equipos inscritos en esta competencia y temporada
-        teams = Team.objects.filter(competition=self.competition)
+        teams_competition = Team.objects.filter(competition=self.competition)
+        teams_season = self.teams.all()  # Obtener los equipos inscritos en esta temporada
+
+        # Combinar los equipos de la competencia y los equipos de la temporada
+        all_teams = list(teams_competition) + list(teams_season)
+        random.shuffle(all_teams)  # Mezclar aleatoriamente los equipos
 
         # Obtener los grupos de esta temporada
         groups = self.groups.all()
 
-        # Asignar los equipos a los grupos de manera equitativa (esto es solo un ejemplo)
-        for index, team in enumerate(teams):
+        # Limpiar los equipos de los grupos antes de asignar nuevos equipos
+        for group in groups:
+            group.teams.clear()
+
+        # Asignar los equipos a los grupos
+        for index, team in enumerate(all_teams):
             group_index = index % self.number_grups  # Asignar equipos de manera circular a los grupos
             groups[group_index].teams.add(team)
+
+    def undo_assign_teams_to_groups(self):
+        groups = self.groups.all()
+
+        for group in groups:
+            group.teams.clear()
 
     def get_teams_per_group(self):
         teams_per_group = {}

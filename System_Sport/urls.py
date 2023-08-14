@@ -40,6 +40,8 @@ urlpatterns = [
 
     path('competitions/<int:id_competition>/seasons/<int:id_season>/sortear_grupos/', views.sortear_grupos,
          name='sortear_grupos'),
+    path('competitions/<int:id_competition>/seasons/<int:id_season>/deshacer_grupos/', views.undo_group_assignment,
+         name='undo_group_assignment'),
 
     path('competitions/<int:id_competition>/seasons/<int:id_season>/match_season', login_required(views.match_season),
          name='match_season'),

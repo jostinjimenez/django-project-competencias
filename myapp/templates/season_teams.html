@@ -2,41 +2,82 @@
 
     {% load static %}
 
+    <link rel="stylesheet" href="{% static 'css/css_season_teams.css' %}">
+
     <nav class="nav mt-5">
         <a class="nav-link active" aria-current="page"
+           style="font-weight: bold; font-size: 1.2rem; color: #2d2a2a; margin-right: 20px;"
            href="{% url 'match_season' competition.id season.id %}">Partidos</a>
         <a class="nav-link active" aria-current="page"
+           style="font-weight: bold; font-size: 1.2rem; color: #2d2a2a; margin-right: 20px;"
            href="#">Tabla de Clasificaciones</a>
     </nav>
-
     <hr>
-
-    <div class="">
-        <a class="btn btn-danger mt-3" href="{% url 'delete_season' competition.id season.id %}">Eliminar
-            Temporada</a>
-    </div>
-
-    <div class="container mt-5 mb-4">
+    <div class="container mt-4 mb-4">
         <div class="row">
-            <div class="col-md-2 d-flex">
+            <div class="col">
                 <div>
                     <form action="{% url 'sortear_grupos' competition.id season.id %}" method="post">
                         {% csrf_token %}
-                        <button class="btn btn-primary" type="submit">Sortear Grupos</button>
+                        <button class="btn text-light" type="submit" style="background-color: #12538a">Sortear Grupos
+                        </button>
                     </form>
                 </div>
             </div>
+            <div class="col">
+                <div class="btn-group">
+                    <form action="{% url 'undo_group_assignment' competition.id season.id %}" method="post">
+                        {% csrf_token %}
+                        <button class="btn text-light" type="submit" style="background-color: #12538a">Deshacer
+                            Grupos
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-2 d-flex">
+                <a class="btn btn-danger" href="{% url 'delete_season' competition.id season.id %}">Eliminar
+                    Temporada</a>
+            </div>
         </div>
+        <hr>
     </div>
 
-    <h2>Equipos</h2>
+    <!-- Equipos -->
     <div class="container mt-5">
+        <h2 class="text-center mb-5">Equipos</h2>
         <div class="row">
             {% for team in teams %}
-                <div class="col-md-2 mb-4">
+                <div class="col-md-3 mb-4">
                     <div class="card text-dark team-card" data-team-id="{{ team.id }}">
                         <div class="card-body text-center">
-                            <p class="card-title">{{ team.name }}</p>
+                            <div class="col">
+                                {% if team.image %}
+                                    <img src="{{ team.image.url }}" width="43px" alt="{{ team.name }}">
+                                {% else %}
+                                    <img src="{% static 'img/team_default.png' %}" width="43px" alt="{{ team.name }}">
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                <p class="card-title team-name">{{ team.name }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            {% for team in teams_in_seasons %}
+                <div class="col-md-3 mb-4">
+                    <div class="card text-dark team-card" data-team-id="{{ team.id }}">
+                        <div class="card-body text-center">
+                            <div class="col">
+                                {% if team.image %}
+                                    <img src="{{ team.image.url }}" width="43px" alt="{{ team.name }}">
+                                {% else %}
+                                    <img src="{% static 'img/team_default.png' %}" width="43px" alt="{{ team.name }}">
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                <p class="card-title team-name">{{ team.name }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -44,18 +85,29 @@
         </div>
     </div>
 
-    <h2>Grupos</h2>
-    <div class="container">
+    <!-- Grupos -->
+    <div class="container mt-5">
+        <h2 class="text-center mb-5">Grupos</h2>
         <div class="row row-cols-1 row-cols-md-3 g-4">
             {% for group in groups %}
                 <div class="col">
                     <div class="card h-100">
                         <div class="card-body">
-                            <h5 class="card-title">{{ group.letter }}</h5>
+                            <h5 class="card-title text-center">{{ group.letter }}</h5>
                             <div class="card">
                                 <ul class="list-group list-group-flush">
                                     {% for team in group.teams.all %}
-                                        <li class="list-group-item">{{ team.name }}</li>
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <div class="col-2">
+                                                {% if team.image %}
+                                                    <img src="{{ team.image.url }}" width="25px" alt="{{ team.name }}">
+                                                {% else %}
+                                                    <img src="{% static 'img/team_default.png' %}" width="25px"
+                                                         alt="{{ team.name }}">
+                                                {% endif %}
+                                            </div>
+                                            <div class="col">{{ team.name }}</div>
+                                        </li>
                                     {% endfor %}
                                 </ul>
                             </div>
@@ -65,5 +117,6 @@
             {% endfor %}
         </div>
     </div>
+
 
 {% endblock %}

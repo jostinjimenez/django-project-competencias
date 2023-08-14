@@ -335,19 +335,20 @@ def competition_detail(request, id):
     all_teams = Team.objects.exclude(competition=competition)  # Todos los equipos que no están en la competencia
     teams_in_seasons = Team.objects.filter(teamseasoninscription__season__competition=competition, user=request.user)
 
+    n_total_teams = len(teams) + len(teams_in_seasons)
+
     return render(request, 'competition_detail.html', {
         'competition': competition,
         'teams': teams,
         'all_teams': all_teams,
         'seasons': seasons,
         'teams_in_seasons': teams_in_seasons,
+        'n_total_teams': n_total_teams,
     })
 
 
 @login_required
 def add_team_to_competition(request, competition_id, team_id):
-    print("competition_id:", competition_id)
-    print("team_id:", team_id)
     competition = get_object_or_404(Competition, pk=competition_id)
     team = get_object_or_404(Team, pk=team_id)
 
@@ -415,8 +416,8 @@ def season_teams(request, id_competition, id_season):
     season = get_object_or_404(Season, pk=id_season)
 
     teams = Team.objects.filter(competition=competition, user=request.user)
-    teams_in_seasons = Team.objects.filter(teamseasoninscription__season__competition=competition, user=request.user)
-
+    teams_in_seasons = Team.objects.filter(teamseasoninscription__season__competition=competition, user=request.user,
+                                           teamseasoninscription__season=season)
     groups = Group.objects.filter(season=season)
 
     return render(request, 'season_teams.html', {
@@ -433,15 +434,24 @@ def sortear_grupos(request, id_competition, id_season):
     return redirect('competition_seasons', id_competition=id_competition)
 
 
+def undo_group_assignment(request, id_competition, id_season):
+    season = Season.objects.get(id=id_season)
+    season.undo_assign_teams_to_groups()  # Llamamos a una nueva función para deshacer la asignación
+    return redirect('competition_seasons', id_competition=id_competition)
+
+
 def competition_seasons(request, id_competition):
     if request.method == 'GET':
         form = SeasonForm()
         competition = get_object_or_404(Competition, pk=id_competition)
         seasons = Season.objects.filter(competition=competition)
+        show_group_warning = request.session.pop('show_group_warning', False)
+
         return render(request, 'competition_seasons.html', {
             'competition': competition,
             'seasons': seasons,
             'form': form,
+            'show_group_warning': show_group_warning,
         })
     else:
         try:
@@ -511,7 +521,20 @@ def match_season(request, id_competition, id_season):
     season = get_object_or_404(Season, pk=id_season)
     games = Game.objects.filter(season=season)
 
-    return render(request, 'match_season.html', {'competition': competition, 'season': season, 'games': games})
+    groups_with_teams = all(group.teams.exists() for group in season.groups.all())
+
+    if not groups_with_teams:
+        request.session['show_group_warning'] = True
+        return redirect('competition_seasons', id_competition=id_competition)
+
+    if 'show_group_warning' in request.session:
+        del request.session['show_group_warning']
+
+    return render(request, 'match_season.html', {
+        'competition': competition,
+        'season': season,
+        'games': games,
+    })
 
 
 @login_required
