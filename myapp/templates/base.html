@@ -35,7 +35,7 @@
 
     </script>
      <meta charset="UTF-8">
-    <title>Pie de pagina</title>
+    <title>PlayoffPro</title>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <link rel="stylesheet" href="estilos.css">
      <!--Iconos-->
@@ -193,8 +193,6 @@
             font-size: 90px;
         }
 
-
-
         h2 {
             font-family: 'Mitr', sans-serif;
             font-family: 'Sen', sans-serif;
@@ -271,17 +269,17 @@
         <section class="mt-5 mb-5 px-4 features-section">
             <div class="row about-extra">
                 <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left">
-                    <img src="{% static 'img/imgDescription.png' %}" class="img-fluid" alt="">
+                    <img src="{% static 'img/imgDescription.png' %}" class="img-fluid rounded-image" alt="">
                 </div>
                 <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1" data-aos="fade-right">
                     <h2>Description</h2>
-                    <p>
+                    <p class="feature-description">
                         This web application was created in order to be able to manage sports competitions, in which
                         they can register teams, players, competitions and matches. In addition, you can view the table
                         of
                         positions of each competition and the results of the matches.
                     </p>
-                    <p>
+                    <p class="feature-description">
                         The application was developed with the Django framework, which is a framework that is based on
                         the
                         model-view-template architecture, which allows the separation of the logic of the application
@@ -301,18 +299,18 @@
     <section class="mt-5 mb-5 px-4 features-section">
         <div class="row about-extra">
             <div class="col-lg-6 order-2 order-lg-1" data-aos="fade-left">
-                <img src="{% static 'img/homefeature1.png' %}" class="img-fluid" alt="">
+                <img src="{% static 'img/homefeature1.png' %}" class="img-fluid rounded-image" alt="">
             </div>
 
             <div class="col-lg-6 pt-4 pt-lg-0 order-1 order-lg-2" data-aos="fade-right">
                 <h3>Create your own sporting event</h3>
-                <p class="features-section">
+                <p class="features-description">
                     Imagine the excitement of designing and hosting your own soccer tournament, basketball competition,
                     track meet, or any other sporting event you love. From the choice of location and dates, to the
                     selection
                     of teams or participants, every detail is in your hands.
                 </p>
-                <p class="features-section">
+                <p class="features-description">
                     Our application offers you an intuitive and easy-to-use interface that will guide you through each
                     step of the process. You can customize the rules, set the prizes and trophies, invite your friends
                     and family, and watch the action unfold in real time through live updates and real-time statistics.
@@ -324,11 +322,11 @@
     <section class="mt-5 mb-5 px-4 features-section">
         <div class="row about-extra">
             <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left">
-                <img src="{% static 'img/homefeature2.png' %}" class="img-fluid" alt="">
+                <img src="{% static 'img/homefeature2.png' %}" class="img-fluid rounded-image" alt="">
             </div>
             <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1" data-aos="fade-right">
                 <h3>Times and dates for competitions</h3>
-                <p class="features-section">
+                <p class="features-description">
                     You can also choose the location, dates, and times of your event. Whether you want to host a
                     tournament in your own backyard or in a professional stadium, our app gives you the flexibility
                     to choose the perfect venue.
@@ -337,6 +335,21 @@
         </div>
     </section>
 
+        <section class="mt-5 mb-5 px-4 features-section">
+        <div class="row about-extra">
+            <div class="col-lg-6 order-2 order-lg-1" data-aos="fade-left">
+                <img src="{% static 'img/homefeature3.png' %}" class="img-fluid rounded-image" alt="">
+            </div>
+            <div class="col-lg-6 pt-4 pt-lg-0 order-1 order-lg-2" data-aos="fade-right">
+                <h3>Wide range of sports for competitions</h3>
+                <p class="features-description">
+                    Explore a wide range of sports and activities available for your events. Whether you prefer soccer,
+                    basketball, volleyball, or even more unique activities like obstacle courses, you can customize
+                    each event to suit your sports interests and passions.
+                </p>
+            </div>
+        </div>
+    </section>
 
     <div id="sport-News-Title" class="mt-6">
         <h2>Somes sport news</h2>
