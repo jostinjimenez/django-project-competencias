@@ -2,6 +2,22 @@
 {% block content %}
     {% load static %}
 
+    <style>
+        /* Personalización de la tabla */
+        .table {
+            font-size: 14px;
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle;
+        }
+
+        .table a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
     <div class="container">
 
         <div class="row">
@@ -11,17 +27,16 @@
                         alt=""></a>
             </div>
 
-            <h2 class="text-center">{{ season.name }}</h2>
+            <h1 class="text-center" style="color: #df2118">{{ season.name }}</h1>
         </div>
-
 
         <div class="row mt-5">
             <div class="col">
-                <p>Partido y Grupos</p>
             </div>
             <div class="col-md-2 d-flex">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"
+                    <button type="button" class="btn text-light dropdown-toggle" data-bs-toggle="dropdown"
+                            style="background-color: #f53d08"
                             aria-expanded="false">
                         Administrar Partidos
                     </button>
@@ -38,12 +53,12 @@
             </div>
         </div>
 
-        <h3>Equipos</h3>
+        <h4 class="mb-3" style="font-weight: bold">Lista de Partidos de la Temporada</h4>
 
         <div class="row">
             <div class="col">
                 <div class="row row mt-3 mb-5">
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <div id="select-menu" class="btn-group">
                             <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"
                                     aria-expanded="false">
@@ -56,19 +71,19 @@
                         </div>
 
                     </div>
-                    <div class="col-md-11">
+                    <div class="col-md-10">
                         <div id="action-menu" class="row" {% if selected_game_ids %}style="display: block;"
                              {% else %}style="display: none;"{% endif %}>
                             <div class="col">
                                 <div class="btn-group" role="group">
                                     <button type="button" class="btn btn-light">
-                                        <img src="{% static 'img/eliminar.png' %}" alt="" width="30px">
+                                        <img src="{% static 'img/eliminar.png' %}" alt="" width="25px">
                                     </button>
                                     <button type="button" class="btn btn-light">
-                                        <img src="{% static 'img/añadir.png' %}" alt="" width="30px">
+                                        <img src="{% static 'img/añadir.png' %}" alt="" width="25px">
                                     </button>
                                     <button type="button" class="btn btn-light">
-                                        <img src="{% static 'img/maps.png' %}" alt="" width="30px">
+                                        <img src="{% static 'img/maps.png' %}" alt="" width="25px">
                                     </button>
                                 </div>
                             </div>
@@ -92,24 +107,20 @@
             </div>
         </div>
 
-
-
         {% if messages %}
-            <div class="messages">
+            <div class="messages mb-4">
                 {% for message in messages %}
-                    <div{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+                    <div{% if message.tags %} class="{{ message.tags }}"{% endif %}><h6>{{ message }}</h6></div>
                 {% endfor %}
             </div>
         {% endif %}
-
-
-        <h4 class="mb-4">Lista de Partidos de la Temporada</h4>
 
         <table class="table table-hover table-responsive" id="team_table">
             <thead class="table-light">
             <tr>
                 <th scope="col"></th> <!-- Columna para las casillas de verificación -->
                 <th scope="col">Estado</th>
+                <th scope="col"></th>
                 <th scope="col">Equipo 1</th>
                 <th scope="col">Resultado</th>
                 <th scope="col">Equipo 2</th>
@@ -128,6 +139,10 @@
                         <input type="checkbox" name="selected_games" value="{{ game.id }}">
                     </td>
                     <td>{{ game.state }}</td>
+                    <td>
+                        <a href="{% url 'match_detail' competition.id season.id game.id %}"><img
+                                src="{% static 'img/edit.png' %}" alt="" width="20px"></a>
+                    </td>
                     <td>{{ game.team_local.name }}</td>
                     <td>
                         <button type="button" class="btn btn-link" style="color: rgba(222,40,52,0.98)"
@@ -156,7 +171,7 @@
         {% for game in games %}
             <div class="modal fade" id="myModal{{ game.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
                  aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Actualizar Resultado</h5>

@@ -17,6 +17,21 @@ from .models import Competition, Season, Sport, Group, Team, Player, Game, State
 from .utils import generate_game_schedule
 
 
+def match_detail(request, id_competition, id_season, id_game):
+    competition = get_object_or_404(Competition, pk=id_competition)
+    season = get_object_or_404(Season, pk=id_season)
+    game = get_object_or_404(Game, pk=id_game)
+
+    teams_participating = [game.team_local, game.team_visitor]
+
+    return render(request, 'match_detail.html', {
+        'competition': competition,
+        'season': season,
+        'game': game,
+        'teams_participating': teams_participating,
+    })
+
+
 def toggle_competition(request, competition_id):
     competition = get_object_or_404(Competition, pk=competition_id)
     competition.is_active = not competition.is_active

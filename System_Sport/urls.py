@@ -45,6 +45,11 @@ urlpatterns = [
 
     path('competitions/<int:id_competition>/seasons/<int:id_season>/match_season', login_required(views.match_season),
          name='match_season'),
+    #    path('competitions/<int:id_competition>/seasons/<int:id_season>/match_season/add_game/<int:id_group>',
+    #        login_required(views.add_game), name='add_game'),
+
+    path('competitions/<int:id_competition>/seasons/<int:id_season>/match_season/<int:id_game>/match_detail/',
+         login_required(views.match_detail), name='match_detail'),
 
     path('competitions/<int:id_competition>/seasons/<int:id_season>/generate_time', login_required(views.generate_time),
          name='generate_time'),
@@ -76,7 +81,6 @@ urlpatterns = [
     path('new_competition/', views.new_competition, name='new_competition'),
 
     path('player_list/', views.player_list, name='player_list'),
-
 
     path('accounts/', include('allauth.urls')),
 ]
