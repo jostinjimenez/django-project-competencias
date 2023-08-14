@@ -37,10 +37,47 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <main class="mt-5">
-                <h3>Equipos</h3>
 
+        <h3>Equipos</h3>
+
+        <div class="row">
+            <div class="col">
+                <div class="row row mt-3 mb-5">
+                    <div class="col-md-1">
+                        <div id="select-menu" class="btn-group">
+                            <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                <img src="{% static 'img/checkbox.png' %}" alt="" width="20px">
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" id="select-all">Seleccionar todo</a></li>
+                                <li><a class="dropdown-item" href="#" id="select-none">Seleccionar ninguno</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="col-md-11">
+                        <div id="action-menu" class="row" {% if selected_game_ids %}style="display: block;"
+                             {% else %}style="display: none;"{% endif %}>
+                            <div class="col">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-light">
+                                        <img src="{% static 'img/eliminar.png' %}" alt="" width="30px">
+                                    </button>
+                                    <button type="button" class="btn btn-light">
+                                        <img src="{% static 'img/añadir.png' %}" alt="" width="30px">
+                                    </button>
+                                    <button type="button" class="btn btn-light">
+                                        <img src="{% static 'img/maps.png' %}" alt="" width="30px">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
                 <div class="d-flex justify-content-end mb-3">
                     <form class="d-none d-sm-inline-block form-inline mr-2 mr-md-3 my-2 my-md-0 mw-100">
                         <div class="input-group align-items-center">
@@ -52,98 +89,69 @@
                         </div>
                     </form>
                 </div>
-
-
-                <div class="row row mt-3 mb-5">
-                    <div class="col">
-                        <div id="select-menu" class="btn-group">
-                            <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                <img src="{% static 'img/checkbox.png' %}" alt="">
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#" id="select-all">Seleccionar todo</a></li>
-                                <li><a class="dropdown-item" href="#" id="select-none">Seleccionar ninguno</a></li>
-                            </ul>
-                        </div>
-
-                    </div>
-                    <div class="col">
-                        <div id="action-menu" class="row" {% if selected_game_ids %}style="display: block;"
-                             {% else %}style="display: none;"{% endif %}>
-                            <div class="col">
-                                <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-light">
-                                        Eliminar
-                                    </button>
-                                    <button type="button" class="btn btn-light">
-                                        <i class="fas fa-user-plus"></i> Añadir árbitro
-                                    </button>
-                                    <button type="button" class="btn btn-light">
-                                        <i class="fas fa-map-marker-alt"></i> Añadir lugar
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {% if messages %}
-                    <div class="messages">
-                        {% for message in messages %}
-                            <div{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-
-                <table class="table table-hover table-responsive" id="team_table">
-                    <thead class="table-light">
-                    <tr>
-                        <th scope="col"></th> <!-- Columna para las casillas de verificación -->
-                        <th scope="col">Estado</th>
-                        <th scope="col">Equipo 1</th>
-                        <th scope="col">Resultado</th>
-                        <th scope="col">Equipo 2</th>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">Hora</th>
-                        <th scope="col">Ronda</th>
-                        <th scope="col">Lugar</th>
-                        <th scope="col">Albitro</th>
-                    </tr>
-                    </thead>
-                    <tbody class="table-group-divider">
-
-                    {% for game in games %}
-                        <tr>
-                            <td>
-                                <input type="checkbox" name="selected_games" value="{{ game.id }}">
-                            </td>
-                            <td>{{ game.state }}</td>
-                            <td>{{ game.team_local.name }}</td>
-                            <td>
-                                <button type="button" class="btn btn-link" data-bs-toggle="modal"
-                                        data-bs-target="#myModal{{ game.id }}">
-                                    {{ game.team_local_goals }} - {{ game.team_visitor_goals }}
-                                </button>
-                            </td>
-                            <td>{{ game.team_visitor.name }}</td>
-                            <td>{{ game.date }}</td>
-                            <td>{{ game.hour }}</td>
-                            <td>{{ game.phase }}</td>
-                            <td>{{ game.location.name }}</td>
-                            <td>Árbitro</td>
-                        </tr>
-                    {% endfor %}
-
-                    </tbody>
-                </table>
-
-                <div id="no-results-message" style="display: none; margin-top: 10px;">
-                    No se encontraron registros coincidentes.
-                </div>
-
-            </main>
+            </div>
         </div>
+
+
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+
+        <h4 class="mb-4">Lista de Partidos de la Temporada</h4>
+
+        <table class="table table-hover table-responsive" id="team_table">
+            <thead class="table-light">
+            <tr>
+                <th scope="col"></th> <!-- Columna para las casillas de verificación -->
+                <th scope="col">Estado</th>
+                <th scope="col">Equipo 1</th>
+                <th scope="col">Resultado</th>
+                <th scope="col">Equipo 2</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Hora</th>
+                <th scope="col">Ronda</th>
+                <th scope="col">Lugar</th>
+                <th scope="col">Albitro</th>
+            </tr>
+            </thead>
+            <tbody class="table-group-divider">
+
+            {% for game in games %}
+                <tr>
+                    <td>
+                        <input type="checkbox" name="selected_games" value="{{ game.id }}">
+                    </td>
+                    <td>{{ game.state }}</td>
+                    <td>{{ game.team_local.name }}</td>
+                    <td>
+                        <button type="button" class="btn btn-link" style="color: rgba(222,40,52,0.98)"
+                                data-bs-toggle="modal"
+                                data-bs-target="#myModal{{ game.id }}">
+                            {{ game.team_local_goals }} - {{ game.team_visitor_goals }}
+                        </button>
+                    </td>
+                    <td>{{ game.team_visitor.name }}</td>
+                    <td>{{ game.date }}</td>
+                    <td>{{ game.hour }}</td>
+                    <td>{{ game.phase }}</td>
+                    <td>{{ game.location.name }}</td>
+                    <td>Árbitro</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+        <div id="no-results-message" style="display: none; margin-top: 10px;">
+            No se encontraron registros coincidentes.
+        </div>
+
 
         {% for game in games %}
             <div class="modal fade" id="myModal{{ game.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -157,42 +165,44 @@
                         <form method="post" action="{% url 'update_game' game.id %}">
                             {% csrf_token %}
                             <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-md-6">
+                                <div class="row mt-4">
+                                    <div class="col text-center">
                                         {% if game.team_local.image %}
                                             <img src="{{ game.team_local.image.url }}" alt="{{ game.team_local.name }}"
-                                                 width="50">
+                                                 width="75">
                                         {% else %}
                                             <img src="{% static 'img/team_default.png' %}" alt="Equipo por defecto"
-                                                 width="50">
+                                                 width="75">
                                         {% endif %}
-                                        <p>{{ game.team_local.name }}</p>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col text-center">
                                         {% if game.team_visitor.image %}
                                             <img src="{{ game.team_visitor.image.url }}"
-                                                 alt="{{ game.team_visitor.name }}" width="50">
+                                                 alt="{{ game.team_visitor.name }}" width="75">
                                         {% else %}
                                             <img src="{% static 'img/team_default.png' %}" alt="Equipo por defecto"
-                                                 width="50">
+                                                 width="75">
                                         {% endif %}
-                                        <p>{{ game.team_visitor.name }}</p>
                                     </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="team_local_goals">Goles {{ game.team_local.name }}:</label>
-                                    <input type="number" class="form-control" id="team_local_goals"
-                                           name="team_local_goals" value="{{ game.team_local_goals }}">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="team_visitor_goals">Goles {{ game.team_visitor.name }}:</label>
-                                    <input type="number" class="form-control" id="team_visitor_goals"
-                                           name="team_visitor_goals" value="{{ game.team_visitor_goals }}">
+                                <div class="row mt-5">
+                                    <div class="mb-3 col text-center">
+                                        <label class="form-label"
+                                               for="team_local_goals">Goles {{ game.team_local.name }}:</label>
+                                        <input type="number" class="form-control" id="team_local_goals"
+                                               name="team_local_goals" value="{{ game.team_local_goals }}">
+                                    </div>
+                                    <div class="mb-3 col text-center">
+                                        <label class="form-label"
+                                               for="team_visitor_goals">Goles {{ game.team_visitor.name }}:</label>
+                                        <input type="number" class="form-control" id="team_visitor_goals"
+                                               name="team_visitor_goals" value="{{ game.team_visitor_goals }}">
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="game_state">Estado del Partido:</label>
                                     <select class="form-control" id="game_state" name="game_state">
-                                        <option value="NOT_PLAYED"
+                                        <option value="Not Played"
                                                 {% if game.state == 'NOT_PLAYED' %}selected{% endif %}>No Jugado
                                         </option>
                                         <option value="IN_PROGRESS"
@@ -205,8 +215,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Actualizar</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Actualizar</button>
                             </div>
                         </form>
                     </div>
@@ -279,13 +289,5 @@
 
         });
     </script>
-
-
-
-
-
-
-
-
 
 {% endblock %}
