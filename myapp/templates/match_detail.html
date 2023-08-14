@@ -135,26 +135,42 @@
             </div>
         </div>
 
-
-        <div class="col-md-4 mt-3">
-            <div class="border rounded border-dark-subtle p-3">
-                <h6 class="mb-3 text-center"><strong>Detalles</strong></h6>
-                <hr class="my-1">
-                <p class="mb-1"><strong>Competencia:</strong><a style="color: #ce5914"
-                                                                href="{% url 'competition_detail' competition.id %}"> {{ competition.name }}</a>
-                </p>
-                <p class="mb-1"><strong>Temporada:</strong> {{ season.name }}</p>
-                <p class="mb-1"><strong>Sede:</strong> {{ game.location }}</p>
-                <p class="mb-1"><strong>Fecha:</strong> {{ game.date }}</p>
-                <p class="mb-1"><strong>Hora:</strong> {{ game.hour }}</p>
+        <div class="row">
+            <div class="col-md-4 mt-3">
+                <div class="">
+                    <div class="border rounded border-dark-subtle p-3">
+                        <h6 class="mb-3 text-center"><strong>Detalles</strong></h6>
+                        <hr class="my-1">
+                        <p class="mb-1"><strong>Competencia:</strong><a style="color: #ce5914"
+                                                                        href="{% url 'competition_detail' competition.id %}"> {{ competition.name }}</a>
+                        </p>
+                        <p class="mb-1"><strong>Temporada:</strong> {{ season.name }}</p>
+                        <p class="mb-1"><strong>Sede:</strong> {{ game.location }}</p>
+                        <p class="mb-1"><strong>Fecha:</strong> {{ game.date }}</p>
+                        <p class="mb-1"><strong>Hora:</strong> {{ game.hour }}</p>
+                    </div>
+                </div>
+                <div class="col mt-3">
+                    <div class="position-relative">
+                        <div id="gameMap" class="card-img-top fondo-imagen" style="height: 480px; width: 100%;"></div>
+                        <div class="position-absolute top-0 start-0 h-100 w-100 bg-dark opacity-25"></div>
+                        <div class="position-absolute top-50 start-50 translate-middle text-light text-center">
+                            <!-- Resto del contenido -->
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="col-md-4 mt-3">
-            <div class="position-relative">
-                <div id="gameMap" class="card-img-top fondo-imagen" style="height: 480px; width: 100%;"></div>
-                <div class="position-absolute top-0 start-0 h-100 w-100 bg-dark opacity-25"></div>
-                <div class="position-absolute top-50 start-50 translate-middle text-light text-center">
-                    <!-- Resto del contenido -->
+            <div class="col-md-8 d-flex mt-3 bg-dark">
+                <div class="border rounded border-dark-subtle p-3">
+                    <h6 class="mb-3 text-center"><strong>Detalles</strong></h6>
+                    <hr class="my-1">
+                    <p class="mb-1"><strong>Competencia:</strong><a style="color: #ce5914"
+                                                                    href="{% url 'competition_detail' competition.id %}"> {{ competition.name }}</a>
+                    </p>
+                    <p class="mb-1"><strong>Temporada:</strong> {{ season.name }}</p>
+                    <p class="mb-1"><strong>Sede:</strong> {{ game.location }}</p>
+                    <p class="mb-1"><strong>Fecha:</strong> {{ game.date }}</p>
+                    <p class="mb-1"><strong>Hora:</strong> {{ game.hour }}</p>
                 </div>
             </div>
         </div>

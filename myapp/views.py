@@ -497,17 +497,30 @@ def generate_calendar(request, id_competition, id_season):
     return redirect('match_season', id_competition=id_competition, id_season=id_season)
 
 
+@login_required
 def update_game(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
 
     if request.method == 'POST':
-        team_local_goals = request.POST.get('team_local_goals', 0)
-        team_visitor_goals = request.POST.get('team_visitor_goals', 0)
+        team_local_goals = int(request.POST.get('team_local_goals', 0))
+        team_visitor_goals = int(request.POST.get('team_visitor_goals', 0))
         game_state = request.POST.get('game_state', '')
 
         game.team_local_goals = team_local_goals
         game.team_visitor_goals = team_visitor_goals
         game.state = game_state
+
+        # Comprobación y actualización del equipo ganador
+        if team_local_goals > team_visitor_goals:
+            game.winner = game.team_local
+            game.loser = game.team_visitor
+        elif team_local_goals < team_visitor_goals:
+            game.winner = game.team_visitor
+            game.loser = game.team_local
+        else:
+            game.winner = None
+            game.loser = None
+
         game.save()
 
     return redirect('match_season', id_competition=game.season.competition.id, id_season=game.season.id)
