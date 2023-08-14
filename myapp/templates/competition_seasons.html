@@ -11,12 +11,13 @@
                     alt=""></a>
         </div>
 
-        <h1 class="text-center">{{ competition.name }}</h1>
+        <h1 class="mb-5 text-center "
+            style="color: #de4418; font-weight: bold;  font-size: 45px">{{ competition.name }}</h1>
     </div>
 
 
     {% if seasons %}
-        <div class="container mt-5 mb-4">
+        <div class="container mt-2 mb-5">
             <div class="row">
                 <div class="col">
                     <div class="btn-group">
@@ -62,9 +63,15 @@
                 </div>
             </div>
         </div>
+        
+        {% if show_group_warning %}
+            <div class="alert alert-warning" role="alert">
+                Primero debes asignar los equipos a los grupos.
+            </div>
+        {% endif %}
 
 
-        <div id="seasonContent"></div>
+        <div id="seasonContent" class="container"></div>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>

@@ -235,8 +235,8 @@
                     <td>{% for season in team.seasons.all %}
                         {{ season.name }}{% if not forloop.last %}, {% endif %}
                     {% endfor %}</td>
-                    <td>{{ team.status }}</td>
                     <td>{{ team.city }}</td>
+                    <td>{{ team.country }}</td>
                 </tr>
 
             {% endfor %}
