@@ -157,10 +157,10 @@
     <style>
         #hero {
             width: 100%;
+            height: 100vh;
             padding: 200px 0 120px 0;
             background: url("{% static 'img/hero-bg.png' %}") top center;
             background-size: cover;
-            position: relative;
         }
 
         @media (max-width: 991px) {
@@ -192,20 +192,22 @@
         }
 
         .container2 {
-            height: 40vh;
+            height: 70vh;
             width: 100%;
             margin: 0% auto;
             display: flex;
             flex-wrap: wrap;
+            justify-content: center;
             color: #fff;
             background-color: #444444;
             align-items: center;
+            justify-content: center;
         }
 
         h2 {
             font-family: 'Mitr', sans-serif;
             font-family: 'Sen', sans-serif;
-            color: #bbbaba;
+            color: #5b5a5a;
             font-size: 65px;
         }
 
@@ -235,81 +237,13 @@
             padding: 10px;
             margin-bottom: 20px;
             /* Other styling properties if needed */
-
         }
-       .container2 .members{
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            width: 100%;
-        }
-       .container2 .social-networks{
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            width: 100%;
-        }
-        .container2 .members p{
+        .feature-description{
             font-size: 20px;
-            font-family: 'Mitr', sans-serif;
-            font-family: 'Sen', sans-serif;
-            color: #bbbaba;
         }
-        .container2 .social-networks h1{
-            font-size: 20px;
-            font-family: 'Mitr', sans-serif;
-            font-family: 'Sen', sans-serif;
-            color: #bbbaba;
+        .rounded-image {
+            border-radius: 20px;
         }
-        .container2 .members li{
-            list-style: none;
-            margin: 10px 0;
-        }
-        .container2 .members li a{
-            text-decoration: none;
-            color: #bbbaba;
-            font-size: 20px;
-            font-family: 'Mitr', sans-serif;
-            font-family: 'Sen', sans-serif;
-        }
-        .container2 .social-networks li{
-            list-style: none;
-            margin: 10px 0;
-        }
-        .container2 .social-networks li a{
-            text-decoration: none;
-            color: #bbbaba;
-            font-size: 20px;
-            font-family: 'Mitr', sans-serif;
-            font-family: 'Sen', sans-serif;
-        }
-        .container2 .members li a:hover{
-            color: #fff;
-        }
-        .container2 .social-networks li a:hover{
-            color: #fff;
-        }
-        .container2 .members li a::before{
-            content: "\f061";
-            font-family: "Font Awesome 5 Free";
-            font-weight: 900;
-            display: inline-block;
-            margin-right: 10px;
-            font-size: 20px;
-            color: #bbbaba;
-            font-family: 'Mitr', sans-serif;
-            font-family: 'Sen', sans-serif;
-        }
-        .container2 .social-networks li a::before{
-            content: "\f061";
-            font-family: "Font Awesome 5 Free";
-            font-weight: 900;
-            display: inline-block;
-            margin-right: 10px;
-            font-size: 20px;
-            color: #bbbaba;
-            font-family: 'Mitr', sans-serif;
-            font-family: '
     </style>
 
     <script>
@@ -345,7 +279,7 @@
         <section class="mt-5 mb-5 px-4 features-section">
             <div class="row about-extra">
                 <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left">
-                    <img src="{% static 'img/no-image.png' %}" class="img-fluid" alt="">
+                    <img src="{% static 'img/imgDescription.png' %}" class="img-fluid" alt="">
                 </div>
                 <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1" data-aos="fade-right">
                     <h2>Description</h2>
@@ -370,30 +304,26 @@
     </div>
 
 
-    <h2 class="text-center mt-5">Create your own sporting event</h2>
+    <h2 class="text-center mt-5">Features</h2>
 
     <section class="mt-5 mb-5 px-4 features-section">
         <div class="row about-extra">
             <div class="col-lg-6 order-2 order-lg-1" data-aos="fade-left">
-                <img src="{% static 'img/no-image.png' %}" class="img-fluid" alt="">
+                <img src="{% static 'img/homefeature1.png' %}" class="img-fluid" alt="">
             </div>
 
             <div class="col-lg-6 pt-4 pt-lg-0 order-1 order-lg-2" data-aos="fade-right">
-                <p>
+                <h3>Create your own sporting event</h3>
+                <p class="features-section">
                     Imagine the excitement of designing and hosting your own soccer tournament, basketball competition,
                     track meet, or any other sporting event you love. From the choice of location and dates, to the
                     selection
                     of teams or participants, every detail is in your hands.
                 </p>
-                <p>
+                <p class="features-section">
                     Our application offers you an intuitive and easy-to-use interface that will guide you through each
                     step of the process. You can customize the rules, set the prizes and trophies, invite your friends
                     and family, and watch the action unfold in real time through live updates and real-time statistics.
-                </p>
-                <p>
-                    It doesn't matter if you are a professional athlete, a passionate fan or just someone who enjoys
-                    organizing exciting activities, our app gives you the perfect platform to bring your sports ideas
-                    to life.
                 </p>
             </div>
         </div>
@@ -402,24 +332,14 @@
     <section class="mt-5 mb-5 px-4 features-section">
         <div class="row about-extra">
             <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left">
-                <img src="{% static 'img/no-image.png' %}" class="img-fluid" alt="">
+                <img src="{% static 'img/homefeature2.png' %}" class="img-fluid" alt="">
             </div>
             <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1" data-aos="fade-right">
-                <h3>Features</h3>
-                <p>
-                    The sports event tracking app offers you an exceptional level of customization. From choosing the
-                    sport to setting up specific rules, every detail is in your hands. Design tournaments, leagues,
-                    individual or team competitions based on your unique vision.
-                </p>
-                <p>
+                <h3>Times and dates for competitions</h3>
+                <p class="features-section">
                     You can also choose the location, dates, and times of your event. Whether you want to host a
                     tournament in your own backyard or in a professional stadium, our app gives you the flexibility
                     to choose the perfect venue.
-                </p>
-                <p>
-                    Explore a wide range of sports and activities available for your events. Whether you prefer soccer,
-                    basketball, volleyball, or even more unique activities like obstacle courses, you can customize
-                    each event to suit your sports interests and passions.
                 </p>
             </div>
         </div>
