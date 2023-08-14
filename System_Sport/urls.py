@@ -77,6 +77,7 @@ urlpatterns = [
 
     path('player_list/', views.player_list, name='player_list'),
 
+
     path('accounts/', include('allauth.urls')),
 ]
 
