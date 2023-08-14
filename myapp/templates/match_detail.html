@@ -5,18 +5,32 @@
     <header>
     </header>
 
-    <div class="container">
+    <div class="container py-3">
 
-        <h4>{{ competition.name }} / {{ season.name }}</h4>
+
+        <div class="row mb-3">
+            <div class="col-md-1">
+                <a class="" href="{% url 'competition_seasons' competition.id %}"><img
+                        src="{% static 'img/back.png' %}"
+                        alt=""></a>
+            </div>
+            <div class="col">
+                <h4 class="text-center">{{ competition.name }} / {{ season.name }}</h4>
+            </div>
+            <div class="col-md-2">
+                <a class="btn btn-danger" href="#">Borrar Partido</a>
+            </div>
+        </div>
 
         <div class="position-relative text-center">
             <img src="{% static 'img/bg futbol.png' %}" class="card-img-top fondo-imagen" alt="..."
                  style="height: 480px; width: 85%;">
-            <div class="position-absolute top-0 start-0 h-100 w-100 bg-dark opacity-50"></div>
+            <div class="position-absolute top-0 start-0 h-100 w-100 bg-dark opacity-75"></div>
             <div class="position-absolute top-50 start-50 translate-middle">
                 <div class="text-light text-center">
-                    <div class="row">
-                        <div class="col-md-4 ">
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col position-relative m-3">
+                            <img class="mb-3" src="{% static 'img/edit.png' %}" width="25px" alt="">
                             {% if game.team_local.image %}
                                 <img src="{{ game.team_local.image.url }}" alt="{{ game.team_local.name }}"
                                      class="mb-3" width="100">
@@ -26,11 +40,17 @@
                             {% endif %}
                             <h3>{{ teams_participating.0.name }}</h3>
                         </div>
-                        <div class="col-md-4 text-center">
-                            <h3>{{ game.team_local_goals }} - {{ game.team_visitor_goals }}</h3>
+                        <div class="col-md-4 text-center my-5">
+                            <button type="button" class="btn btn-link" style="color: rgba(222,40,52,0.98)"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#myModal{{ game.id }}">
+                                <h3>{{ game.team_local_goals }} - {{ game.team_visitor_goals }}</h3>
+                            </button>
+
                             <h6>{{ game.state }}</h6>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col position-relative m-3">
+                            <img class="mb-3" src="{% static 'img/edit.png' %}" width="25px" alt="">
                             {% if game.team_visitor.image %}
                                 <img src="{{ game.team_visitor.image.url }}" alt="{{ game.team_visitor.name }}"
                                      class="mb-3" width="100">
@@ -46,7 +66,128 @@
         </div>
 
 
+        <div class="modal fade" id="myModal{{ game.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Actualizar Resultado</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="post" action="{% url 'update_game' game.id %}">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <div class="row mt-4">
+                                <div class="col text-center">
+                                    {% if game.team_local.image %}
+                                        <img src="{{ game.team_local.image.url }}" alt="{{ game.team_local.name }}"
+                                             width="75">
+                                    {% else %}
+                                        <img src="{% static 'img/team_default.png' %}" alt="Equipo por defecto"
+                                             width="75">
+                                    {% endif %}
+                                </div>
+                                <div class="col text-center">
+                                    {% if game.team_visitor.image %}
+                                        <img src="{{ game.team_visitor.image.url }}"
+                                             alt="{{ game.team_visitor.name }}" width="75">
+                                    {% else %}
+                                        <img src="{% static 'img/team_default.png' %}" alt="Equipo por defecto"
+                                             width="75">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="mb-3 col text-center">
+                                    <label class="form-label"
+                                           for="team_local_goals">Goles {{ game.team_local.name }}:</label>
+                                    <input type="number" class="form-control" id="team_local_goals"
+                                           name="team_local_goals" value="{{ game.team_local_goals }}">
+                                </div>
+                                <div class="mb-3 col text-center">
+                                    <label class="form-label"
+                                           for="team_visitor_goals">Goles {{ game.team_visitor.name }}:</label>
+                                    <input type="number" class="form-control" id="team_visitor_goals"
+                                           name="team_visitor_goals" value="{{ game.team_visitor_goals }}">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="game_state">Estado del Partido:</label>
+                                <select class="form-control" id="game_state" name="game_state">
+                                    <option value="Not Played"
+                                            {% if game.state == 'NOT_PLAYED' %}selected{% endif %}>No Jugado
+                                    </option>
+                                    <option value="IN_PROGRESS"
+                                            {% if game.state == 'IN_PROGRESS' %}selected{% endif %}>En Progreso
+                                    </option>
+                                    <option value="FINISHED" {% if game.state == 'FINISHED' %}selected{% endif %}>
+                                        Finalizado
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-4 mt-3">
+            <div class="border rounded border-dark-subtle p-3">
+                <h6 class="mb-3 text-center"><strong>Detalles</strong></h6>
+                <hr class="my-1">
+                <p class="mb-1"><strong>Competencia:</strong><a style="color: #ce5914"
+                                                                href="{% url 'competition_detail' competition.id %}"> {{ competition.name }}</a>
+                </p>
+                <p class="mb-1"><strong>Temporada:</strong> {{ season.name }}</p>
+                <p class="mb-1"><strong>Sede:</strong> {{ game.location }}</p>
+                <p class="mb-1"><strong>Fecha:</strong> {{ game.date }}</p>
+                <p class="mb-1"><strong>Hora:</strong> {{ game.hour }}</p>
+            </div>
+        </div>
+        <div class="col-md-4 mt-3">
+            <div class="position-relative">
+                <div id="gameMap" class="card-img-top fondo-imagen" style="height: 480px; width: 100%;"></div>
+                <div class="position-absolute top-0 start-0 h-100 w-100 bg-dark opacity-25"></div>
+                <div class="position-absolute top-50 start-50 translate-middle text-light text-center">
+                    <!-- Resto del contenido -->
+                </div>
+            </div>
+        </div>
+
+
     </div>
+    <script type="text/javascript"
+            src="https://www.bing.com/api/maps/mapcontrol?key=ApzrK8-qiiRRdCt-zCJCBU42D-OCpYnOW-Yu47cE30jPPlILtWr52Z_ySM0wErJA&callback=loadGameMapScenario"
+            async defer></script>
+
+    <script>
+        function loadGameMapScenario() {
+            const gameMapElement = document.getElementById('gameMap');
+            const locationData = "{{ game.location.geolocation }}"; // Obtén la ubicación de la base de datos
+
+            if (locationData) {
+                const coordinates = locationData.split(',');
+                const latitude = parseFloat(coordinates[0]);
+                const longitude = parseFloat(coordinates[1]);
+
+                const map = new Microsoft.Maps.Map(gameMapElement, {
+                    credentials: 'ApzrK8-qiiRRdCt-zCJCBU42D-OCpYnOW-Yu47cE30jPPlILtWr52Z_ySM0wErJA',
+                    center: new Microsoft.Maps.Location(latitude, longitude),
+                    zoom: 15 // Puedes ajustar el nivel de zoom según tus preferencias
+                });
+
+                const location = new Microsoft.Maps.Location(latitude, longitude);
+                const pushpin = new Microsoft.Maps.Pushpin(location);
+
+                map.entities.push(pushpin);
+            }
+        }
+    </script>
 
 
 {% endblock %}
