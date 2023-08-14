@@ -9,6 +9,11 @@
 
     <link href="{% static 'img/icon.png' %}" rel="icon">
 
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="estilos.css">
+     <!--Iconos-->
+    <script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,400,500,700"
           rel="stylesheet">
@@ -157,6 +162,7 @@
     <style>
         #hero {
             width: 100%;
+            height: 100vh;
             padding: 200px 0 120px 0;
             background: url("{% static 'img/hero-bg.png' %}") top center;
             background-size: cover;
@@ -187,25 +193,18 @@
             font-size: 90px;
         }
 
-        .pic img {
-            border-radius: 50%;
-        }
+       .feature-description{
+           font-size: 20px;
+       }
 
-        .container2 {
-            height: 40vh;
-            width: 100%;
-            margin: 0% auto;
-            display: flex;
-            flex-wrap: wrap;
-            color: #fff;
-            background-color: #444444;
-            align-items: center;
-        }
+       .rounded-image{
+           border-radius: 20px;
+       }
 
         h2 {
             font-family: 'Mitr', sans-serif;
             font-family: 'Sen', sans-serif;
-            color: #bbbaba;
+            color: #595858;
             font-size: 65px;
         }
 
@@ -332,7 +331,7 @@
         <div class="container" data-aos="fade-up">
 
             <div class="hero-img" data-aos="zoom-out" data-aos-delay="200">
-                <img src="{% static 'img/logo-color.svg' %}" alt="" class="img-fluid">
+                <img src="{% static 'img/logo-color.svg' %}" alt="" class="img-fluid rounded-image">
             </div>
 
             <div class="hero-info" data-aos="zoom-in" data-aos-delay="100">
@@ -345,24 +344,23 @@
         <section class="mt-5 mb-5 px-4 features-section">
             <div class="row about-extra">
                 <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left">
-                    <img src="{% static 'img/no-image.png' %}" class="img-fluid" alt="">
+                    <img src="{% static 'img/imgDescription.png' %}" class="img-fluid rounded-image" alt="">
                 </div>
                 <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1" data-aos="fade-right">
                     <h2>Description</h2>
-                    <p>
+                    <p class="feature-description">
                         This web application was created in order to be able to manage sports competitions, in which
                         they can register teams, players, competitions and matches. In addition, you can view the table
                         of
                         positions of each competition and the results of the matches.
                     </p>
-                    <p>
+                    <p class="feature-description">
                         The application was developed with the Django framework, which is a framework that is based on
                         the
                         model-view-template architecture, which allows the separation of the logic of the application
                         from the
                         presentation of the data. In addition, it has a database in which the data of the teams,
-                        players,
-                        competitions and matches are stored.
+                        players, competitions and matches are stored.
                     </p>
                 </div>
             </div>
@@ -370,30 +368,26 @@
     </div>
 
 
-    <h2 class="text-center mt-5">Create your own sporting event</h2>
+    <h2 class="text-center mt-5">Features</h2>
 
     <section class="mt-5 mb-5 px-4 features-section">
         <div class="row about-extra">
             <div class="col-lg-6 order-2 order-lg-1" data-aos="fade-left">
-                <img src="{% static 'img/no-image.png' %}" class="img-fluid" alt="">
+                <img src="{% static 'img/homefeature1.png' %}" class="img-fluid rounded-image" alt="">
             </div>
 
             <div class="col-lg-6 pt-4 pt-lg-0 order-1 order-lg-2" data-aos="fade-right">
-                <p>
+                <h3>Create your own sporting event</h3>
+                <p class="feature-description">
                     Imagine the excitement of designing and hosting your own soccer tournament, basketball competition,
                     track meet, or any other sporting event you love. From the choice of location and dates, to the
                     selection
                     of teams or participants, every detail is in your hands.
                 </p>
-                <p>
+                <p class="feature-description">
                     Our application offers you an intuitive and easy-to-use interface that will guide you through each
                     step of the process. You can customize the rules, set the prizes and trophies, invite your friends
                     and family, and watch the action unfold in real time through live updates and real-time statistics.
-                </p>
-                <p>
-                    It doesn't matter if you are a professional athlete, a passionate fan or just someone who enjoys
-                    organizing exciting activities, our app gives you the perfect platform to bring your sports ideas
-                    to life.
                 </p>
             </div>
         </div>
@@ -402,25 +396,33 @@
     <section class="mt-5 mb-5 px-4 features-section">
         <div class="row about-extra">
             <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left">
-                <img src="{% static 'img/no-image.png' %}" class="img-fluid" alt="">
+                <img src="{% static 'img/homefeature2.png' %}" class="img-fluid rounded-image" alt="">
             </div>
             <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1" data-aos="fade-right">
-                <h3>Features</h3>
-                <p>
-                    The sports event tracking app offers you an exceptional level of customization. From choosing the
-                    sport to setting up specific rules, every detail is in your hands. Design tournaments, leagues,
-                    individual or team competitions based on your unique vision.
-                </p>
-                <p>
-                    You can also choose the location, dates, and times of your event. Whether you want to host a
-                    tournament in your own backyard or in a professional stadium, our app gives you the flexibility
-                    to choose the perfect venue.
-                </p>
-                <p>
-                    Explore a wide range of sports and activities available for your events. Whether you prefer soccer,
-                    basketball, volleyball, or even more unique activities like obstacle courses, you can customize
-                    each event to suit your sports interests and passions.
-                </p>
+                <h3>Times and dates for competitions</h3>
+                    <p class="feature-description">
+                        You can also choose the location, dates, and times of your event. Whether you want to host a
+                        tournament in your own backyard or in a professional stadium, our app gives you the flexibility
+                        to choose the perfect venue.
+                    </p>
+
+            </div>
+        </div>
+    </section>
+
+     <section class="mt-5 mb-5 px-4 features-section">
+        <div class="row about-extra">
+            <div class="col-lg-6 order-2 order-lg-1" data-aos="fade-left">
+                <img src="{% static 'img/homefeature3.png' %}" class="img-fluid rounded-image" alt="">
+            </div>
+
+            <div class="col-lg-6 pt-4 pt-lg-0 order-1 order-lg-2" data-aos="fade-right">
+                <h3>Wide range of sports for competitions</h3>
+                    <p class="feature-description">
+                        Explore a wide range of sports and activities available for your events. Whether you prefer soccer,
+                        basketball, volleyball, or even more unique activities like obstacle courses, you can customize
+                        each event to suit your sports interests and passions.
+                    </p>
             </div>
         </div>
     </section>
@@ -446,22 +448,37 @@
         </div>
         <br>
     </div>
-    <div class="container2">
-    <ul class = "Members">
-         <p>Work Team</p>
-        <li><a href="https://jostinjimenez.github.io/Perfil/">Jostin Jimenez 1</a></li>
-        <li><a href="https://jhostin08.github.io/">Jhostin Rojas</a></li>
-        <li><a href="https://geovannyisma.github.io/">Geovanny Romero</a></li>
-        <li><a href="https://jalverca.github.io/">Juan Alverca</a></li>
-    </ul>
-    <ul class = "social-networks">
-            <h1>Social Networks</h1>
-        <li><a href="https://www.facebook.com/profile.php?id=61550300878142">Facebook</a></li>
-        <li><a href="https://www.instagram.com/playoffpro11/">Instagram</a></li>
-        <li><a href="https://twitter.com/PlayOffPro11">Twitter</a></li>
-        </ul>
-    </div>
 
+    <footer class="pie-pagina">
+        <div class="grupo-1">
+            <div class="box">
+                <figure>
+                    <a href="#">
+                        <img src="{% static 'img/icon.png' %}" alt="PlayOffPro">
+                    </a>
+                </figure>
+            </div>
+             <div class="box">
+                <h2>WORK TEAM</h2>
+                <li><a href="https://jostinjimenez.github.io/Perfil/">Jostin Jimenez</a></li>
+                <li><a href="https://jhostin08.github.io/">Jhostin Rojas</a></li>
+                <li><a href="https://geovannyisma.github.io/">Geovanny Romero</a></li>
+                <li><a href="https://jalverca.github.io/">Juan Alverca</a></li>
+            </div>
+
+            <div class="box">
+                <h2>FOLLOW US</h2>
+                <div class="red-social">
+                    <a href="https://www.facebook.com/profile.php?id=61550300878142" class="fa fa-facebook"></a>
+                    <a href="https://www.instagram.com/playoffpro11/" class="fa fa-instagram"></a>
+                    <a href="https://twitter.com/PlayOffPro11" class="fa fa-twitter"></a>
+                </div>
+            </div>
+        </div>
+    <div class="grupo-2">
+            <small>© 2021 <b>PlayoffPro. </b> All rights reserved.</small>
+    </div>
+    </footer>
 {% endif %}
 </body>
 </html>
