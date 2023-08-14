@@ -3,28 +3,30 @@
     {% load static %}
 
     <nav class="nav mt-5">
-        <a class="nav-link active" aria-current="page"
+        <a class="nav-link active" aria-current="page" style="font-weight: bold;  font-size: 1.2rem; color: #2d2a2a"
            href="{% url 'match_season' competition.id season.id %}">Partidos</a>
-        <a class="nav-link active" aria-current="page"
+        <a class="nav-link active" aria-current="page" style="font-weight: bold;  font-size: 1.2rem; color: #2d2a2a"
            href="#">Tabla de Clasificaciones</a>
     </nav>
 
     <hr>
 
-    <div class="">
-        <a class="btn btn-danger mt-3" href="{% url 'delete_season' competition.id season.id %}">Eliminar
-            Temporada</a>
-    </div>
 
-    <div class="container mt-5 mb-4">
+
+    <div class="container mt-3 mb-4">
         <div class="row">
-            <div class="col-md-2 d-flex">
+            <div class="col">
                 <div>
                     <form action="{% url 'sortear_grupos' competition.id season.id %}" method="post">
                         {% csrf_token %}
-                        <button class="btn btn-primary" type="submit">Sortear Grupos</button>
+                        <button class="btn text-light" type="submit" style="background-color: #12538a">Sortear Grupos
+                        </button>
                     </form>
                 </div>
+            </div>
+            <div class="col-md-2 d-flex">
+                <a class="btn btn-danger" href="{% url 'delete_season' competition.id season.id %}">Eliminar
+                    Temporada</a>
             </div>
         </div>
     </div>
