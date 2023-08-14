@@ -1,62 +1,70 @@
-{% extends 'base.html' %}
+{% extends 'base.html'%}
 {% block content %}
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{{ team.name }} - Team Details</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f7f7f7;
-                margin: 0;
-                padding: 0;
-            }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ team.name }} - Team Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #70ecdd;
+            margin: 0;
+            padding: 0;
+        }
 
-            main {
-                max-width: 800px;
-                margin: 40px auto;
-                padding: 20px;
-                background-color: #fff;
-                border-radius: 5px;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            }
+        main {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #6aec7b;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgb(112, 133, 236);
+        }
 
-            h1 {
-                margin-top: 0;
-            }
+        h1 {
+            margin-top: 0;
+        }
 
-            ul {
-                list-style-type: none;
-                padding: 0;
-            }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
 
-            li {
-                margin-bottom: 10px;
-            }
+        li {
+            margin-bottom: 10px;
+        }
 
-            h2 {
-                margin-top: 20px;
-            }
-        </style>
-    </head>
-    <body>
+        h2 {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
     <main>
         <h1>{{ team.name }}</h1>
         <h2>Players:</h2>
-
-        <p>Ciudad: {{ team.city }}</p>
-
-        <p>Competencias en las que esta insctito el equipo:</p>
         <ul>
-            {% for competition in team.competition.all %}
-                <li>{{ competition.name }}</li>
+            {% for player in players %}
+                <li>{{ player.name }} ({{ player.position }})</li>
             {% endfor %}
         </ul>
 
+        <h2>Home Team Matches:</h2>
+        <ul>
+            {% for game in games_as_local %}
+                <li>{{ game.team_visitor.name }} - {{ game.date }} - {{ game.hour }}</li>
+            {% endfor %}
+        </ul>
 
+        <h2>Matches as Away Team:</h2>
+        <ul>
+            {% for game in games_as_visitor %}
+                <li>{{ game.team_local.name }} - {{ game.date }} - {{ game.hour }}</li>
+            {% endfor %}
+        </ul>
     </main>
-    </body>
-    </html>
+</body>
+</html>
 {% endblock %}
