@@ -15,7 +15,7 @@
                         alt=""></a>
             </div>
             <div class="col">
-                <h4 class="text-center">{{ competition.name }} / {{ season.name }}</h4>
+                <h2 class="text-center" style="color: #da5620">{{ competition.name }} / {{ season.name }}</h2>
             </div>
             <div class="col-md-2">
                 <a class="btn btn-danger" href="#">Borrar Partido</a>
@@ -160,22 +160,41 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-8 d-flex mt-3 bg-dark">
-                <div class="border rounded border-dark-subtle p-3">
-                    <h6 class="mb-3 text-center"><strong>Detalles</strong></h6>
-                    <hr class="my-1">
-                    <p class="mb-1"><strong>Competencia:</strong><a style="color: #ce5914"
-                                                                    href="{% url 'competition_detail' competition.id %}"> {{ competition.name }}</a>
-                    </p>
-                    <p class="mb-1"><strong>Temporada:</strong> {{ season.name }}</p>
-                    <p class="mb-1"><strong>Sede:</strong> {{ game.location }}</p>
-                    <p class="mb-1"><strong>Fecha:</strong> {{ game.date }}</p>
-                    <p class="mb-1"><strong>Hora:</strong> {{ game.hour }}</p>
+            <div class="col-md-8 mt-3 border rounded border-dark-subtle p-3">
+                <h6 class="mb-4 text-center"><strong style="color: #dc5c28">Resumen</strong></h6>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="mb-4 text-center"><strong>Estadísticas {{ game.team_local.name }}</strong></h6>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Posesión:</strong> {{ game.team_local_possession }}%</p>
+                                <p><strong>Remates:</strong> {{ game.team_local_shots }}</p>
+                                <p><strong>Remates a puerta:</strong> {{ game.team_local_shots_on_target }}</p>
+                                <p><strong>Faltas:</strong> {{ game.team_local_fouls }}</p>
+                                <p><strong>Tarjetas Amarillas:</strong> {{ game.team_local_yellow_cards }}</p>
+                                <p><strong>Tarjetas Rojas:</strong> {{ game.team_local_red_cards }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="mb-4 text-center"><strong>Estadísticas {{ game.team_visitor.name }}</strong></h6>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Posesión:</strong> {{ game.team_visitor_possession }}%</p>
+                                <p><strong>Remates:</strong> {{ game.team_visitor_shots }}</p>
+                                <p><strong>Remates a puerta:</strong> {{ game.team_visitor_shots_on_target }}</p>
+                                <p><strong>Faltas:</strong> {{ game.team_visitor_fouls }}</p>
+                                <p><strong>Tarjetas Amarillas:</strong> {{ game.team_visitor_yellow_cards }}</p>
+                                <p><strong>Tarjetas Rojas:</strong> {{ game.team_visitor_red_cards }}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
-
     </div>
     <script type="text/javascript"
             src="https://www.bing.com/api/maps/mapcontrol?key=ApzrK8-qiiRRdCt-zCJCBU42D-OCpYnOW-Yu47cE30jPPlILtWr52Z_ySM0wErJA&callback=loadGameMapScenario"

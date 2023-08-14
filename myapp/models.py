@@ -39,15 +39,7 @@ class State(models.TextChoices):
 
 class Competition(models.Model):
     name = models.CharField(max_length=50, blank=True)
-    SPORT_lIST = (
-        ('F', 'Football'),
-        ('B', 'Basketball'),
-        ('V', 'Volleyball'),
-        ('H', 'Handball'),
-        ('T', 'Tennis'),
-        ('O', 'Other')
-    )
-    sport = models.CharField(max_length=1, choices=SPORT_lIST, default='F')
+    sport = models.ForeignKey(Sport, on_delete=models.CASCADE)  # Cambio en esta línea
     genre = models.CharField(choices=[('M', 'Male'), ('F', 'Female'), ('MF', 'Mixed')], max_length=2, null=True)
     COMPETITION_TYPES = (
         ('L', 'League'),
@@ -164,7 +156,7 @@ class Location(models.Model):
 
 class Phase(Enum):
     GROUP = 'Group'
-    ROUND_OF_16 = '16th Round'
+    EIGHTH_FINALS = 'Eighth Finals'
     QUARTER_FINALS = 'Quarter Finals'
     SEMI_FINALS = 'Semi Finals'
     FINAL = 'Final'

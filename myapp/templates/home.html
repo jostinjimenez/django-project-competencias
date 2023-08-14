@@ -11,7 +11,36 @@
     <body>
     <div class="container mt-5">
         <h1 class="text-center mb-5">Welcome!</h1>
-
+        <!-- Mostrar la lista de competiciones activas -->
+        <h2 class="mt-5 mb-3">Competencias Activas:</h2>
+        <ul class="list-group">
+            <li class="row">
+                {% for competition in active_competitions %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card text-dark">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5 class="card-title mb-3">{{ competition.name }}</h5>
+                                        <p class="card-text">Deporte:{{ competition.sport }} </p>
+                                        <a href="#" class="btn btn-primary btn-sm">Detalles</a>
+                                    </div>
+                                    <div class="col">
+                                        {% if sport.image %}
+                                            <img src="{{ sport.image.url }}" class="card-img-top"
+                                                 alt="{{ sport.name }}">
+                                        {% else %}
+                                            <img src="{% static 'img/sports.png' %}" class="card-img-top"
+                                                 alt="{{ sport.name }}">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </li>
+        </ul>
         <!-- Mostrar información general sobre los deportes ofrecidos -->
         <h2 class="mt-5 mb-3">Sports offered:</h2>
         <div class="row">
@@ -35,13 +64,6 @@
             {% endfor %}
         </div>
 
-        <!-- Mostrar la lista de competiciones activas -->
-        <h2 class="mt-5 mb-3">Active competitions:</h2>
-        <ul class="list-group">
-            {% for competition in active_competitions %}
-                <li class="list-group-item">{{ competition.name }}</li>
-            {% endfor %}
-        </ul>
 
         <!-- Mostrar la lista de competiciones próximas -->
         <h2 class="mt-5 mb-3">Upcoming competitions:</h2>

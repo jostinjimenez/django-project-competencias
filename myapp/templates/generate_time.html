@@ -28,83 +28,92 @@
             <ul class="list-group list-group-flush">
                 {% for location in locations %}
                     <li class="list-group-item">
-                        <div class="row">
-                            <div class="col">
-                                {{ location.name }}
+                        <div class="row align-items-center">
+                            <div class="col mx-5">
+                                <strong class="text-center">{{ location.name }}</strong>
                             </div>
-                            <div class="col">
+                            <div class="col-md-7 d-flex justify-content-center">
                                 {% for availability in availability_data.items %}
                                     {% if location.id == availability.0 %}
                                         {% for avail in availability.1 %}
-                                            {{ avail.days_available }}<br>
-                                            {{ avail.opening_time }} - {{ avail.closing_time }}<br>
-                                            {{ avail.date }}<br>
+                                            <div class="card mb-3 mx-3" style="max-width: 15rem;">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{ avail.days_available }}</h5>
+                                                    <p class="card-text">
+                                                        <i class="fas fa-clock"></i> {{ avail.opening_time }}
+                                                        - {{ avail.closing_time }}<br>
+                                                        <i class="far fa-calendar-alt"></i> {{ avail.date }}
+                                                    </p>
+                                                </div>
+                                            </div>
                                         {% endfor %}
                                     {% endif %}
                                 {% endfor %}
                             </div>
-                            <div class="col">
+
+                            <div class="col-md-3 d-flex justify-content-center">
                                 <button type="button" class="btn btn-primary" data-toggle="modal"
                                         data-target="#modal{{ location.id }}">Agregar Disponibilidad
                                 </button>
-                                <!-- Modal -->
-                                <div class="modal fade" id="modal{{ location.id }}" tabindex="-1"
-                                     aria-labelledby="modal{{ location.id }}" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="modal{{ location.id }}">Añadir
-                                                    Disponibilidad</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form method="post"
-                                                      action="{% url 'add_availability' competition.id season.id location.id %}">
-                                                    {% csrf_token %}
-                                                    <div class=" form-group">
-                                                        <label for="{{ form.days_available.id_for_label }}">Días
-                                                            Disponibles:</label><br>
-                                                        {% for check in form.days_available %}
-                                                            <div class="form-check form-check-inline">
-                                                                {{ check.tag }}
-                                                                <label class="form-check-label"
-                                                                       for="{{ check.id_for_label }}">{{ check.choice_label }}</label>
-                                                            </div>
-                                                        {% endfor %}
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <div class="mt-3">
-                                                                <label for="{{ form.opening_time.id_for_label }}">Hora
-                                                                    de Apertura:</label>
-                                                                {{ form.opening_time }}
-                                                            </div>
+                            </div>
+                            <!-- Modal -->
+                            <div class="modal fade" id="modal{{ location.id }}" tabindex="-1"
+                                 aria-labelledby="modal{{ location.id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modal{{ location.id }}">Añadir
+                                                Disponibilidad</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post"
+                                                  action="{% url 'add_availability' competition.id season.id location.id %}">
+                                                {% csrf_token %}
+                                                <div class=" form-group">
+                                                    <label for="{{ form.days_available.id_for_label }}">Días
+                                                        Disponibles:</label><br>
+                                                    {% for check in form.days_available %}
+                                                        <div class="form-check form-check-inline">
+                                                            {{ check.tag }}
+                                                            <label class="form-check-label"
+                                                                   for="{{ check.id_for_label }}">{{ check.choice_label }}</label>
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <div class="mt-3">
-                                                                <label for="{{ form.closing_time.id_for_label }}">Hora
-                                                                    de Cierre:</label>
-                                                                {{ form.closing_time }}
-                                                            </div>
+                                                    {% endfor %}
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="mt-3">
+                                                            <label for="{{ form.opening_time.id_for_label }}">Hora
+                                                                de Apertura:</label>
+                                                            {{ form.opening_time }}
                                                         </div>
                                                     </div>
-                                                    <div class="mt-3">
-                                                        <label for="{{ form.date.id_for_label }}">Fecha:</label>
-                                                        {{ form.date }}
+                                                    <div class="col-md-6">
+                                                        <div class="mt-3">
+                                                            <label for="{{ form.closing_time.id_for_label }}">Hora
+                                                                de Cierre:</label>
+                                                            {{ form.closing_time }}
+                                                        </div>
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary mt-3">Guardar</button>
-                                                </form>
-                                            </div>
+                                                </div>
+                                                <div class="mt-3">
+                                                    <label for="{{ form.date.id_for_label }}">Fecha:</label>
+                                                    {{ form.date }}
+                                                </div>
+                                                <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </li>
                 {% endfor %}
             </ul>
+
+
         </div>
 
         <section class="mt-5">

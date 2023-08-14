@@ -29,18 +29,35 @@ class SportForm(forms.ModelForm):
 
 
 class CompetitionForm(forms.ModelForm):
+    # Agregamos un nuevo campo para permitir agregar un nuevo deporte
+    new_sport_name = forms.CharField(max_length=50, required=False,
+                                     widget=forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}))
+
     class Meta:
         model = Competition
-        fields = ['name', 'sport', 'genre', 'type_competition', 'is_active']
+        fields = ['name', 'sport', 'new_sport_name', 'genre', 'type_competition', 'is_active']
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control border-2 rounded-pill'}),
-
             'genre': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
             'sport': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
             'type_competition': forms.Select(attrs={'class': 'form-select border-2 rounded-pill'}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        # Verificamos si se ingresó un nuevo nombre de deporte
+        new_sport_name = self.cleaned_data.get('new_sport_name', '').strip()
+        if new_sport_name:
+            # Creamos un nuevo deporte
+            new_sport = Sport.objects.create(name=new_sport_name)
+            instance.sport = new_sport
+
+        if commit:
+            instance.save()
+        return instance
 
 
 class TeamForm(forms.ModelForm):
