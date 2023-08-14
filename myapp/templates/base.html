@@ -34,6 +34,12 @@
             src="https://widgets.api-sports.io/2.0.3/widgets.js">
 
     </script>
+     <meta charset="UTF-8">
+    <title>Pie de pagina</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="estilos.css">
+     <!--Iconos-->
+    <script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
 
     <style>
         body {
@@ -187,22 +193,7 @@
             font-size: 90px;
         }
 
-        .pic img {
-            border-radius: 50%;
-        }
 
-        .container2 {
-            height: 70vh;
-            width: 100%;
-            margin: 0% auto;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            color: #fff;
-            background-color: #444444;
-            align-items: center;
-            justify-content: center;
-        }
 
         h2 {
             font-family: 'Mitr', sans-serif;
@@ -238,15 +229,13 @@
             margin-bottom: 20px;
             /* Other styling properties if needed */
         }
-        .features-description {
+        .feature-description{
             font-size: 20px;
         }
-
         .rounded-image {
             border-radius: 20px;
         }
 
-        .features
     </style>
 
     <script>
@@ -282,17 +271,17 @@
         <section class="mt-5 mb-5 px-4 features-section">
             <div class="row about-extra">
                 <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left">
-                    <img src="{% static 'img/imgDescription.png' %}" class="img-fluid rounded-image" alt="">
+                    <img src="{% static 'img/imgDescription.png' %}" class="img-fluid" alt="">
                 </div>
                 <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1" data-aos="fade-right">
                     <h2>Description</h2>
-                    <p class="features-description">
+                    <p>
                         This web application was created in order to be able to manage sports competitions, in which
                         they can register teams, players, competitions and matches. In addition, you can view the table
                         of
                         positions of each competition and the results of the matches.
                     </p>
-                    <p class="features-description">
+                    <p>
                         The application was developed with the Django framework, which is a framework that is based on
                         the
                         model-view-template architecture, which allows the separation of the logic of the application
@@ -312,18 +301,18 @@
     <section class="mt-5 mb-5 px-4 features-section">
         <div class="row about-extra">
             <div class="col-lg-6 order-2 order-lg-1" data-aos="fade-left">
-                <img src="{% static 'img/homefeature1.png' %}" class="img-fluid rounded-image" alt="">
+                <img src="{% static 'img/homefeature1.png' %}" class="img-fluid" alt="">
             </div>
 
             <div class="col-lg-6 pt-4 pt-lg-0 order-1 order-lg-2" data-aos="fade-right">
                 <h3>Create your own sporting event</h3>
-                <p class="features-description">
+                <p class="features-section">
                     Imagine the excitement of designing and hosting your own soccer tournament, basketball competition,
                     track meet, or any other sporting event you love. From the choice of location and dates, to the
                     selection
                     of teams or participants, every detail is in your hands.
                 </p>
-                <p class="features-description">
+                <p class="features-section">
                     Our application offers you an intuitive and easy-to-use interface that will guide you through each
                     step of the process. You can customize the rules, set the prizes and trophies, invite your friends
                     and family, and watch the action unfold in real time through live updates and real-time statistics.
@@ -335,30 +324,14 @@
     <section class="mt-5 mb-5 px-4 features-section">
         <div class="row about-extra">
             <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left">
-                <img src="{% static 'img/homefeature2.png' %}" class="img-fluid rounded-image" alt="">
+                <img src="{% static 'img/homefeature2.png' %}" class="img-fluid" alt="">
             </div>
             <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1" data-aos="fade-right">
                 <h3>Times and dates for competitions</h3>
-                <p class="features-description">
+                <p class="features-section">
                     You can also choose the location, dates, and times of your event. Whether you want to host a
                     tournament in your own backyard or in a professional stadium, our app gives you the flexibility
                     to choose the perfect venue.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section class="mt-5 mb-5 px-4 features-section">
-        <div class="row about-extra">
-            <div class="col-lg-6 order-2 order-lg-1" data-aos="fade-left">
-                <img src="{% static 'img/homefeature3.png' %}" class="img-fluid rounded-image" alt="">
-            </div>
-            <div class="col-lg-6 pt-4 pt-lg-0 order-1 order-lg-2" data-aos="fade-right">
-                <h3>Wide range of sports for competitions</h3>
-                <p class="features-description">
-                    Explore a wide range of sports and activities available for your events. Whether you prefer soccer,
-                    basketball, volleyball, or even more unique activities like obstacle courses, you can customize
-                    each event to suit your sports interests and passions.
                 </p>
             </div>
         </div>
@@ -385,22 +358,35 @@
         </div>
         <br>
     </div>
-    <div class="container2">
-    <ul class = "Members">
-         <p>Work Team</p>
+    <footer class="pie-pagina">
+        <div class="grupo-1">
+            <div class="box">
+                <figure>
+                    <a href="#">
+                        <img src="{%static 'img/icon.png'%}" alt="PlayOffPro">
+                    </a>
+                </figure>
+            </div>
+            <div class="box">
+                <h2>WORK TEAM</h2>
         <li><a href="https://jostinjimenez.github.io/Perfil/">Jostin Jimenez 1</a></li>
         <li><a href="https://jhostin08.github.io/">Jhostin Rojas</a></li>
         <li><a href="https://geovannyisma.github.io/">Geovanny Romero</a></li>
         <li><a href="https://jalverca.github.io/">Juan Alverca</a></li>
-    </ul>
-    <ul class = "social-networks">
-            <h1>Social Networks</h1>
-        <li><a href="https://www.facebook.com/profile.php?id=61550300878142">Facebook</a></li>
-        <li><a href="https://www.instagram.com/playoffpro11/">Instagram</a></li>
-        <li><a href="https://twitter.com/PlayOffPro11">Twitter</a></li>
-        </ul>
-    </div>
-
+            </div>
+            <div class="box">
+                <h2>FOLLOW US</h2>
+                <div class="red-social">
+                    <a href="https://www.facebook.com/profile.php?id=61550300878142" class="fa fa-facebook"></a>
+                    <a href="https://www.instagram.com/playoffpro11/" class="fa fa-instagram"></a>
+                    <a href="https://twitter.com/PlayOffPro11" class="fa fa-twitter"></a>
+                </div>
+            </div>
+        </div>
+        <div class="grupo-2">
+            <small>&copy; 2023 <b>PlayOffPro</b> - Todos los Derechos Reservados.</small>
+        </div>
+    </footer>
 {% endif %}
 </body>
 </html>
